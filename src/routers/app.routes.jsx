@@ -18,14 +18,20 @@ const AppRouter = () => {
 
   return (
     <Routes>
-      {role === "guest" && renderRoutes(guestRoutes)}
+      <Route path="/" element={<Navigate to="/trang-chu" replace />} />
+
+      {/* Public routes */}
+      {renderRoutes(guestRoutes)}
+
+      {/* User role based routes */}
       {role === "doctor" && renderRoutes(doctorRoutes)}
       {role === "staff" && renderRoutes(staffRoutes)}
       {role === "guest" && renderRoutes(guestRoutes)}
       {role === "admin" && renderRoutes(adminRoutes)}
       {role === "manager" && renderRoutes(managerRoutes)}
 
-      <Route path="*" element={<Navigate to="/not-found" />} />
+      {/* Not found page */}
+      <Route path="/*" element={<Navigate to="/not-found" />} />
     </Routes>
   );
 };
