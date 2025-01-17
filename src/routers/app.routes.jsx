@@ -7,7 +7,7 @@ import {
   staffRoutes,
 } from "./roleBased.routes";
 import { useAuth } from "../context/auth.context";
-import AppHeader from "../components/Header/Header"; // Import Header
+import AppNavbar from "../components/Navbar/Navbar";
 
 const AppRouter = () => {
   const { role } = useAuth();
@@ -20,7 +20,7 @@ const AppRouter = () => {
   return (
     <>
       {/* Header hiển thị cố định */}
-      <AppHeader />
+      <AppNavbar />
       <Routes>
         <Route path="/" element={<Navigate to="/trang-chu" replace />} />
 
