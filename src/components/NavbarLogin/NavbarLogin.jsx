@@ -1,14 +1,32 @@
-import { Layout, Menu, Typography, Row, Col } from "antd";
-import "./Navbar.css";
+import {
+  Layout,
+  Menu,
+  Typography,
+  Row,
+  Col,
+  Avatar,
+  Dropdown,
+  Space,
+} from "antd";
+import { UserOutlined, DownOutlined } from "@ant-design/icons";
+import "./NavbarLogin.css";
 
-const { Header } = Layout; 
+const { Header } = Layout;
 const { Text } = Typography;
 
-const AppNavbar = () => {
+const AppNavbarLogin = () => {
+  // Menu cho dropdown
+  const menu = (
+    <Menu className="dropdown-menu">
+      <Menu.Item key="1">Lịch Khám</Menu.Item>
+      <Menu.Item key="2">Đăng xuất</Menu.Item>
+    </Menu>
+  );
+
   return (
-    <Header className="app-navbar">  
+    <Header className="app-navbar">
       <Row justify="space-between" align="middle">
-        {/* Logo and Title */}
+        {/* Logo và thông tin */}
         <Col>
           <div className="logo">
             <img
@@ -22,14 +40,20 @@ const AppNavbar = () => {
             </div>
           </div>
         </Col>
-  
-        {/* Title Centered and Menu */}
-        <Col flex="auto" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+        {/* Title và menu */}
+        <Col
+          flex="auto"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <div className="text">
             <Text className="center-title">
               Trung tâm chữa lành tâm hồn Epsilon
             </Text>
-            {/* Menu */}
             <Menu
               mode="horizontal"
               defaultSelectedKeys={["home"]}
@@ -44,13 +68,27 @@ const AppNavbar = () => {
             />
           </div>
         </Col>
-        
-        <a href="/signin" className="sign-in">
-          Sign in
-        </a>
+
+        {/* Avatar, dòng chữ "Hi User" và dropdown */}
+        <Col>
+          <Dropdown
+            overlay={menu}
+            placement="bottomRight"
+            arrow
+            trigger={["click"]}
+          >
+            <div className="user-avatar">
+              <Avatar icon={<UserOutlined />} className="avatar" />
+              <Space className="user-dropdown">
+                <Text className="user-text">Hi User</Text>
+                <DownOutlined />
+              </Space>
+            </div>
+          </Dropdown>
+        </Col>
       </Row>
-    </Header>  
+    </Header>
   );
 };
 
-export default AppNavbar;
+export default AppNavbarLogin;
