@@ -7,6 +7,7 @@ import {
   staffRoutes,
 } from "./roleBased.routes";
 import { useAuth } from "../context/auth.context";
+import AppHeader from "../components/Header/Header"; // Import Header
 
 const AppRouter = () => {
   const { role } = useAuth();
@@ -17,22 +18,26 @@ const AppRouter = () => {
     ));
 
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/trang-chu" replace />} />
+    <>
+      {/* Header hiển thị cố định */}
+      <AppHeader />
+      <Routes>
+        <Route path="/" element={<Navigate to="/trang-chu" replace />} />
 
-      {/* Public routes */}
-      {renderRoutes(guestRoutes)}
+        {/* Public routes */}
+        {renderRoutes(guestRoutes)}
 
-      {/* User role based routes */}
-      {role === "doctor" && renderRoutes(doctorRoutes)}
-      {role === "staff" && renderRoutes(staffRoutes)}
-      {role === "guest" && renderRoutes(guestRoutes)}
-      {role === "admin" && renderRoutes(adminRoutes)}
-      {role === "manager" && renderRoutes(managerRoutes)}
+        {/* User role-based routes */}
+        {role === "doctor" && renderRoutes(doctorRoutes)}
+        {role === "staff" && renderRoutes(staffRoutes)}
+        {role === "guest" && renderRoutes(guestRoutes)}
+        {role === "admin" && renderRoutes(adminRoutes)}
+        {role === "manager" && renderRoutes(managerRoutes)}
 
-      {/* Not found page */}
-      <Route path="/*" element={<Navigate to="/not-found" />} />
-    </Routes>
+        {/* Not found page */}
+        <Route path="/*" element={<Navigate to="/not-found" />} />
+      </Routes>
+    </>
   );
 };
 
