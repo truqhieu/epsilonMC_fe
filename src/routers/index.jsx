@@ -8,6 +8,10 @@ const ROUTERS = {
   //Guest
   HOME: "/trang-chu",
   LOGIN: "/dang-nhap",
+  ABOUT: "/gioi-thieu",
+  INFORMATION: "/thong-tin",
+  NEWS: "/tin-tuc",
+  CONTACT: "/lien-he",
 
   //Bệnh nhân
   BENH_NHAN: BENH_NHAN,
