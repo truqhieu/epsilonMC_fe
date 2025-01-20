@@ -1,66 +1,18 @@
-.footer-container {
-    display: flex;
-    flex-wrap: wrap; 
-    align-items: center;
-    justify-content: space-around;
-    background-color: rgba(146, 235, 235, 0.838);
-    padding: 15px 20px;
-    font-family: Arial, sans-serif;
-    color: #000000;
-    font-size: 14px;
-  }
-  
-  .footer-icons a {
-    margin: 0 10px;
-    color: #000;
-    text-decoration: none;
-    font-size: 20px;
-  }
-  
-  .footer-icons i {
-    transition: color 0.3s ease;
-  }
-  
-  .footer-icons a:hover i {
-    color: #007bff;
-  }
-  
-  .footer-address,
-  .footer-timings,
-  .footer-phone {
-    flex: 1;
-    text-align: center;
-    margin: 10px 0;
-  }
-  
-  .footer-timings i,
-  .footer-phone i {
-    margin-right: 5px;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .footer-container {
-      flex-direction: column;
-      text-align: center;
-    }
-  
-    .footer-icons a {
-      margin: 0 5px;
-    }
-  }
-  .fa-facebook{
-    color: #007bff;
-  }
-  .fa-envelope{
-    color: rgba(6, 136, 136, 0.942)
-  }
-  .fa-home{
-    color: rgba(6, 136, 136, 0.942)
-  }
-  .fa-clock{
-    color:#007bff
-  }
-  .fa-phone{
-    color:#007bff
-  }
+.header-container {
+  padding: 20px 0px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #bce6f7; 
+}
+
+.icon{
+  width: 30px;
+}
+
+.header-items{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+

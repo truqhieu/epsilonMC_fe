@@ -18,13 +18,13 @@ const AppRouter = () => {
     routes.map((route, index) => (
       <Route key={index} path={route.path} element={route.element} />
     ));
-
+  console.log(role);
   return (
     <>
       {/* Header hiển thị cố định */}
-      <AppNavbar />
-      <br></br>
-      <AppNavbarLogin/>
+      <AppHeader />
+      {role === "guest" ? <AppNavbar /> : <AppNavbarLogin />}
+
       <Routes>
         {/* Điều hướng mặc định */}
         <Route path="/" element={<Navigate to="/trang-chu" replace />} />
@@ -42,7 +42,6 @@ const AppRouter = () => {
         {/* Trang không tìm thấy */}
         <Route path="/*" element={<Navigate to="/not-found" />} />
       </Routes>
-      <AppHeader />
       <br></br>
       <Footer></Footer>
     </>
