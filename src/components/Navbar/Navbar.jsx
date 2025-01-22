@@ -5,11 +5,13 @@ import PropTypes from "prop-types";
 import { assets } from "../../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth.context";
+import LoginForm from "../LoginModel/LoginModel";
 
-const Navbar = ({ setShowLogin, userRole }) => {
+const Navbar = ({ userRole }) => {
   const [menu, setMenu] = useState("home");
   const navigate = useNavigate();
   const { token, setToken } = useAuth();
+  const [showLogin, setShowLogin] = useState(false);
   const logout = () => {
     setToken("");
     localStorage.removeItem("token");
@@ -79,7 +81,7 @@ const Navbar = ({ setShowLogin, userRole }) => {
         )}
 
         {!token ? (
-          <button onClick={() => setShowLogin(true)}>Login</button>
+          <button onClick={() => setShowLogin(true)}>Đăng nhập</button>
         ) : (
           <div className="navbar-profile">
             <img src={assets.profile_icon} alt="" />
@@ -103,9 +105,14 @@ const Navbar = ({ setShowLogin, userRole }) => {
           </div>
         )}
       </div>
+
+      {!!showLogin && (
+        <LoginForm open={showLogin} onCancel={() => setShowLogin(false)} />
+      )}
     </div>
   );
 };
+
 Navbar.propTypes = {
   setShowLogin: PropTypes.func.isRequired,
   userRole: PropTypes.string.isRequired,

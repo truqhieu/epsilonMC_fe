@@ -18,6 +18,7 @@ import strength4 from "./icons/strength4.png";
 import package1 from "./icons/package1.png";
 import package2 from "./icons/package2.png";
 import package3 from "./icons/package3.png";
+import backgroundLogin from "./backgroundLogin.jpg";
 
 export const assets = {
   logo,
@@ -40,4 +41,5 @@ export const assets = {
   package1,
   package2,
   package3,
+  backgroundLogin,
 };

@@ -10,7 +10,6 @@ import { useAuth } from "../context/auth.context";
 import AppNavbar from "../components/Navbar/Navbar";
 import AppHeader from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
-import AppNavbarLogin from "../components/NavbarLogin/NavbarLogin";
 const AppRouter = () => {
   const { role } = useAuth();
 
@@ -23,7 +22,7 @@ const AppRouter = () => {
     <>
       {/* Header hiển thị cố định */}
       <AppHeader />
-      {role === "guest" ? <AppNavbar /> : <AppNavbarLogin />}
+      {role === "guest" && <AppNavbar />}
 
       <Routes>
         {/* Điều hướng mặc định */}
