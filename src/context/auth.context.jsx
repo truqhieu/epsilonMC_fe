@@ -1,10 +1,11 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [role, setRole] = useState("guest"); // Default là guest
 
   const login = (userInfo, userRole) => {
@@ -17,10 +18,24 @@ export const AuthProvider = ({ children }) => {
     setRole("guest"); // Reset về guest khi logout
   };
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
+  const contextValue = {
+    user,
+    role,
+    login,
+    logout,
+    token,
+    setToken,
+  };
+
   return (
-    <AuthContext.Provider value={{ user, role, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 AuthProvider.propTypes = {

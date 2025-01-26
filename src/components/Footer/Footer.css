@@ -1,0 +1,30 @@
+.footer-container {
+  padding: 10px 0px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #bce6f7; 
+  }
+  
+  .title{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .doctor-description {
+    width: 350px;
+  }
+
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-contact-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }

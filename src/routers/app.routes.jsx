@@ -7,7 +7,9 @@ import {
   staffRoutes,
 } from "./roleBased.routes";
 import { useAuth } from "../context/auth.context";
-
+import AppNavbar from "../components/Navbar/Navbar";
+import AppHeader from "../components/Header/Header";
+import Footer from "../components/Footer/Footer";
 const AppRouter = () => {
   const { role } = useAuth();
 
@@ -15,24 +17,33 @@ const AppRouter = () => {
     routes.map((route, index) => (
       <Route key={index} path={route.path} element={route.element} />
     ));
-
+  console.log(role);
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/trang-chu" replace />} />
+    <>
+      {/* Header hiển thị cố định */}
+      <AppHeader />
+      {role === "guest" && <AppNavbar />}
 
-      {/* Public routes */}
-      {renderRoutes(guestRoutes)}
+      <Routes>
+        {/* Điều hướng mặc định */}
+        <Route path="/" element={<Navigate to="/trang-chu" replace />} />
 
-      {/* User role based routes */}
-      {role === "doctor" && renderRoutes(doctorRoutes)}
-      {role === "staff" && renderRoutes(staffRoutes)}
-      {role === "guest" && renderRoutes(guestRoutes)}
-      {role === "admin" && renderRoutes(adminRoutes)}
-      {role === "manager" && renderRoutes(managerRoutes)}
+        {/* Public routes */}
+        {renderRoutes(guestRoutes)}
 
-      {/* Not found page */}
-      <Route path="/*" element={<Navigate to="/not-found" />} />
-    </Routes>
+        {/* Các route dựa theo role */}
+        {role === "doctor" && renderRoutes(doctorRoutes)}
+        {role === "staff" && renderRoutes(staffRoutes)}
+        {role === "guest" && renderRoutes(guestRoutes)}
+        {role === "admin" && renderRoutes(adminRoutes)}
+        {role === "manager" && renderRoutes(managerRoutes)}
+
+        {/* Trang không tìm thấy */}
+        <Route path="/*" element={<Navigate to="/not-found" />} />
+      </Routes>
+      <br></br>
+      <Footer></Footer>
+    </>
   );
 };
 
