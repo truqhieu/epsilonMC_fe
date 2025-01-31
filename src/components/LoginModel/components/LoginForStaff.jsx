@@ -2,17 +2,30 @@ import { Form, Input, Button } from "antd";
 import PropTypes from "prop-types";
 import { UserOutlined, LockOutlined, LeftOutlined } from "@ant-design/icons";
 import { LoginForStaffStyled } from "../styles";
+import AuthServices from "../../../services/AuthServices";
+import useAuth from "../../../hooks/useAuth";
 
-const LoginForStaff = ({ setRoleLogin }) => {
+const LoginForStaff = ({ setRoleLogin, onCancel }) => {
   const [formLogin] = Form.useForm();
+  const { setUserRole, setToken } = useAuth();
 
-  const onFinish = async () => {
+  const loginAccout = async () => {
+    const values = await formLogin.validateFields();
+    console.log(values);
     try {
-      const values = await formLogin.validateFields(); // Lấy dữ liệu từ form
-      console.log("Received values of form: ", values);
-      // Xử lý logic với dữ liệu lấy được
+      const res = await AuthServices.login(values);
+      if (res.data.success) {
+        setToken(res.data.token);
+        setUserRole(res.data.user.role);
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("userRole", res.data.user.role);
+        console.log("Login Success:", res.data);
+        onCancel();
+      } else {
+        console.error("Login Failed:", res.data.message);
+      }
     } catch (error) {
-      console.error("Validation Failed:", error);
+      console.error("Login Failed:", error);
     }
   };
 
@@ -32,7 +45,7 @@ const LoginForStaff = ({ setRoleLogin }) => {
         style={{ width: "70%", margin: "auto" }}
       >
         <Form.Item
-          name="username"
+          name="phone"
           rules={[{ required: true, message: "Vui lòng nhập Số Điện Thoại!" }]}
         >
           <Input
@@ -53,7 +66,7 @@ const LoginForStaff = ({ setRoleLogin }) => {
         <Form.Item>
           <Button
             className="login-form-button"
-            onClick={onFinish}
+            onClick={loginAccout}
             style={{
               backgroundColor: "#3e70a7",
               color: "white",
@@ -70,6 +83,7 @@ const LoginForStaff = ({ setRoleLogin }) => {
 
 LoginForStaff.propTypes = {
   setRoleLogin: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
 export default LoginForStaff;

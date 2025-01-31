@@ -21,9 +21,9 @@ const LoginForm = ({ open, onCancel }) => {
       {roleLogin === "" ? (
         <RoleLogin setRoleLogin={setRoleLogin} />
       ) : roleLogin === "patient" ? (
-        <LoginForPatient setRoleLogin={setRoleLogin} />
+        <LoginForPatient setRoleLogin={setRoleLogin} onCancel={onCancel} />
       ) : (
-        <LoginForStaff setRoleLogin={setRoleLogin} />
+        <LoginForStaff setRoleLogin={setRoleLogin} onCancel={onCancel} />
       )}
     </LoginModel>
   );

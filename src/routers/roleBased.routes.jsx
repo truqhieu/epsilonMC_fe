@@ -2,7 +2,6 @@ import ROUTERS from "./index";
 import wrapWithLazy from "../utils/wrapWithLazy";
 import React from "react";
 
-const LoginPage = React.lazy(() => import("../pages/Anonymous/Login"));
 const UnauthorizedPage = React.lazy(() => import("../pages/NotFound"));
 const HomePage = React.lazy(() =>
   import("../pages/Anonymous/HomePage/HomePage")
@@ -42,10 +41,6 @@ export const doctorRoutes = [
 ];
 
 export const guestRoutes = [
-  {
-    path: ROUTERS.LOGIN,
-    element: wrapWithLazy(LoginPage),
-  },
   {
     path: ROUTERS.HOME,
     element: wrapWithLazy(HomePage),

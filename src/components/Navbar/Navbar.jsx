@@ -3,22 +3,15 @@ import React, { useState } from "react";
 import "./Navbar.css";
 import PropTypes from "prop-types";
 import { assets } from "../../assets/assets";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/auth.context";
+import { Link } from "react-router-dom";
 import LoginForm from "../LoginModel/LoginModel";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = ({ userRole }) => {
   const [menu, setMenu] = useState("home");
-  const navigate = useNavigate();
-  const { token, setToken } = useAuth();
+  // const navigate = useNavigate();
+  const { token, logout } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
-  const logout = () => {
-    setToken("");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userRole");
-    navigate("/");
-    window.location.reload();
-  };
 
   return (
     <div className="navbar">
@@ -83,26 +76,27 @@ const Navbar = ({ userRole }) => {
         {!token ? (
           <button onClick={() => setShowLogin(true)}>Đăng nhập</button>
         ) : (
-          <div className="navbar-profile">
-            <img src={assets.profile_icon} alt="" />
-            <ul className="navbar-profile-dropdown">
-              {userRole === "admin" ? (
-                <></>
-              ) : (
-                <>
-                  <li onClick={() => navigate("/myorders")}>
-                    <img src={assets.bag_icon} alt="" />
-                    <p>Orders</p>
-                  </li>
-                  <hr />
-                </>
-              )}
-              <li onClick={logout}>
-                <img src={assets.logout_icon} alt="" />
-                <p>Logout</p>
-              </li>
-            </ul>
-          </div>
+          <button onClick={logout}>Đăng xuất</button>
+          // <div className="navbar-profile">
+          //   <img src={assets.profile_icon} alt="" />
+          //   <ul className="navbar-profile-dropdown">
+          //     {userRole === "admin" ? (
+          //       <></>
+          //     ) : (
+          //       <>
+          //         <li onClick={() => navigate("/myorders")}>
+          //           <img src={assets.bag_icon} alt="" />
+          //           <p>Orders</p>
+          //         </li>
+          //         <hr />
+          //       </>
+          //     )}
+          //     <li onClick={logout}>
+          //       <img src={assets.logout_icon} alt="" />
+          //       <p>Logout</p>
+          //     </li>
+          //   </ul>
+          // </div>
         )}
       </div>
 

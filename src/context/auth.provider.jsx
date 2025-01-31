@@ -1,21 +1,19 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-
-const AuthContext = createContext();
+import AuthContext from ".";
+import { useNavigate } from "react-router-dom";
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
   const [token, setToken] = useState(null);
-  const [role, setRole] = useState("guest"); // Default là guest
-
-  const login = (userInfo, userRole) => {
-    setUser(userInfo);
-    setRole(userRole); // Xác định role sau khi login
-  };
+  const [userRole, setUserRole] = useState("guest"); // Default là guest
 
   const logout = () => {
-    setUser(null);
-    setRole("guest"); // Reset về guest khi logout
+    setToken("");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    navigate("/");
+    setUserRole("guest");
   };
 
   useEffect(() => {
@@ -26,9 +24,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const contextValue = {
-    user,
-    role,
-    login,
+    userRole,
+    setUserRole,
     logout,
     token,
     setToken,
@@ -38,8 +35,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
+
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
-
-export const useAuth = () => useContext(AuthContext);
