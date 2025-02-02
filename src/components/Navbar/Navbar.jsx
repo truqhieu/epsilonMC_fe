@@ -10,7 +10,7 @@ import useAuth from "../../hooks/useAuth";
 const Navbar = ({ userRole }) => {
   const [menu, setMenu] = useState("home");
   // const navigate = useNavigate();
-  const { token, logout } = useAuth();
+  const { accessToken, logout } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
 
   return (
@@ -60,7 +60,7 @@ const Navbar = ({ userRole }) => {
       </div>
 
       <div className="navbar-right">
-        {userRole === "admin" || !token ? (
+        {userRole === "admin" || !accessToken ? (
           <></>
         ) : (
           <>
@@ -73,7 +73,7 @@ const Navbar = ({ userRole }) => {
           </>
         )}
 
-        {!token ? (
+        {!accessToken ? (
           <button onClick={() => setShowLogin(true)}>Đăng nhập</button>
         ) : (
           <button onClick={logout}>Đăng xuất</button>

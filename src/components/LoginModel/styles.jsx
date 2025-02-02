@@ -61,6 +61,18 @@ export const LoginForStaffStyled = styled.div`
     padding-left: 65px;
   }
 
+  .error {
+    color: red;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    width: max-content;
+    transform: translateX(-50%);
+  }
+
   .otp {
     display: flex;
     gap: 10px;

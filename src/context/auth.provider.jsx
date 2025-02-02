@@ -5,21 +5,24 @@ import { useNavigate } from "react-router-dom";
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [token, setToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
   const [userRole, setUserRole] = useState("guest"); // Default là guest
 
   const logout = () => {
-    setToken("");
-    localStorage.removeItem("token");
+    setAccessToken(null);
+    setRefreshToken(null);
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("userRole");
     navigate("/");
     setUserRole("guest");
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
+    const storedToken = localStorage.getItem("accessToken");
     if (storedToken) {
-      setToken(storedToken);
+      setAccessToken(storedToken);
     }
   }, []);
 
@@ -27,8 +30,10 @@ export const AuthProvider = ({ children }) => {
     userRole,
     setUserRole,
     logout,
-    token,
-    setToken,
+    accessToken,
+    setAccessToken,
+    refreshToken,
+    setRefreshToken,
   };
 
   return (

@@ -1,8 +1,9 @@
 import http from "../../utils/axiosConfigs";
-import { apiLogin } from "./urls";
+import { apiLoginStaff, apiLoginPatient } from "./urls";
 
-const login = (body) => http.post(apiLogin, body);
+const loginStaff = (body) => http.post(apiLoginStaff, body);
+const loginPatient = (body) => http.post(apiLoginPatient, body);
 
-const AuthServices = { login };
+const AuthServices = { loginStaff, loginPatient };
 
 export default AuthServices;
