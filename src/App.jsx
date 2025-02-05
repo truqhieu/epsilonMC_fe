@@ -1,11 +1,11 @@
+import { Provider } from "react-redux";
 import AppRouter from "./routers/app.routes";
-import { AuthProvider } from "./context/auth.context";
+import store from "./reduxs/store";
 
 const App = () => (
-  <AuthProvider>
-    
+  <Provider store={store}>
     <AppRouter />
-  </AuthProvider>
+  </Provider>
 );
 
 export default App;
