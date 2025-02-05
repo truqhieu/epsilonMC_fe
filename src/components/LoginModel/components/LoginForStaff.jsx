@@ -3,34 +3,36 @@ import PropTypes from "prop-types";
 import { UserOutlined, LockOutlined, LeftOutlined } from "@ant-design/icons";
 import { LoginForStaffStyled } from "../styles";
 import AuthServices from "../../../services/AuthServices";
-import useAuth from "../../../hooks/useAuth";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setTokens, setUser } from "../../../reduxs/authReduxs/authSlice";
 
 const LoginForStaff = ({ setRoleLogin, onCancel }) => {
   const [loginError, setLoginError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formLogin] = Form.useForm();
-  const { setUserRole, setAccessToken, setRefreshToken } = useAuth();
+  const dispatch = useDispatch();
 
   const loginAccout = async () => {
     const values = await formLogin.validateFields();
     try {
       setLoading(true);
       const res = await AuthServices.loginStaff(values);
-      console.log(res.data.success);
+      console.log(res?.user);
 
-      if (res.data.success) {
-        setAccessToken(res.data.accessToken);
-        setRefreshToken(res.data.refreshToken);
-        setUserRole(res.data.user.role);
-        localStorage.setItem("accessToken", res.data.accessToken);
-        localStorage.setItem("refreshToken", res.data.refreshToken);
-        localStorage.setItem("userRole", res.data.user.role);
+      if (res.success) {
+        dispatch(
+          setTokens({
+            accessToken: res.accessToken,
+            refreshToken: res.refreshToken,
+          })
+        );
+        dispatch(setUser(res.user));
         onCancel();
         toast.success("Đăng nhập thành công!");
       }
-      if (!res.data.success) {
+      if (!res.success) {
         setLoginError(true);
         toast.error(res.data.message);
       }
@@ -79,6 +81,7 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
               placeholder="Mật khẩu"
+              onPressEnter={loginAccout}
             />
           </Form.Item>
           <Form.Item>

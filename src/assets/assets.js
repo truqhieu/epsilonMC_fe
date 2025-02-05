@@ -19,6 +19,7 @@ import package1 from "./icons/package1.png";
 import package2 from "./icons/package2.png";
 import package3 from "./icons/package3.png";
 import backgroundLogin from "./backgroundLogin.jpg";
+import avatar from "./avatar/profile_icon.png";
 
 export const assets = {
   logo,
@@ -42,4 +43,5 @@ export const assets = {
   package2,
   package3,
   backgroundLogin,
+  avatar,
 };

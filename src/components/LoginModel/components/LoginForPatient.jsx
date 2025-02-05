@@ -5,34 +5,36 @@ import { LoginForStaffStyled } from "../styles";
 import { useEffect, useState } from "react";
 import firebase from "firebase/compat/app";
 import AuthServices from "../../../services/AuthServices";
-import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setTokens, setUser } from "../../../reduxs/authReduxs/authSlice";
 
 const LoginForPatient = ({ setRoleLogin, onCancel }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
-  const { setUserRole, setAccessToken, setRefreshToken } = useAuth();
 
   const [formLogin] = Form.useForm();
+  const dispatch = useDispatch();
 
   const loginAccout = async () => {
     try {
       setLoading(true);
       const res = await AuthServices.loginPatient(phoneNumber);
-      console.log(res.data.success);
+      console.log(res.success);
 
-      if (res.data.success) {
-        setAccessToken(res.data.accessToken);
-        setRefreshToken(res.data.refreshToken);
-        setUserRole(res.data.user.role);
-        localStorage.setItem("accessToken", res.data.accessToken);
-        localStorage.setItem("refreshToken", res.data.refreshToken);
-        localStorage.setItem("userRole", res.data.user.role);
+      if (res.success) {
+        dispatch(
+          setTokens({
+            accessToken: res.accessToken,
+            refreshToken: res.refreshToken,
+          })
+        );
+        dispatch(setUser(res.user));
         onCancel();
         toast.success("Đăng nhập thành công!");
       }
-      if (!res.data.success) {
+      if (!res.success) {
         toast.error(res.data.message);
       }
     } catch (error) {

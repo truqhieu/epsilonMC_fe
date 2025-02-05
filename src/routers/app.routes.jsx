@@ -9,18 +9,21 @@ import {
 import AppNavbar from "../components/Navbar/Navbar";
 import AppHeader from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
-import useAuth from "../hooks/useAuth";
 import { ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
+import AuthLoader from "../reduxs/authReduxs/authLoader";
 const AppRouter = () => {
-  const { userRole } = useAuth();
+  const { user } = useSelector((state) => state.auth);
+  const userRole = user?.role || "guest";
 
   const renderRoutes = (routes) =>
     routes.map((route, index) => (
       <Route key={index} path={route.path} element={route.element} />
     ));
-  console.log(userRole);
+  console.log(user);
   return (
     <>
+      <AuthLoader />
       {/* Header hiển thị cố định */}
       <AppHeader />
       <AppNavbar />
