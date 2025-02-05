@@ -10,6 +10,8 @@ import { useAuth } from "../context/auth.context";
 import AppNavbar from "../components/Navbar/Navbar";
 import AppHeader from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
+import News from "../pages/Anonymous/News/News";
+import NewsDetails from "../pages/Anonymous/News/NewsDetails";
 const AppRouter = () => {
   const { role } = useAuth();
 
@@ -27,7 +29,8 @@ const AppRouter = () => {
       <Routes>
         {/* Điều hướng mặc định */}
         <Route path="/" element={<Navigate to="/trang-chu" replace />} />
-
+        <Route path ="/news" element={<News/>}  />
+        <Route path ="/newsDetail" element={<NewsDetails/>}  />
         {/* Public routes */}
         {renderRoutes(guestRoutes)}
 

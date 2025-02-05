@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/auth.context";
 
 const App = () => (
   <AuthProvider>
+    
     <AppRouter />
   </AuthProvider>
 );
