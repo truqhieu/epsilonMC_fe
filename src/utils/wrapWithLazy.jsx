@@ -1,4 +1,4 @@
-import LazyLoading from "../components/lazyLoading";
+import LazyLoading from "./lazyLoading";
 
 const wrapWithLazy = (Component) => (
   <LazyLoading>
