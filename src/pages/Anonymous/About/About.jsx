@@ -9,29 +9,27 @@ import psychologyImage from "../../../assets/icons/psy.png";
 
 const About = () => {
   return (
-    <div className="about-section">
-      <div className="about-header">
-        <img src={doctorImage} alt="Bác sĩ" className="doctor-img" />
-        <div className="about-content">
-          <h2>Về phòng khám chúng tôi</h2>
-          <p>
-            Epsilon là trung tâm chuyên khoa tâm thần - thần kinh - tư vấn tâm
-            lý, chuyên cung cấp các dịch vụ điều trị và hỗ trợ sức khỏe tinh
-            thần.
-          </p>
-          <p>
-            Phòng khám được phụ trách bởi <b>BS TRUNG HIẾU</b>:
-          </p>
-          <ul>
-            <li>Tốt nghiệp chuyên khoa 2 tâm thần, Đại học Y Hà Nội.</li>
-            <li>
-              Nguyên Trưởng khoa Tâm lý lâm sàng, Bệnh viện Tâm thần Hà Nội.
-            </li>
-            <li>
-              Có hơn 20 năm kinh nghiệm trong tư vấn tâm lý và điều trị các rối
-              loạn tâm thần - thần kinh.
-            </li>
-          </ul>
+    <div className="homepage">
+      <div className="mainstream">
+        <img src={doctorImage} alt="doctor" className="doctor-image" />
+        <div className="mainstream-content">
+          <h1 className="mainstream-title">Về phòng khám của chúng tôi</h1>
+          <div className="mainstream-description">
+            <div className="mainstream-description-content">
+              <p>Epsilon là trung tâm chuyên khoa tâm thần - thần kinh -</p>
+              <p>tư vấn tâm lý, chuyên cung cấp các dịch vụ điều trị và hỗ</p>
+              <p>trợ sức khỏe tinh thần</p>
+              <p>Phòng khám được phụ trách bởi BS TRUNG HIẾU:</p>
+              <ul>
+                <li>Tốt nghiệp chuyên khoa 2 tâm thần, Đại học Y Hà Nội.</li>
+                <li>
+                  Nguyên Trưởng khoa Tâm lý lâm sàng, Bệnh viện Tâm thần Hà Nội.
+                </li>
+                <li>Có hơn 20 năm kinh nghiệm trong tư vấn tâm lý và</li>
+                <li>điều trị các rối loạn tâm thần - thần kinh.</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -70,15 +68,30 @@ const About = () => {
               className="treatment-img"
             />
           </div>
-
-          {/* Hàng 2: Chữ bên trái - Ảnh bên phải */}
           <div className="treatment-item">
-            <h3>Khám chữa bệnh người lớn</h3>
+            <ul>
+              <h3>Khám chữa bệnh người lớn</h3>
+              <li>Các rối loạn giấc ngủ: mất ngủ, ngủ nhiều</li>
+              <li>Các rối loạn lo âu</li>
+              <li>Các rối loạn lưỡng cực</li>
+              <li>Các rối loạn dạng cơ thể</li>
+              <li>Co giật phân ly </li>
+              <li>Rối loạn ảm ảnh cưỡng bức </li>
+              <li>...</li>
+            </ul>
           </div>
 
           {/* Hàng 3: Ảnh bên trái - Chữ bên phải */}
           <div className="treatment-item">
-            <h3>Khám chữa bệnh trẻ em</h3>
+            <ul>
+              <h3>Khám chữa bệnh trẻ em</h3>
+              <li> Co giật do sốt </li>
+              <li> Động kinh</li>
+              <li> Rối loạn tăng động - giảm chú ý</li>
+              <li> Rối loạn bướng bỉnh - chống đối</li>
+              <li> Rối loạn hành vi</li>
+              <li>.....</li>
+            </ul>
           </div>
 
           {/* Hàng 4: Chữ bên trái - Ảnh bên phải */}
@@ -97,7 +110,15 @@ const About = () => {
             />
           </div>
           <div className="treatment-item">
-            <h3>Chuyên khoa thần kinh</h3>
+            <ul>
+              <h3>Chuyên khoa thần kinh</h3>
+              <li> Đau dai dẳng</li>
+              <li> Đau thần kinh tọa</li>
+              <li> Chóng mặt</li>
+              <li> Nhức đầu</li>
+              <li> Run: Parkinson, run lành tính ...</li>
+              <li>.....</li>
+            </ul>
           </div>
           <div className="treatment-item">
             <h3>Tư vấn tâm lý</h3>
