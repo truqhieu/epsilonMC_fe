@@ -1,14 +1,14 @@
-import React from "react";
 import { Row, Col, List, Typography, Card } from "antd";
 import { assets } from "../../../assets/assets";
-import "./News.css"
+import "./News.css";
 const { Title, Text, Paragraph } = Typography;
 
 const NewsDetail = () => {
   const newsData = {
     title: `Câu chuyện về Bác sĩ Trung Hiếu, hành trình lột xác từ một cậu bé tâm thần`,
     date: "10/02/2018",
-    image: "https://umcclinic.com.vn/Data/Sites/1/News/441/khi-nao-can-tham-khao-y-kien-cua-bac-si-tam-ly.jpg",
+    image:
+      "https://umcclinic.com.vn/Data/Sites/1/News/441/khi-nao-can-tham-khao-y-kien-cua-bac-si-tam-ly.jpg",
     content: `
       Thuở nhỏ, Trung Hiếu là một cậu bé vui vẻ, hòa đồng. Nhưng ở độ tuổi thanh thiếu niên, anh bắt đầu gặp phải những vấn đề tâm lý nghiêm trọng sau một biến cố gia đình. Những cơn lo âu triền miên, mất ngủ và cảm giác trống rỗng khiến cuộc sống của anh trở nên nặng nề. Dần dần, Hiếu rơi vào trạng thái khép kín, tránh né mọi người xung quanh và tưởng chừng sẽ không bao giờ tìm lại được chính mình.
       
@@ -18,7 +18,7 @@ const NewsDetail = () => {
     `,
   };
 
-  const relatedNews = Array.from({ length: 4 }).map((_, i) => ({
+  const relatedNews = Array.from({ length: 4 }).map(() => ({
     title: `Câu chuyện về Bác sĩ Trung Hiếu`,
     image: newsData.image,
   }));
@@ -44,7 +44,16 @@ const NewsDetail = () => {
         </div>
       </div>
 
-      <div style={{ display: "flex", width: "80%", margin: "auto", padding: "20px", gap: "100px", alignItems: "flex-start" }}>
+      <div
+        style={{
+          display: "flex",
+          width: "80%",
+          margin: "auto",
+          padding: "20px",
+          gap: "100px",
+          alignItems: "flex-start",
+        }}
+      >
         <div
           style={{
             flex: "1",
@@ -58,17 +67,31 @@ const NewsDetail = () => {
             itemLayout="horizontal"
             dataSource={relatedNews}
             renderItem={(item) => (
-              <List.Item style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
+              <List.Item
+                style={{ padding: "10px", borderBottom: "1px solid #ddd" }}
+              >
                 <List.Item.Meta
                   avatar={
                     <img
                       src={item.image}
                       alt="thumbnail"
-                      style={{ width: 70, height: 70, objectFit: "cover", borderRadius: "5px" }}
+                      style={{
+                        width: 70,
+                        height: 70,
+                        objectFit: "cover",
+                        borderRadius: "5px",
+                      }}
                     />
                   }
                   title={
-                    <Text style={{ fontSize: "14px", color: "#333", display: "block", textAlign: "center" }}>
+                    <Text
+                      style={{
+                        fontSize: "14px",
+                        color: "#333",
+                        display: "block",
+                        textAlign: "center",
+                      }}
+                    >
                       {item.title}
                     </Text>
                   }
