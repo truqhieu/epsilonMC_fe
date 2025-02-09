@@ -20,6 +20,10 @@ import package2 from "./icons/package2.png";
 import package3 from "./icons/package3.png";
 import backgroundLogin from "./backgroundLogin.jpg";
 import avatar from "./avatar/profile_icon.png";
+import brain from "./icons/brain.png";
+import hands from "./icons/hands.png";
+import network from "./icons/network.png";
+import psychology from "./icons/psy.png";
 
 export const assets = {
   logo,
@@ -44,4 +48,8 @@ export const assets = {
   package3,
   backgroundLogin,
   avatar,
+  brain,
+  hands,
+  network,
+  psychology,
 };

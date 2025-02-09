@@ -3,34 +3,65 @@ import PropTypes from "prop-types";
 import { UserOutlined, LockOutlined, LeftOutlined } from "@ant-design/icons";
 import { LoginForStaffStyled } from "../styles";
 import { useEffect, useState } from "react";
-import firebase from "firebase/compat/app";
 import AuthServices from "../../../services/AuthServices";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setTokens, setUser } from "../../../reduxs/authReduxs/authSlice";
 
 const LoginForPatient = ({ setRoleLogin, onCancel }) => {
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [otp, setOtp] = useState("");
+  const [seconds, setSeconds] = useState(0);
+  const [sendOTP, setSendOTP] = useState(false);
 
   const [formLogin] = Form.useForm();
   const dispatch = useDispatch();
 
-  const loginAccout = async () => {
+  const handleSendOTP = async () => {
     try {
       setLoading(true);
-      const res = await AuthServices.loginPatient(phoneNumber);
-      console.log(res.success);
+      const res = await AuthServices.sendOTP({ email });
+      if (res.success) {
+        toast.success("Gửi mã OTP thành công!");
+      } else {
+        toast.error("Vui lòng thử lại!");
+      }
+    } catch (error) {
+      console.error("Send OTP Failed:", error);
+    } finally {
+      setLoading(false);
+      setSendOTP(true);
+      setSeconds(60);
+    }
+  };
 
+  const verifyOTP = async () => {
+    const values = await formLogin.validateFields();
+    try {
+      setLoading(true);
+      const res = await AuthServices.verifyOTP(values);
+      if (res.success) {
+        loginPatient();
+      }
+    } catch (error) {
+      console.error("Verify OTP Failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loginPatient = async () => {
+    try {
+      setLoading(true);
+      const res = await AuthServices.loginPatient({ email });
       if (res.success) {
         dispatch(
           setTokens({
             accessToken: res.accessToken,
-            refreshToken: res.refreshToken,
           })
         );
         dispatch(setUser(res.user));
+        sessionStorage.removeItem("hasTriedRefresh");
         onCancel();
         toast.success("Đăng nhập thành công!");
       }
@@ -38,52 +69,21 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
         toast.error(res.data.message);
       }
     } catch (error) {
-      console.error("Login Failed:", error);
+      console.error("Login Failed", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const setUpRecaptcha = async () => {
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      "recaptcha-container",
-      {
-        size: "invisible",
-        defaultCountry: "VN",
-      }
-    );
-    await window.recaptchaVerifier.render();
-  };
-
-  const handleSendOTP = async () => {
-    const appVerifier = window.recaptchaVerifier;
-    try {
-      const confirmationResult = await firebase
-        .auth()
-        .signInWithPhoneNumber(phoneNumber, appVerifier);
-
-      window.confirmationResult = confirmationResult;
-      console.log("OTP đã được gửi");
-    } catch (error) {
-      console.error("SMS not sent", error);
-    }
-  };
-
-  const verifyOTP = async () => {
-    try {
-      const result = await window.confirmationResult.confirm(otp);
-      loginAccout();
-      console.log("Đăng nhập thành công", result.user);
-    } catch (error) {
-      console.error("Mã OTP không chính xác", error);
-    }
-  };
-
-  console.log(phoneNumber, otp);
-
   useEffect(() => {
-    setUpRecaptcha();
-  }, []);
+    if (seconds <= 0) return;
+    const intervalId = setInterval(() => {
+      setSeconds((prevSeconds) => prevSeconds - 1);
+    }, 1000);
+
+    // xóa interval khi seconds thay đổi
+    return () => clearInterval(intervalId);
+  }, [seconds]);
 
   return (
     <Spin spinning={loading}>
@@ -95,6 +95,9 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
           />
           <div className="title-login">Đăng nhập cho Bệnh Nhân</div>
         </div>
+        {sendOTP ? (
+          <div className="error">Gửi lại mã OTP sau {seconds} giây</div>
+        ) : null}
         <Form
           form={formLogin}
           name="normal_login"
@@ -102,23 +105,25 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
           style={{ width: "70%", margin: "auto" }}
         >
           <Form.Item
-            name="username"
+            name="email"
             rules={[
-              { required: true, message: "Vui lòng nhập Số Điện Thoại!" },
+              { required: true, message: "Vui lòng nhập Email!" },
+              { type: "email", message: "Email không hợp lệ!" },
             ]}
           >
             <div className="otp" style={{ display: "flex" }}>
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Số Điện Thoại"
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Vui lòng nhập Email"
+                onChange={(e) => setEmail(e.target.value)}
               />
               <Button
                 style={{
                   backgroundColor: "#3e70a7",
                   color: "white",
                 }}
-                onClick={handleSendOTP} // Gửi mã OTP
+                onClick={handleSendOTP} // Gửi mã otp
+                disabled={seconds > 0}
               >
                 Gửi OTP
               </Button>
@@ -132,7 +137,6 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="otp"
               placeholder="Nhập mã OTP"
-              onChange={(e) => setOtp(e.target.value)}
             />
           </Form.Item>
           <Form.Item>
@@ -149,7 +153,6 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
             </Button>
           </Form.Item>
         </Form>
-        <div id="recaptcha-container"></div>
       </LoginForStaffStyled>
     </Spin>
   );
