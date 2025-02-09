@@ -11,6 +11,7 @@ const ROUTERS = {
   ABOUT: "/gioi-thieu",
   INFORMATION: "/thong-tin",
   NEWS: "/tin-tuc",
+  NEWS_DETAIL: "/tin-tuc-chi-tiet",
   CONTACT: "/lien-he",
 
   //Bệnh nhân

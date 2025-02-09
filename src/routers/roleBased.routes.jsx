@@ -8,10 +8,12 @@ const HomePage = React.lazy(() =>
 );
 const About = React.lazy(() => import("../pages/Anonymous/About/About"));
 const News = React.lazy(() => import("../pages/Anonymous/News/News"));
+const NewsDetail = React.lazy(() => import("../pages/Anonymous/News/NewsDetails"));
 const Information = React.lazy(() =>
   import("../pages/Anonymous/Information/Information")
 );
 const Contact = React.lazy(() => import("../pages/Anonymous/Contact/Contact"));
+
 
 export const adminRoutes = [
   {
@@ -52,6 +54,10 @@ export const guestRoutes = [
   {
     path: ROUTERS.NEWS,
     element: wrapWithLazy(News),
+  },
+  {
+    path: ROUTERS.NEWS_DETAIL, 
+    element: wrapWithLazy(NewsDetail),
   },
   {
     path: ROUTERS.CONTACT,
