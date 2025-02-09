@@ -2,7 +2,7 @@ import { Spin } from "antd";
 import React from "react";
 import PropTypes from "prop-types";
 
-function LazyLoading({ children }) {
+export default function LazyLoading({ children }) {
   return (
     <React.Suspense
       fallback={
@@ -18,5 +18,3 @@ function LazyLoading({ children }) {
 LazyLoading.propTypes = {
   children: PropTypes.node.isRequired,
 };
-
-export default LazyLoading;

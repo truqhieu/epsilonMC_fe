@@ -25,7 +25,6 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
         dispatch(
           setTokens({
             accessToken: res.accessToken,
-            refreshToken: res.refreshToken,
           })
         );
         dispatch(setUser(res.user));

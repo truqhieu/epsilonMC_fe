@@ -20,7 +20,7 @@ const AppRouter = () => {
     routes.map((route, index) => (
       <Route key={index} path={route.path} element={route.element} />
     ));
-  console.log(user);
+  console.log(userRole);
   return (
     <>
       <AuthLoader />
