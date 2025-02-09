@@ -1,10 +1,10 @@
 import React from "react";
 import { Row, Col, List, Typography, Card } from "antd";
-
+import { assets } from "../../../assets/assets";
+import "./News.css"
 const { Title, Text, Paragraph } = Typography;
 
 const NewsDetail = () => {
-
   const newsData = {
     title: `Câu chuyện về Bác sĩ Trung Hiếu, hành trình lột xác từ một cậu bé tâm thần`,
     date: "10/02/2018",
@@ -24,83 +24,104 @@ const NewsDetail = () => {
   }));
 
   return (
-    <div style={{ display: "flex", width: "80%", margin: "auto", padding: "20px", gap: "100px", alignItems: "flex-start" }}>
-      <div
-        style={{
-          flex: "1",
-          maxWidth: "20%",
-          background: "#eaf6f6",
-          padding: "15px",
-          borderRadius: "10px",
-        }}
-      >
-        <List
-          itemLayout="horizontal"
-          dataSource={relatedNews}
-          renderItem={(item) => (
-            <List.Item style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
-              <List.Item.Meta
-                avatar={
-                  <img
-                    src={item.image}
-                    alt="thumbnail"
-                    style={{ width: 70, height: 70, objectFit: "cover", borderRadius: "5px" }}
-                  />
-                }
-                title={
-                  <Text style={{ fontSize: "14px", color: "#333", display: "block", textAlign: "center" }}>
-                    {item.title}
-                  </Text>
-                }
-              />
-            </List.Item>
-          )}
-        />
+    <div>
+      <div className="mainstream">
+        <img src={assets.doctor} alt="doctor" className="doctor-image" />
+        <div className="mainstream-content">
+          <h1 className="mainstream-title">Tin tức & Câu chuyện</h1>
+          <div className="mainstream-description">
+            <div className="mainstream-description-content">
+              <p>- Cập nhật thông tin mới nhất</p>
+              <p>- Câu chuyện truyền cảm hứng</p>
+              <p>- Kiến thức y khoa</p>
+            </div>
+            <div className="mainstream-description-content">
+              <p>- Chia sẻ từ chuyên gia</p>
+              <p>- Kinh nghiệm điều trị</p>
+              <p>- Sự kiện nổi bật</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div style={{ flex: "3" }}>
-        <Row gutter={[20, 20]} align="middle">
-          <Col xs={24} sm={6} md={5}>
-            <Card
-              cover={
-                <img
-                  src={newsData.image}
-                  alt="news"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    objectFit: "cover",
-                    borderRadius: "8px",
-                  }}
+      <div style={{ display: "flex", width: "80%", margin: "auto", padding: "20px", gap: "100px", alignItems: "flex-start" }}>
+        <div
+          style={{
+            flex: "1",
+            maxWidth: "20%",
+            background: "#eaf6f6",
+            padding: "15px",
+            borderRadius: "10px",
+          }}
+        >
+          <List
+            itemLayout="horizontal"
+            dataSource={relatedNews}
+            renderItem={(item) => (
+              <List.Item style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
+                <List.Item.Meta
+                  avatar={
+                    <img
+                      src={item.image}
+                      alt="thumbnail"
+                      style={{ width: 70, height: 70, objectFit: "cover", borderRadius: "5px" }}
+                    />
+                  }
+                  title={
+                    <Text style={{ fontSize: "14px", color: "#333", display: "block", textAlign: "center" }}>
+                      {item.title}
+                    </Text>
+                  }
                 />
-              }
-              bordered={false}
-              style={{ boxShadow: "none" }}
-            />
-          </Col>
+              </List.Item>
+            )}
+          />
+        </div>
 
-          <Col xs={24} sm={18} md={19}>
-            <Title level={3} style={{ marginBottom: "5px" }}>
-              {newsData.title}
-            </Title>
-            <Text type="secondary">{newsData.date}</Text>
-          </Col>
-        </Row>
+        <div style={{ flex: "3" }}>
+          <Row gutter={[20, 20]} align="middle">
+            <Col xs={24} sm={6} md={5}>
+              <Card
+                cover={
+                  <img
+                    src={newsData.image}
+                    alt="news"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                    }}
+                  />
+                }
+                bordered={false}
+                style={{ boxShadow: "none" }}
+              />
+            </Col>
 
-        <Row>
-          <Col span={24}>
-            <Paragraph
-              style={{
-                fontSize: "16px",
-                lineHeight: "1.8",
-                textAlign: "justify",
-                marginTop: "20px",
-              }}
-            >
-              {newsData.content}
-            </Paragraph>
-          </Col>
-        </Row>
+            <Col xs={24} sm={18} md={19}>
+              <Title level={3} style={{ marginBottom: "5px" }}>
+                {newsData.title}
+              </Title>
+              <Text type="secondary">{newsData.date}</Text>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={24}>
+              <Paragraph
+                style={{
+                  fontSize: "16px",
+                  lineHeight: "1.8",
+                  textAlign: "justify",
+                  marginTop: "20px",
+                }}
+              >
+                {newsData.content}
+              </Paragraph>
+            </Col>
+          </Row>
+        </div>
       </div>
     </div>
   );
