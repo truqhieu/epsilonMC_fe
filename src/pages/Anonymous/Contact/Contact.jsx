@@ -1,4 +1,3 @@
-import { assets } from "../../../assets/assets";
 import "./Contact.css";
 
 const ContactPage = () => {
@@ -17,7 +16,7 @@ const ContactPage = () => {
               <textarea placeholder="Nội dung tin nhắn" rows="5" required></textarea>
               <button type="submit">Gửi tin nhắn</button>
             </form>
-            
+
           </div>
           <div className="contact-info">
 
