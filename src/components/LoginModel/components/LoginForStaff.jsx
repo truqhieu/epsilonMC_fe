@@ -25,10 +25,10 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
         dispatch(
           setTokens({
             accessToken: res.accessToken,
-            refreshToken: res.refreshToken,
           })
         );
         dispatch(setUser(res.user));
+        sessionStorage.removeItem("hasTriedRefresh");
         onCancel();
         toast.success("Đăng nhập thành công!");
       }
@@ -54,7 +54,7 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
           <div className="title-login">Đăng nhập cho Nhân Viên</div>
         </div>
         {loginError ? (
-          <div className="error">Số Điện Thoại Hoặc Mật Khẩu không đúng!</div>
+          <div className="error">Email Hoặc Mật Khẩu không đúng!</div>
         ) : null}
         <Form
           form={formLogin}
@@ -63,14 +63,17 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
           style={{ width: "70%", margin: "auto" }}
         >
           <Form.Item
-            name="phone"
-            rules={[
-              { required: true, message: "Vui lòng nhập Số Điện Thoại!" },
-            ]}
+            name="email"
+            rules={[{ required: true, message: "Vui lòng nhập Email!" }]}
           >
             <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Số Điện Thoại"
+              prefix={
+                <UserOutlined
+                  className="site-form-item-icon"
+                  style={{ paddingRight: "10px" }}
+                />
+              }
+              placeholder="Vui lòng nhập Email"
             />
           </Form.Item>
           <Form.Item
@@ -78,7 +81,12 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
             rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
           >
             <Input
-              prefix={<LockOutlined className="site-form-item-icon" />}
+              prefix={
+                <LockOutlined
+                  className="site-form-item-icon"
+                  style={{ paddingRight: "10px" }}
+                />
+              }
               type="password"
               placeholder="Mật khẩu"
               onPressEnter={loginAccout}

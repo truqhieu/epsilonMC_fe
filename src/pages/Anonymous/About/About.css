@@ -1,3 +1,7 @@
+.homepage{
+    padding-top: 5px;
+}
+
 .mainstream{
     height: 34vw;
     margin: 0px 135px;
@@ -42,35 +46,32 @@
     gap: 10px;
 }
 
-/* Ảnh bác sĩ */
 .doctor-img {
     width: 450px;
     height: auto;
     object-fit: cover;
     border-radius: 10px;
-    margin-right: 40px; /* Thêm khoảng cách giữa ảnh và nội dung */
+    margin-right: 40px; 
 }
 
-/* Danh sách dịch vụ */
 .mainstream-description-content ul {
-    padding-left: 0; /* Loại bỏ thụt đầu dòng mặc định */
-    list-style-position: inside; /* Đưa dấu chấm về bên trong */
-}
-.mainstream-description-content li {
-    margin-left: 0; /* Giữ danh sách sát mép trái */
-    text-indent: -1.2em; /* Căn chỉnh dấu chấm */
-    padding-left: 1.2em; /* Dịch chuyển nội dung về phải một chút */
+    padding-left: 0; 
+    list-style-position: inside; 
 }
 
+.mainstream-description-content li {
+    margin-left: 0; 
+    text-indent: -1.2em; 
+    padding-left: 1.2em; 
+}
 
 .services {
     background-color: #f1efef;
-    margin-top: -13px; /* Đẩy phần dịch vụ lên sát với phần header */
-    padding-top: 20px;
-    padding-bottom: 40px; /* Tạo thêm khoảng cách phía dưới button */
+    margin-top: 20px; 
+    padding-top: 30px;
+    padding-bottom: 40px; 
 }
 
-/* Tiêu đề */
 .services h3 {
     text-align: center;
     font-size: 1.8rem;
@@ -79,16 +80,15 @@
     margin-bottom: 50px;
 }
 
-/* Danh sách dịch vụ */
 .service-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Chia làm 2 cột */
-    column-gap: 100px; /* Tăng khoảng cách giữa hai cột */
-    row-gap: 15px; /* Điều chỉnh khoảng cách giữa các dòng */
+    grid-template-columns: repeat(2, 1fr); 
+    column-gap: 100px; 
+    row-gap: 15px; 
     align-items: center;
     justify-content: center;
     text-align: left;
-    max-width: 800px; /* Giảm chiều rộng để không bị dàn quá rộng */
+    max-width: 800px;
     margin: 0 auto;
     margin-right: 290px;
 }
@@ -97,17 +97,15 @@
 .service-item {
     display: flex;
     align-items: center;
-    gap: 10px; /* Giữ khoảng cách giữa icon và chữ */
+    gap: 10px;
 }
 
-
-/* Biểu tượng check màu xanh lá */
 .check-icon {
-    color: #52c41a; /* Xanh lá */
+    color: #52c41a; 
     font-size: 1.5rem;
     margin-right: 10px;
 }
-/* Nút đặt hẹn */
+
 .appointment-btn {
     display: flex;
     justify-content: center;
@@ -120,7 +118,7 @@
     padding: 12px 20px;
     border-radius: 25px;
     cursor: pointer;
-    margin: 20px auto 20px; /* Thêm khoảng cách bên dưới */
+    margin: 30px auto 0px; 
     width: fit-content;
 }
 
@@ -128,23 +126,21 @@
     background-color: #cc0000;
 }
 
-
-/* Bố cục danh mục khám chữa bệnh */
 .treatment-section {
     max-width: 1200px;
-    margin: 50px auto;
-}/* Bố cục danh mục khám chữa bệnh - 2 cột */
+    margin: 25px auto;
+}
+
 .treatment-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Chia thành 2 cột */
-    gap: 20px 0px; /* Khoảng cách giữa hàng và cột */
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px 0px; 
     align-items: center;
     justify-content: center;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Căn chỉnh mỗi mục dịch vụ */
 .treatment-item {
     display: flex;
     align-items: center;
@@ -152,13 +148,11 @@
     width: 100%;
 }
 
-/* Cột 1: Hình ảnh (nếu là ảnh) căn trái */
 .treatment-item img {
     width: 300px;
     height: auto;
 }
 
-/* Cột 2: Văn bản (nếu là chữ) căn phải */
 .treatment-item h3 {
     font-size: 1.5rem;
     font-weight: bold;

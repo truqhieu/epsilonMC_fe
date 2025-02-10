@@ -1,33 +1,29 @@
-import React from "react";
-import "./About.css"; // Import file CSS riêng
-import doctorImage from "../../../assets/avatar/doctor.png"; // Đúng đường dẫn
-import { CheckCircleOutlined } from "@ant-design/icons"; // Import icon từ Ant Design
-import brainImage from "../../../assets/icons/brain.png"; // Hình não bộ
-import handsImage from "../../../assets/icons/hands.png"; // Hình bàn tay
-import networkImage from "../../../assets/icons/network.png"; // Hình mạng thần kinh
-import psychologyImage from "../../../assets/icons/psy.png";
+import "./About.css";
+import { CheckCircleOutlined } from "@ant-design/icons";
+import { assets } from "../../../assets/assets";
 
 const About = () => {
   return (
     <div className="homepage">
       <div className="mainstream">
-        <img src={doctorImage} alt="doctor" className="doctor-image" />
+        <img src={assets.doctor} alt="doctor" className="doctor-image" />
         <div className="mainstream-content">
-          <h1 className="mainstream-title">Về phòng khám của chúng tôi</h1>
+          <h1 className="mainstream-title">Dịch vụ điều trị theo yêu cầu</h1>
           <div className="mainstream-description">
             <div className="mainstream-description-content">
-              <p>Epsilon là trung tâm chuyên khoa tâm thần - thần kinh -</p>
-              <p>tư vấn tâm lý, chuyên cung cấp các dịch vụ điều trị và hỗ</p>
-              <p>trợ sức khỏe tinh thần</p>
-              <p>Phòng khám được phụ trách bởi BS TRUNG HIẾU:</p>
-              <ul>
-                <li>Tốt nghiệp chuyên khoa 2 tâm thần, Đại học Y Hà Nội.</li>
-                <li>
-                  Nguyên Trưởng khoa Tâm lý lâm sàng, Bệnh viện Tâm thần Hà Nội.
-                </li>
-                <li>Có hơn 20 năm kinh nghiệm trong tư vấn tâm lý và</li>
-                <li>điều trị các rối loạn tâm thần - thần kinh.</li>
-              </ul>
+              <p>- Rối loạn giấc ngủ</p>
+              <p>- Chậm nói</p>
+              <p>- Tự kỷ </p>
+              <p>- Tăng động giảm chú ý</p>
+              <p>- Trầm cảm lô âu</p>
+              <p>- Chóng mặt đau đầu</p>
+            </div>
+            <div className="mainstream-description-content">
+              <p>- Hoang tưởng ảo giác</p>
+              <p>- Co giật</p>
+              <p>- Ám ảnh tâm lý</p>
+              <p>- Rối loạn hoặc giảm trí nhớ</p>
+              <p>- Tư vấn và điều trị tâm lý</p>
             </div>
           </div>
         </div>
@@ -63,7 +59,7 @@ const About = () => {
           {/* Hàng 1: Ảnh bên trái - Chữ bên phải */}
           <div className="treatment-item">
             <img
-              src={brainImage}
+              src={assets.brain}
               alt="Khám bệnh người lớn"
               className="treatment-img"
             />
@@ -97,14 +93,14 @@ const About = () => {
           {/* Hàng 4: Chữ bên trái - Ảnh bên phải */}
           <div className="treatment-item">
             <img
-              src={handsImage}
+              src={assets.hands}
               alt="Chuyên khoa thần kinh"
               className="treatment-img"
             />
           </div>
           <div className="treatment-item">
             <img
-              src={psychologyImage}
+              src={assets.psychology}
               alt="Chuyên khoa thần kinh"
               className="treatment-img"
             />
@@ -125,7 +121,7 @@ const About = () => {
           </div>
           <div className="treatment-item">
             <img
-              src={networkImage}
+              src={assets.network}
               alt="Chuyên khoa thần kinh"
               className="treatment-img"
             />

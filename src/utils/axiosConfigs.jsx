@@ -1,36 +1,28 @@
 import axios from "axios";
 import store from "../reduxs/store";
 import { logout, setTokens } from "../reduxs/authReduxs/authSlice";
+import AuthServices from "../services/AuthServices";
 
 const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 const http = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
+  withCredentials: true, // Gửi cookie HTTP-Only
 });
 
 // Hàm làm mới accessToken bằng refreshToken
 const refreshAccessToken = async () => {
   try {
-    const { refreshToken } = store.getState().auth;
-    if (!refreshToken) throw new Error("No refresh token available");
+    const response = await AuthServices.refresh(); // Gửi cookie HTTP-Only
 
-    const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
-      refreshToken,
-    });
-
-    // Cập nhật accessToken mới vào Redux
-    store.dispatch(
-      setTokens({
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken || refreshToken, // Giữ nguyên refreshToken nếu không có cái mới
-      })
-    );
-
-    return response.data.accessToken;
+    // Cập nhật accessToken vào Redux
+    store.dispatch(setTokens({ accessToken: response.accessToken }));
+    localStorage.setItem("accessToken", response.accessToken);
+    return response.accessToken;
   } catch (error) {
-    store.dispatch(logout());
     console.error("Failed to refresh access token:", error);
+    store.dispatch(logout());
     return null;
   }
 };

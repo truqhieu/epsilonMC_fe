@@ -8,25 +8,15 @@ const HomePage = React.lazy(() =>
 );
 const About = React.lazy(() => import("../pages/Anonymous/About/About"));
 const News = React.lazy(() => import("../pages/Anonymous/News/News"));
-const NewsDetail = React.lazy(() => import("../pages/Anonymous/News/NewsDetails"));
+const NewsDetail = React.lazy(() =>
+  import("../pages/Anonymous/News/NewsDetails")
+);
 const Information = React.lazy(() =>
   import("../pages/Anonymous/Information/Information")
 );
 const Contact = React.lazy(() => import("../pages/Anonymous/Contact/Contact"));
 
-
-export const adminRoutes = [
-  {
-    path: ROUTERS.QUAN_LY_KHACH,
-    element: wrapWithLazy(),
-  },
-  {
-    path: ROUTERS.QUAN_LY_LICH_HOP,
-    element: wrapWithLazy(),
-  },
-  // ... Các route dành riêng cho admin
-];
-
+export const adminRoutes = [];
 export const staffRoutes = [];
 export const patientRoutes = [];
 export const managerRoutes = [];
@@ -56,7 +46,7 @@ export const guestRoutes = [
     element: wrapWithLazy(News),
   },
   {
-    path: ROUTERS.NEWS_DETAIL, 
+    path: ROUTERS.NEWS_DETAIL,
     element: wrapWithLazy(NewsDetail),
   },
   {

@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../reduxs/authReduxs/authSlice";
 import { LogoutOutlined } from "@ant-design/icons";
 
-const Navbar = ({ userRole }) => {
+const Navbar = () => {
   const [menu, setMenu] = useState("home");
   const { accessToken, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -63,19 +63,6 @@ const Navbar = ({ userRole }) => {
       </div>
 
       <div className="navbar-right">
-        {userRole === "admin" || !accessToken ? (
-          <></>
-        ) : (
-          <>
-            <img src={assets.search_icon} alt="" />
-            <div className="navbar-search-icon">
-              <Link to="/cart">
-                <img src={assets.basket_icon} alt="" />
-              </Link>
-            </div>
-          </>
-        )}
-
         {!accessToken ? (
           <button onClick={() => setShowLogin(true)}>Đăng nhập</button>
         ) : (
@@ -105,7 +92,6 @@ const Navbar = ({ userRole }) => {
 
 Navbar.propTypes = {
   setShowLogin: PropTypes.func.isRequired,
-  userRole: PropTypes.string.isRequired,
 };
 
 export default Navbar;
