@@ -1,6 +1,7 @@
 import "./About.css";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { assets } from "../../../assets/assets";
+import { Link } from "react-router-dom";
 
 const About = () => {
   return (
@@ -50,13 +51,18 @@ const About = () => {
             <span>Tư vấn và điều trị tâm lý</span>
           </div>
         </div>
-        <button className="appointment-btn">Đặt hẹn ngay →</button>
+        <button className="appointment-btn">
+          <Link
+            to="/dat-lich"
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            Đặt hẹn ngay →
+          </Link>
+        </button>
       </div>
 
-      {/* Bố cục danh mục khám chữa bệnh */}
       <div className="treatment-section">
         <div className="treatment-grid">
-          {/* Hàng 1: Ảnh bên trái - Chữ bên phải */}
           <div className="treatment-item">
             <img
               src={assets.brain}
@@ -77,7 +83,6 @@ const About = () => {
             </ul>
           </div>
 
-          {/* Hàng 3: Ảnh bên trái - Chữ bên phải */}
           <div className="treatment-item">
             <ul>
               <h3>Khám chữa bệnh trẻ em</h3>
@@ -90,7 +95,6 @@ const About = () => {
             </ul>
           </div>
 
-          {/* Hàng 4: Chữ bên trái - Ảnh bên phải */}
           <div className="treatment-item">
             <img
               src={assets.hands}

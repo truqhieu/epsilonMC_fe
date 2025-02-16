@@ -7,7 +7,7 @@ const BENH_NHAN = "benh-nhan";
 const ROUTERS = {
   //Guest
   HOME: "/trang-chu",
-  LOGIN: "/dang-nhap",
+  BOOKING: "/dat-lich",
   ABOUT: "/gioi-thieu",
   INFORMATION: "/thong-tin",
   NEWS: "/tin-tuc",
