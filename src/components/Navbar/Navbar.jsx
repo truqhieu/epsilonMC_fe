@@ -8,12 +8,19 @@ import LoginForm from "../LoginModel/LoginModel";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../reduxs/authReduxs/authSlice";
 import { LogoutOutlined } from "@ant-design/icons";
+import AuthServices from "../../services/AuthServices";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
   const { accessToken, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [showLogin, setShowLogin] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    const res = AuthServices.logout();
+    console.log(res);
+  };
   console.log("user", user?.name);
 
   return (
@@ -74,7 +81,7 @@ const Navbar = () => {
               </div>
             </div>
             <ul className="navbar-profile-dropdown">
-              <li onClick={() => dispatch(logout())}>
+              <li onClick={() => handleLogout()}>
                 <LogoutOutlined />
                 <p style={{ width: "max-content" }}>Đăng xuất</p>
               </li>

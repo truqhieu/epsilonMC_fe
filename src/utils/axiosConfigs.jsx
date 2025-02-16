@@ -47,17 +47,37 @@ http.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+    //khac loi 401
+    if (!error.response || error.response.status !== 401) {
+      return Promise.reject(error);
+    }
+
+    //dang nhập sai
+    if (
+      error.response.data?.message === "Mật khẩu không chính xác" ||
+      error.response.data?.message === "Người dùng không tồn tại"
+    ) {
+      return Promise.reject(error);
+    }
+
+    if (originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+
+    try {
       const newAccessToken = await refreshAccessToken();
 
       if (newAccessToken) {
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return http(originalRequest); // Gửi lại request với token mới
       }
+    } catch (refreshError) {
+      return Promise.reject(refreshError);
     }
 
-    return error.response ? error.response : Promise.reject(error);
+    return Promise.reject(error);
   }
 );
 
