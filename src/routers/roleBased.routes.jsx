@@ -15,7 +15,7 @@ const Information = React.lazy(() =>
   import("../pages/Anonymous/Information/Information")
 );
 const Contact = React.lazy(() => import("../pages/Anonymous/Contact/Contact"));
-
+const DoctorDetails = React.lazy(() => import("../pages/Anonymous/Information/DoctorDetail"));
 export const adminRoutes = [];
 export const staffRoutes = [];
 export const patientRoutes = [];
@@ -57,6 +57,11 @@ export const guestRoutes = [
     path: ROUTERS.INFORMATION,
     element: wrapWithLazy(Information),
   },
+  {
+    path: ROUTERS.DOCTOR_DETAIL, 
+    element: wrapWithLazy(DoctorDetails),
+  },
+  
   {
     path: "*",
     element: wrapWithLazy(UnauthorizedPage),

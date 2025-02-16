@@ -10,6 +10,7 @@ const ROUTERS = {
   LOGIN: "/dang-nhap",
   ABOUT: "/gioi-thieu",
   INFORMATION: "/thong-tin",
+  DOCTOR_DETAIL : "/doctor-detail/:id",
   NEWS: "/tin-tuc",
   NEWS_DETAIL: "/tin-tuc-chi-tiet",
   CONTACT: "/lien-he",

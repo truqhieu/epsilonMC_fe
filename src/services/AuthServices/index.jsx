@@ -6,6 +6,7 @@ import {
   apiSendOTP,
   apiVerifyOTP,
   apiLogout,
+
 } from "./urls";
 
 const loginStaff = (body) => http.post(apiLoginStaff, body);
@@ -22,6 +23,7 @@ const AuthServices = {
   sendOTP,
   verifyOTP,
   logout,
+ 
 };
 
 export default AuthServices;

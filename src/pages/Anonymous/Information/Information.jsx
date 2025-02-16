@@ -1,35 +1,48 @@
-// eslint-disable-next-line no-unused-vars
-import React from "react";
-import { List } from "antd";
+import React, { useEffect, useState } from "react";
+import { List, Spin, Alert } from "antd";
+import { useNavigate } from "react-router-dom"; // Import useNavigate để điều hướng
+import UserServices from "../../../services/UserServices";
 import { assets } from "../../../assets/assets";
 import "./Information.css";
 
 const Information = () => {
-  const data = Array.from({ length: 4 }).map(() => ({
-    href: "/tin-tuc-chi-tiet",
-    title: `Câu chuyện về Bác sĩ Trung Hiếu`,
-    date: "10/02/2018",
-    thumbnail:
-      "https://umcclinic.com.vn/Data/Sites/1/News/441/khi-nao-can-tham-khao-y-kien-cua-bac-si-tam-ly.jpg",
-    mainImage:
-      "https://umcclinic.com.vn/Data/Sites/1/News/441/khi-nao-can-tham-khao-y-kien-cua-bac-si-tam-ly.jpg",
-  }));
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Hook điều hướng
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await UserServices.getDoctors();
+        if (Array.isArray(response) && response.length > 0) {
+          setDoctors(response);
+        } else {
+          setDoctors([]);
+          setError("Không có dữ liệu bác sĩ!");
+        }
+      } catch (err) {
+        setError("Lỗi khi tải danh sách bác sĩ!");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDoctors();
+  }, []);
 
   return (
     <div className="homepage">
       <div className="mainstream">
         <img src={assets.doctor} alt="doctor" className="doctor-image" />
         <div className="mainstream-content">
-          <h1 className="mainstream-title">
-            Khám - tư vấn - điều trị các bệnh
-          </h1>
+          <h1 className="mainstream-title">Khám - tư vấn - điều trị các bệnh</h1>
           <div className="mainstream-description">
             <div className="mainstream-description-content">
               <p>- Rối loạn giấc ngủ</p>
               <p>- Chậm nói</p>
               <p>- Tự kỷ </p>
               <p>- Tăng động giảm chú ý</p>
-              <p>- Trầm cảm lô âu</p>
+              <p>- Trầm cảm lo âu</p>
               <p>- Chóng mặt đau đầu</p>
             </div>
             <div className="mainstream-description-content">
@@ -43,116 +56,30 @@ const Information = () => {
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          width: "80%",
-          margin: "auto",
-          padding: "20px",
-          gap: "100px",
-          alignItems: "flex-start",
-        }}
-      >
-        <div
-          style={{
-            flex: "1",
-            maxWidth: "20%",
-            background: "#eaf6f6",
-            padding: "15px",
-            borderRadius: "10px",
-            display: "flex",
-            flexDirection: "column",
-            alignSelf: "flex-start",
-          }}
-        >
+      {/* Danh sách bác sĩ */}
+      <div className="doctor-list">
+        {loading ? (
+          <Spin size="large" />
+        ) : error ? (
+          <Alert message={error} type="error" />
+        ) : (
           <List
-            itemLayout="horizontal"
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item
-                style={{ padding: "10px", borderBottom: "1px solid #ddd" }}
-              >
-                <List.Item.Meta
-                  avatar={
-                    <img
-                      src={item.thumbnail}
-                      alt="thumbnail"
-                      style={{
-                        width: 70,
-                        height: 70,
-                        objectFit: "cover",
-                        borderRadius: "5px",
-                      }}
-                    />
-                  }
-                  title={
-                    <a
-                      href={item.href}
-                      style={{
-                        fontSize: "14px",
-                        color: "#333",
-                        display: "block",
-                        textAlign: "center",
-                      }}
-                    >
-                      {item.title}
-                    </a>
-                  }
-                />
-              </List.Item>
-            )}
-          />
-        </div>
-
-        {/* Phần bên phải */}
-        <div style={{ flex: "3" }}>
-          <List
-            itemLayout="horizontal"
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item
-                style={{
-                  padding: "15px",
-                  borderBottom: "1px solid #ddd",
-                  display: "flex",
-                  alignItems: "center",
-                  background: "#fff",
-                  borderRadius: "8px",
-                  gap: "15px",
-                }}
-              >
-                <div style={{ flex: "1", maxWidth: "30%" }}>
-                  <img
-                    src={item.mainImage}
-                    alt="news"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                    }}
-                  />
-                </div>
-                <div style={{ flex: "2" }}>
-                  <a
-                    href={item.href}
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      color: "#333",
-                      display: "block",
-                    }}
-                  >
-                    {item.title}
-                  </a>
-                  <span style={{ color: "#777", fontSize: "14px" }}>
-                    {item.date}
-                  </span>
+            grid={{ gutter: 16, column: 4 }} // Hiển thị 4 cột ngang
+            dataSource={doctors}
+            renderItem={(doctor, index) => (
+              <List.Item>
+                <div
+                  className="doctor-card"
+                  onClick={() => navigate(`/doctor-detail/${index + 1}`)} // Chuyển hướng với số thứ tự
+                  style={{ cursor: "pointer" }}
+                >
+                  <h3>{doctor.name}</h3>
+                  <p>{doctor.specialization}</p>
                 </div>
               </List.Item>
             )}
           />
-        </div>
+        )}
       </div>
     </div>
   );
