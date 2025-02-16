@@ -28,10 +28,10 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
           })
         );
         dispatch(setUser(res.user));
-        sessionStorage.removeItem("hasTriedRefresh");
         onCancel();
         toast.success("Đăng nhập thành công!");
       }
+
       if (!res.success) {
         setLoginError(true);
         toast.error(res.data.message);

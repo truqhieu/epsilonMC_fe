@@ -19,10 +19,16 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
 
   const handleSendOTP = async () => {
     try {
+      if (email === "") {
+        toast.error("Vui lòng nhập Email!");
+        return;
+      }
       setLoading(true);
       const res = await AuthServices.sendOTP({ email });
       if (res.success) {
         toast.success("Gửi mã OTP thành công!");
+        setSendOTP(true);
+        setSeconds(60);
       } else {
         toast.error("Vui lòng thử lại!");
       }
@@ -30,8 +36,6 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
       console.error("Send OTP Failed:", error);
     } finally {
       setLoading(false);
-      setSendOTP(true);
-      setSeconds(60);
     }
   };
 
