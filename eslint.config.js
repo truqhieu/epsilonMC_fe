@@ -17,7 +17,11 @@ export default [
         sourceType: "module",
       },
     },
-    settings: { react: { version: "18.3" } },
+    settings: {
+      react: {
+        version: "18",
+      },
+    },
     plugins: {
       react,
       "react-hooks": reactHooks,
@@ -34,6 +38,5 @@ export default [
         { allowConstantExport: true },
       ],
     },
-    build: { dymamicImportVars: true },
   },
 ];

@@ -19,7 +19,6 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
     try {
       setLoading(true);
       const res = await AuthServices.loginStaff(values);
-      console.log(res?.user);
 
       if (res.success) {
         dispatch(

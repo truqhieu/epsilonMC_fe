@@ -17,10 +17,8 @@ const NavbarUser = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    const res = AuthServices.logout();
-    console.log(res);
+    AuthServices.logout();
   };
-  console.log("user", user?.name);
 
   return (
     <div className="navbar-user">

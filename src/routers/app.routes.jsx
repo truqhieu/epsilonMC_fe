@@ -32,7 +32,7 @@ const AppRouter = () => {
     <>
       <AuthLoader />
       {!isDatLichPage && <BookingButton />}
-      {!isDatLichPage && <AppHeader />}
+      {!isDatLichPage && !isNotGuest && <AppHeader />}
       {isDatLichPage || isNotGuest ? <NavbarUser /> : <Navbar />}
 
       <Routes>
