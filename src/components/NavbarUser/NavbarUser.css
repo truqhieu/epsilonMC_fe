@@ -1,9 +1,10 @@
 .navbar-user{
     padding: 20px 0px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     background-color: #bce6f7;
+    padding: 10px 100px;
   }
   
   .navbar-user-left{

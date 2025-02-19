@@ -34,7 +34,6 @@ const AppRouter = () => {
       {!isDatLichPage && <BookingButton />}
       {!isDatLichPage && !isNotGuest && <AppHeader />}
       {isDatLichPage || isNotGuest ? <NavbarUser /> : <Navbar />}
-
       <Routes>
         <Route path="/" element={<Navigate to="/trang-chu" replace />} />
         {renderRoutes(guestRoutes)}
