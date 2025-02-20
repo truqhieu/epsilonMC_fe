@@ -19,8 +19,6 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
     try {
       setLoading(true);
       const res = await AuthServices.loginStaff(values);
-      console.log(res?.user);
-
       if (res.success) {
         dispatch(
           setTokens({
@@ -31,13 +29,10 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
         onCancel();
         toast.success("Đăng nhập thành công!");
       }
-
-      if (!res.success) {
-        setLoginError(true);
-        toast.error(res.data.message);
-      }
     } catch (error) {
-      console.error("Login Failed:", error);
+      setLoginError(true);
+      toast.error("Email hoặc mật khẩu không đúng!");
+      console.log("Login Failed:", error);
     } finally {
       setLoading(false);
     }
