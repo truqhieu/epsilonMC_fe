@@ -206,3 +206,28 @@
     padding: 8px;
     margin: auto;
 }
+.doctor-list {
+    margin-top: 20px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .doctor-card {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: #fff;
+  }
+  
+  .doctor-card h3 {
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .doctor-card p {
+    font-size: 14px;
+    color: #777;
+  }
