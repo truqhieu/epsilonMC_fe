@@ -1,23 +1,40 @@
 import BookingForm from "./components/BookingForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BankOutlined, CheckOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, ConfigProvider, Steps } from "antd";
+import { ConfigProvider, Steps } from "antd";
 import PaymentPage from "./components/PaymentPage";
 import { BookingPageContainer } from "./styles";
+import InvoiceServices from "../../services/InvoiceServices";
+import ConfirmBooking from "./components/ConfirmBooking";
 
 const BookingPage = () => {
   const [current, setCurrent] = useState(0);
   const [amount, setAmount] = useState(0);
+  const [isBooking, setIsBooking] = useState(false);
 
   const invoiceId = localStorage.getItem("invoiceId");
 
-  const next = () => {
-    setCurrent(current + 1);
+  const getInvoiceById = async (id, intervalId) => {
+    try {
+      const res = await InvoiceServices.getInvoiceById(id);
+      console.log(res?.invoice?.status);
+      if (res?.invoice?.status === "paid") {
+        setCurrent(2);
+        clearInterval(intervalId);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const prev = () => {
-    setCurrent(current - 1);
-  };
+  useEffect(() => {
+    if (isBooking) {
+      const intervalId = setInterval(() => {
+        getInvoiceById(invoiceId, intervalId);
+      }, 5000);
+      return () => clearInterval(intervalId);
+    }
+  }, [invoiceId, isBooking]);
 
   const qr_url = `https://qr.sepay.vn/img?acc=67808082002&bank=TPBank&amount=${amount}&des=TKPEH ${invoiceId}`;
 
@@ -55,19 +72,15 @@ const BookingPage = () => {
 
         <div className="steps-content">
           {current === 0 && (
-            <BookingForm next={next} setAmount={setAmount} amount={amount} />
+            <BookingForm
+              setCurrent={setCurrent}
+              setAmount={setAmount}
+              amount={amount}
+              setIsBooking={setIsBooking}
+            />
           )}
           {current === 1 && <PaymentPage qr_url={qr_url} amount={amount} />}
-          {current === 2 && <div>Step 3 Content</div>}
-        </div>
-
-        <div className="steps-action">
-          <Button disabled={current === 0} onClick={() => prev()}>
-            Previous
-          </Button>
-          <Button type="primary" onClick={() => next()}>
-            {current === 2 ? "Done" : "Next"}
-          </Button>
+          {current === 2 && <ConfirmBooking />}
         </div>
       </div>
     </BookingPageContainer>

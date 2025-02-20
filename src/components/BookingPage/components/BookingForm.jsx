@@ -7,7 +7,7 @@ import ExamServices from "../../../services/ExamServices";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-const BookingForm = ({ next, setAmount }) => {
+const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [birthday, setBirthday] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -107,8 +107,9 @@ const BookingForm = ({ next, setAmount }) => {
       });
       if (res?.success) {
         localStorage.setItem("invoiceId", res.invoiceId);
+        setIsBooking(true);
+        setCurrent(1);
       }
-      next();
     } catch (error) {
       console.log(error);
     } finally {
@@ -386,8 +387,9 @@ const BookingForm = ({ next, setAmount }) => {
   );
 };
 BookingForm.propTypes = {
-  next: PropTypes.func.isRequired,
+  setCurrent: PropTypes.func.isRequired,
   setAmount: PropTypes.func.isRequired,
+  setIsBooking: PropTypes.func.isRequired,
 };
 
 export default BookingForm;

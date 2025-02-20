@@ -43,6 +43,7 @@ export const PaymentContainer = styled.div`
     gap: 50px;
     align-items: center;
     margin-top: 40px;
+    margin-bottom: 40px;
   }
 
   .content-title {
@@ -66,5 +67,43 @@ export const PaymentContainer = styled.div`
     font-size: 1.2em;
     margin-bottom: 10px;
     font-weight: 600;
+  }
+`;
+
+export const ConfirmBookingContainer = styled.div`
+  .confirm-booking-page {
+    margin: 2vh 30vh;
+    text-align: center;
+  }
+
+  .check-icon {
+    color: #1ab2c9;
+    border: 2px solid #1ab2c9;
+    border-radius: 20%;
+    padding: 20px;
+    font-size: 10rem;
+    margin: 50px auto;
+  }
+
+  .content-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .note {
+    width: 100%;
+    font-size: 0%.8;
+    margin-bottom: 30px;
+  }
+
+  .button-confirm {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
   }
 `;
