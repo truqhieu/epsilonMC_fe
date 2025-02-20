@@ -24,7 +24,7 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="navbar-left">
-        <Link to="/trang-chu" onClick={() => setMenu("home")}>
+        <Link to="/" onClick={() => setMenu("home")}>
           <img src={assets.logo} alt="logo" className="logo"></img>
         </Link>
       </div>

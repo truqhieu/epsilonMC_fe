@@ -7,12 +7,14 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setTokens, setUser } from "../../../reduxs/authReduxs/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const LoginForStaff = ({ setRoleLogin, onCancel }) => {
   const [loginError, setLoginError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formLogin] = Form.useForm();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const loginAccout = async () => {
     const values = await formLogin.validateFields();
@@ -26,6 +28,7 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
           })
         );
         dispatch(setUser(res.user));
+        navigate(`/${res?.user?.role}`);
         onCancel();
         toast.success("Đăng nhập thành công!");
       }

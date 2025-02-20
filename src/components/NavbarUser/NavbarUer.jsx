@@ -23,10 +23,7 @@ const NavbarUser = () => {
   return (
     <div className="navbar-user">
       <div className="navbar-user-left">
-        <Link
-          to="/trang-chu"
-          style={{ textDecoration: "none", color: "#0787b2" }}
-        >
+        <Link to="/" style={{ textDecoration: "none", color: "#0787b2" }}>
           <h2>EPSILON HEAVEN</h2>
         </Link>
       </div>

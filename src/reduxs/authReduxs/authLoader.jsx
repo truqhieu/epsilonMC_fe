@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { logout, setTokens, setUser } from "./authSlice";
 import AuthServices from "../../services/AuthServices";
 
 const AuthLoader = () => {
   const dispatch = useDispatch();
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -13,10 +12,6 @@ const AuthLoader = () => {
     const hasTriedRefresh = sessionStorage.getItem("hasTriedRefresh");
 
     const refreshAccessToken = async () => {
-      if (isRefreshing || hasTriedRefresh) return; // Ngăn gọi lại nhiều lần
-      setIsRefreshing(true);
-      sessionStorage.setItem("hasTriedRefresh", "true"); // Đánh dấu đã thử refresh
-
       try {
         const response = await AuthServices.refresh();
 
@@ -31,8 +26,6 @@ const AuthLoader = () => {
       } catch (error) {
         console.error("Failed to refresh access token:", error);
         dispatch(logout());
-      } finally {
-        setIsRefreshing(false);
       }
     };
 
@@ -40,10 +33,9 @@ const AuthLoader = () => {
       dispatch(setTokens({ accessToken }));
       dispatch(setUser(user));
     } else if (!hasTriedRefresh && document.cookie.includes("refreshToken")) {
-      // Chỉ thử refresh nếu refreshToken tồn tại trong cookie
       refreshAccessToken();
     }
-  }, [dispatch, isRefreshing]);
+  }, [dispatch]);
 
   return null;
 };

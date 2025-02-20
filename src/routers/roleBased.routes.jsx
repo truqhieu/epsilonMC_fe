@@ -2,7 +2,8 @@ import ROUTERS from "./index";
 import wrapWithLazy from "../utils/wrapWithLazy";
 import React from "react";
 
-const UnauthorizedPage = React.lazy(() => import("../pages/NotFound"));
+//Guest routes
+const NotFound = React.lazy(() => import("../pages/NotFound/NotFound"));
 const HomePage = React.lazy(() =>
   import("../pages/Anonymous/HomePage/HomePage")
 );
@@ -22,19 +23,53 @@ const Booking = React.lazy(() =>
 const DoctorDetails = React.lazy(() =>
   import("../pages/Anonymous/Information/DoctorDetail")
 );
+
+//Staff routes
+const AppointmentList = React.lazy(() =>
+  import("../pages/Staffs/AppointmentList/AppointmentList")
+);
+const MedicalRecords = React.lazy(() =>
+  import("../pages/Staffs/MedicalRecords/MedicalRecords")
+);
+const DashboardStaff = React.lazy(() =>
+  import("../pages/Staffs/DashboardStaff/DashboardStaff")
+);
+
+//Doctor routes
+const DashboardDoctor = React.lazy(() =>
+  import("../pages/Doctors/DashboardDoctor/DashboardDoctor")
+);
+
+export const staffRoutes = [
+  {
+    path: ROUTERS.DASHBOARD_STAFF,
+    element: wrapWithLazy(DashboardStaff),
+  },
+  {
+    path: ROUTERS.DANH_SACH_LICH_KHAM,
+    element: wrapWithLazy(AppointmentList),
+  },
+  {
+    path: ROUTERS.HO_SO_BENH_AN_NHAN_VIEN,
+    element: wrapWithLazy(MedicalRecords),
+  },
+  {
+    path: "/not-found",
+    element: wrapWithLazy(NotFound),
+  },
+];
 export const adminRoutes = [];
-export const staffRoutes = [];
 export const patientRoutes = [];
 export const managerRoutes = [];
 
 export const doctorRoutes = [
   {
-    path: ROUTERS.HOME,
-    element: wrapWithLazy(HomePage),
+    path: ROUTERS.DASHBOARD_DOCTOR,
+    element: wrapWithLazy(DashboardDoctor),
   },
   {
-    path: ROUTERS.GIAM_SAT_CUOC_HOP_APP,
-    element: wrapWithLazy(),
+    path: "/not-found",
+    element: wrapWithLazy(NotFound),
   },
 ];
 
@@ -72,7 +107,7 @@ export const guestRoutes = [
     element: wrapWithLazy(DoctorDetails),
   },
   {
-    path: "*",
-    element: wrapWithLazy(UnauthorizedPage),
+    path: "/not-found",
+    element: wrapWithLazy(NotFound),
   },
 ];
