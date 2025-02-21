@@ -1,14 +1,11 @@
-// UserRoleLayout.js
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
-  HomeOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { StaffLayoutStyled } from "./styles";
@@ -23,6 +20,8 @@ import {
   staffRoutes,
 } from "../routers/roleBased.routes";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import ROUTERS from "../routers";
+import { menuItemsStaff } from "./components/MenuItemStaff";
 
 const { Header, Sider, Content } = Layout;
 
@@ -43,61 +42,6 @@ const StaffLayout = ({ renderRoutes }) => {
   } = theme.useToken();
 
   // Tạo menu dựa trên userRole
-  const menuItems = {
-    doctor: [
-      {
-        key: "1",
-        icon: <UserOutlined />,
-        label: "Bệnh nhân",
-      },
-      {
-        key: "2",
-        icon: <VideoCameraOutlined />,
-        label: "Chẩn đoán",
-      },
-    ],
-    staff: [
-      {
-        key: "1",
-        icon: <HomeOutlined />,
-        label: "Dashborad",
-      },
-      {
-        key: "2",
-        icon: <UserOutlined />,
-        label: "Quản lý lịch khám",
-      },
-      {
-        key: "3",
-        icon: <VideoCameraOutlined />,
-        label: "Chẩn đoán",
-      },
-    ],
-    admin: [
-      {
-        key: "1",
-        icon: <UserOutlined />,
-        label: "Quản lý người dùng",
-      },
-      {
-        key: "2",
-        icon: <VideoCameraOutlined />,
-        label: "Thống kê",
-      },
-    ],
-    manager: [
-      {
-        key: "1",
-        icon: <UserOutlined />,
-        label: "Quản lý công việc",
-      },
-      {
-        key: "2",
-        icon: <VideoCameraOutlined />,
-        label: "Báo cáo",
-      },
-    ],
-  };
 
   const navigationPaths = {
     doctor: {
@@ -105,9 +49,9 @@ const StaffLayout = ({ renderRoutes }) => {
       2: "/doctor/diagnosis", // Chẩn đoán
     },
     staff: {
-      1: "/staff/dashboard",
-      2: "/staff/danh-sach-lich-kham",
-      3: "/staff/ho-so-benh-an",
+      1: ROUTERS.DASHBOARD_STAFF,
+      2: ROUTERS.DANH_SACH_LICH_KHAM,
+      3: ROUTERS.HO_SO_BENH_AN_NHAN_VIEN,
     },
     admin: {
       1: "/admin/manage-users", // Quản lý người dùng
@@ -119,7 +63,7 @@ const StaffLayout = ({ renderRoutes }) => {
     },
   };
 
-  const menu = menuItems[userRole] || menuItems.staff;
+  const menu = menuItemsStaff[userRole] || menuItemsStaff.staff;
 
   console.log(userRole);
 
