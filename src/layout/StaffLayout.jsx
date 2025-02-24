@@ -30,11 +30,15 @@ const StaffLayout = ({ renderRoutes }) => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userRole = user?.role || "staff";
+  const userRole = user?.role;
 
   const handleLogout = () => {
     dispatch(logout());
     AuthServices.logout();
+
+    setTimeout(() => {
+      navigate("/");
+    }, 100);
   };
 
   const {

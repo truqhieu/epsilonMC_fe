@@ -17,10 +17,12 @@ const AppRouter = () => {
   const isDatLichPage = pathName === "/dat-lich";
   const isPatient = user?.role === "patient";
 
+  console.log(!user || isPatient);
+
   return (
     <>
       <AuthLoader />
-      {isPatient || !!user ? (
+      {isPatient || !user ? (
         <GuestLayout
           isDatLichPage={isDatLichPage}
           renderRoutes={renderRoutes}
