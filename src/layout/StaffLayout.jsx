@@ -65,8 +65,6 @@ const StaffLayout = ({ renderRoutes }) => {
 
   const menu = menuItemsStaff[userRole] || menuItemsStaff.staff;
 
-  console.log(userRole);
-
   return (
     <StaffLayoutStyled>
       <Layout>
