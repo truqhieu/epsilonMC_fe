@@ -15,6 +15,8 @@ const ROUTERS = {
   NEWS_DETAIL: "/tin-tuc-chi-tiet",
   CONTACT: "/lien-he",
   COMMUNITY: "/hoi-dap",
+  NOTFOUND: "/not-found",
+
   //Bệnh nhân
   DANG_KY_KHAM: `/${BENH_NHAN}/dang-ky-kham`,
   LICH_SU_KHAM: `/${BENH_NHAN}/lich-su-kham`,

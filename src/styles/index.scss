@@ -1,0 +1,16 @@
+// main.scss
+@forward "./flexBox/flex_box";
+
+// margin
+@forward "./margin/margin";
+@forward "./margin/margin_bottom";
+@forward "./margin/margin_left";
+@forward "./margin/margin_right";
+@forward "./margin/margin_top";
+
+// padding
+@forward "./padding/padding.scss";
+@forward "./padding/padding_bottom.scss";
+@forward "./padding/padding_left.scss";
+@forward "./padding/padding_right.scss";
+@forward "./padding/padding_top.scss";

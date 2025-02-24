@@ -8,3 +8,11 @@ export const TableCustom = styled(Table)`
     font-size: 1.2em;
   }
 `;
+
+export const DetailAppointment = styled.div`
+  .detail-appointment {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+`;

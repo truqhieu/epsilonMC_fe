@@ -138,11 +138,17 @@ const StaffLayout = ({ renderRoutes }) => {
             }}
           >
             <Routes>
-              {userRole === "doctor" && renderRoutes(doctorRoutes)}
-              {userRole === "staff" && renderRoutes(staffRoutes)}
-              {userRole === "admin" && renderRoutes(adminRoutes)}
-              {userRole === "manager" && renderRoutes(managerRoutes)}
-              <Route path="/*" element={<Navigate to="/not-found" />} />
+              <Route
+                path="/"
+                element={<Navigate to={ROUTERS.DASHBOARD_STAFF} replace />}
+              />
+              <>
+                {userRole === "doctor" && renderRoutes(doctorRoutes)}
+                {userRole === "staff" && renderRoutes(staffRoutes)}
+                {userRole === "admin" && renderRoutes(adminRoutes)}
+                {userRole === "manager" && renderRoutes(managerRoutes)}
+              </>
+              <Route path="/*" element={<Navigate to={ROUTERS.NOTFOUND} />} />
             </Routes>
           </Content>
         </Layout>

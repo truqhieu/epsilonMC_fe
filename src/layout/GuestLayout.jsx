@@ -6,10 +6,14 @@ import AppHeader from "../components/Header/Header";
 import NavbarUser from "../components/NavbarUser/NavbarUer";
 import Navbar from "../components/Navbar/Navbar";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { guestRoutes } from "../routers/roleBased.routes";
+import { guestRoutes, patientRoutes } from "../routers/roleBased.routes";
 import Footer from "../components/Footer/Footer";
+import ROUTERS from "../routers";
+import { useSelector } from "react-redux";
 
 const GuestLayout = ({ isDatLichPage, renderRoutes, isPatient }) => {
+  const { user } = useSelector((state) => state.auth);
+  const userRole = user?.role || "staff";
   return (
     <>
       {!isDatLichPage && <BookingButton />}
@@ -17,7 +21,9 @@ const GuestLayout = ({ isDatLichPage, renderRoutes, isPatient }) => {
       {isDatLichPage || isPatient ? <NavbarUser /> : <Navbar />}
       <Routes>
         {renderRoutes(guestRoutes)}
-        <Route path="/*" element={<Navigate to="/not-found" />} />
+        {userRole === "patient" && renderRoutes(patientRoutes)}
+
+        <Route path="/*" element={<Navigate to={ROUTERS.NOTFOUND} />} />
       </Routes>
       <Footer />
     </>

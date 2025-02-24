@@ -55,7 +55,7 @@ export const staffRoutes = [
     element: wrapWithLazy(MedicalRecords),
   },
   {
-    path: "/not-found",
+    path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
 ];
@@ -69,7 +69,7 @@ export const doctorRoutes = [
     element: wrapWithLazy(DashboardDoctor),
   },
   {
-    path: "/not-found",
+    path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
 ];
@@ -112,7 +112,11 @@ export const guestRoutes = [
     element: wrapWithLazy(CommunityPage),
   },
   {
-    path: "/not-found",
+    path: ROUTERS.COMMUNITY,
+    element: wrapWithLazy(CommunityPage),
+  },
+  {
+    path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
 ];

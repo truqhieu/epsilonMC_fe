@@ -28,7 +28,7 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
           })
         );
         dispatch(setUser(res.user));
-        navigate(`/${res?.user?.role}`);
+        navigate(`/${res?.user?.role}/dashboard`);
         onCancel();
         toast.success("Đăng nhập thành công!");
       }
