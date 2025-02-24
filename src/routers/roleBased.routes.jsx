@@ -23,6 +23,7 @@ const Booking = React.lazy(() =>
 const DoctorDetails = React.lazy(() =>
   import("../pages/Anonymous/Information/DoctorDetail")
 );
+const CommunityPage = React.lazy(() => import("../pages/Community/CommunityPage"));
 
 //Staff routes
 const AppointmentList = React.lazy(() =>
@@ -105,6 +106,10 @@ export const guestRoutes = [
   {
     path: ROUTERS.DOCTOR_DETAIL,
     element: wrapWithLazy(DoctorDetails),
+  },
+  {
+    path: ROUTERS.COMMUNITY,
+    element: wrapWithLazy(CommunityPage),
   },
   {
     path: "/not-found",

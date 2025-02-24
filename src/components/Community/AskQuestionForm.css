@@ -1,0 +1,36 @@
+.ask-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .ask-form input,
+  .ask-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .ask-form textarea {
+    resize: none;
+    height: 80px;
+  }
+  
+  .ask-form button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .ask-form button:hover {
+    background: #0056b3;
+  }
+  
