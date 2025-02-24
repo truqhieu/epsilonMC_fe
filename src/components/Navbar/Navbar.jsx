@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./Navbar.css";
 import PropTypes from "prop-types";
 import { assets } from "../../assets/assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginForm from "../LoginModel/LoginModel";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../reduxs/authReduxs/authSlice";
@@ -15,10 +15,15 @@ const Navbar = () => {
   const { accessToken, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [showLogin, setShowLogin] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logout());
     AuthServices.logout();
+
+    setTimeout(() => {
+      navigate("/");
+    }, 100);
   };
 
   return (
