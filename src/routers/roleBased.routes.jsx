@@ -59,7 +59,16 @@ export const staffRoutes = [
   },
 ];
 export const adminRoutes = [];
-export const patientRoutes = [];
+export const patientRoutes = [
+  {
+    path: ROUTERS.DANG_KY_KHAM,
+    element: wrapWithLazy(Booking),
+  },
+  {
+    path: ROUTERS.NOTFOUND,
+    element: wrapWithLazy(NotFound),
+  },
+];
 export const managerRoutes = [];
 
 export const doctorRoutes = [

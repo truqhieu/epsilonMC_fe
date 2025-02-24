@@ -33,7 +33,7 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
 
   return (
     <CustomModal
-      title="Chi tiết"
+      title="Chi tiết lịch khám"
       open={open}
       onCancel={onCancel}
       loading={loading}
