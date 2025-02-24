@@ -14,16 +14,17 @@ import { useSelector } from "react-redux";
 const GuestLayout = ({ isDatLichPage, renderRoutes, isPatient }) => {
   const { user } = useSelector((state) => state.auth);
   const userRole = user?.role || "staff";
+
   return (
     <>
       {!isDatLichPage && <BookingButton />}
-      {!isDatLichPage && <AppHeader />}
+      {!isDatLichPage || isPatient && <AppHeader />}
       {isDatLichPage || isPatient ? <NavbarUser /> : <Navbar />}
       <Routes>
         {renderRoutes(guestRoutes)}
         {userRole === "patient" && renderRoutes(patientRoutes)}
 
-        <Route path="/*" element={<Navigate to={ROUTERS.NOTFOUND} />} />
+        {/* <Route path="/*" element={<Navigate to={ROUTERS.NOTFOUND} />} /> */}
       </Routes>
       <Footer />
     </>

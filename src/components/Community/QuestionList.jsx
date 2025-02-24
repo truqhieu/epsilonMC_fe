@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { Modal, Button } from "antd";
+import { MessageOutlined } from "@ant-design/icons";
 import CommunityService from "../../services/CommunityServices";
 import "./QuestionList.css";
 
 const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchQuestions();
@@ -20,6 +24,18 @@ const QuestionList = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Xử lý mở popup
+  const openModal = (question) => {
+    setSelectedQuestion(question);
+    setIsModalOpen(true);
+  };
+
+  // Xử lý đóng popup
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedQuestion(null);
   };
 
   return (
@@ -46,23 +62,54 @@ const QuestionList = () => {
             <p className="question-content">{q.content}</p>
 
             {/* Thời gian đăng câu hỏi */}
-            <p className="question-date">
-              📅 {new Date(q.createdAt).toLocaleDateString()}
-            </p>
+            <p className="question-date">📅 {new Date(q.createdAt).toLocaleDateString()}</p>
 
-            {/* Phần câu trả lời */}
-            <div className="answer-section">
-            <p>
-  <strong>Bác sĩ:</strong>{" "}
-  <span className="doctor-name">{q.doctorId?.name || "Chưa cập nhật"}</span>
-</p>
-              <p>
-                <strong>Trả lời:</strong> {q.answer}
-              </p>
+            {/* Nút xem chi tiết */}
+            <div className="question-footer">
+              <span className="question-time">
+                ⏳ {new Date(q.updatedAt).toLocaleDateString()}
+              </span>
+              <span className="question-reply" onClick={() => openModal(q)}>
+                <MessageOutlined className="reply-icon" /> {q.answer ? "1 Trả lời" : "Chưa có trả lời"}
+              </span>
+              <span className="question-thanks">❤️ 0 Cảm ơn</span>
             </div>
           </div>
         ))
       )}
+
+      {/* Popup Modal hiển thị chi tiết câu hỏi */}
+      <Modal title="Chi tiết câu hỏi" open={isModalOpen} onCancel={closeModal} footer={null}>
+        {selectedQuestion && (
+          <div className="modal-content">
+            <h4 className="modal-question-title">{selectedQuestion.title}</h4>
+            <p className="modal-question-meta">
+              {selectedQuestion.gender}, {selectedQuestion.age} tuổi
+            </p>
+            <p className="modal-question-content">{selectedQuestion.content}</p>
+            <p className="modal-question-date">
+              📅 Ngày hỏi: {new Date(selectedQuestion.createdAt).toLocaleDateString()}
+            </p>
+
+            {selectedQuestion.answer ? (
+              <div className="modal-answer-section">
+                <p>
+                  <strong>Bác sĩ:</strong>{" "}
+                  <span className="doctor-name">{selectedQuestion.doctorId?.name || "Chưa cập nhật"}</span>
+                </p>
+                <p>
+                  <strong>Trả lời:</strong> {selectedQuestion.answer}
+                </p>
+                <p className="modal-answer-time">
+                  ⏳ Ngày trả lời: {new Date(selectedQuestion.updatedAt).toLocaleDateString()}
+                </p>
+              </div>
+            ) : (
+              <p className="no-answer">Chưa có câu trả lời.</p>
+            )}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

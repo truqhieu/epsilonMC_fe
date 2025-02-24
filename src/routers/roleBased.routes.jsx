@@ -60,7 +60,13 @@ export const staffRoutes = [
   },
 ];
 export const adminRoutes = [];
-export const patientRoutes = [];
+export const patientRoutes = [
+  {
+    path: ROUTERS.COMMUNITY,
+    element: wrapWithLazy(CommunityPage),
+  },
+ 
+];
 export const managerRoutes = [];
 
 export const doctorRoutes = [
@@ -111,10 +117,7 @@ export const guestRoutes = [
     path: ROUTERS.COMMUNITY,
     element: wrapWithLazy(CommunityPage),
   },
-  {
-    path: ROUTERS.COMMUNITY,
-    element: wrapWithLazy(CommunityPage),
-  },
+
   {
     path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),

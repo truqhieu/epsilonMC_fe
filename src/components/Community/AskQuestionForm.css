@@ -1,36 +1,80 @@
 .ask-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ask-form label {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.ask-form input,
+.ask-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+}
+
+.ask-form textarea {
+  resize: none;
+  height: 80px;
+}
+
+/* Căn chỉnh giới tính & tuổi cùng dòng */
+.gender-age {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.gender-age label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Đảm bảo các radio nằm trên cùng một dòng */
+.gender-age input[type="radio"] {
+  margin-left: 5px;
+}
+
+/* Căn chỉnh nút gửi */
+.ask-form button {
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease-in-out;
+}
+
+.ask-form button:hover {
+  background: #0056b3;
+}
+
+/* Tăng khoảng cách trên mobile */
+@media (max-width: 480px) {
+  .ask-form {
+      width: 90%;
+      padding: 15px;
   }
   
-  .ask-form input,
-  .ask-form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
+  .gender-age {
+      flex-direction: column;
+      gap: 10px;
   }
-  
-  .ask-form textarea {
-    resize: none;
-    height: 80px;
-  }
-  
-  .ask-form button {
-    width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s ease-in-out;
-  }
-  
-  .ask-form button:hover {
-    background: #0056b3;
-  }
-  
+}
