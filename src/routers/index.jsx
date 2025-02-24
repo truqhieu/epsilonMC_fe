@@ -1,7 +1,7 @@
 const BAC_SI = "doctor";
 const NHAN_VIEN = "staff";
 // const QUAN_LY = "quan_ly";
-const BENH_NHAN = "benh-nhan";
+const BENH_NHAN = "patient";
 // const ADMIN = "admin";
 
 const ROUTERS = {

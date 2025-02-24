@@ -20,11 +20,10 @@ const AppRouter = () => {
   return (
     <>
       <AuthLoader />
-      {isPatient || !user ? (
+      {isPatient || !!user ? (
         <GuestLayout
           isDatLichPage={isDatLichPage}
           renderRoutes={renderRoutes}
-          isPatient={isPatient}
         />
       ) : (
         <StaffLayout renderRoutes={renderRoutes} />
