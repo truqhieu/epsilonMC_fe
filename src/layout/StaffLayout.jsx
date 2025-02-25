@@ -40,7 +40,11 @@ const StaffLayout = () => {
   // Tạo menu dựa trên userRole
 
   const routes = {
-    doctor: ["patients", "diagnosis"],
+    doctor: [
+      "patients", 
+      "diagnosis",
+      ROUTERS.DANH_SACH_LICH_HEN,
+    ],
     staff: [
       ROUTERS.DASHBOARD_STAFF,
       ROUTERS.DANH_SACH_LICH_KHAM,
