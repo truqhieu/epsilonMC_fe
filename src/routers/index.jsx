@@ -2,7 +2,7 @@ const BAC_SI = "doctor";
 const NHAN_VIEN = "staff";
 // const QUAN_LY = "quan_ly";
 const BENH_NHAN = "benh-nhan";
-// const ADMIN = "admin";
+const ADMIN = "admin";
 
 const ROUTERS = {
   //Guest
@@ -31,5 +31,7 @@ const ROUTERS = {
   // Quản lý
 
   // Admin
+  XEM_DANH_SACH_ACCOUNT: "/admin/manage-users",
+  TAO_ACCOUNT: "/admin/tao-tai-khoan",
 };
 export default ROUTERS;

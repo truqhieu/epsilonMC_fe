@@ -1,6 +1,7 @@
 import ROUTERS from "./index";
 import wrapWithLazy from "../utils/wrapWithLazy";
 import React from "react";
+import { element } from "prop-types";
 
 //Guest routes
 const NotFound = React.lazy(() => import("../pages/NotFound/NotFound"));
@@ -35,6 +36,14 @@ const DashboardStaff = React.lazy(() =>
   import("../pages/Staffs/DashboardStaff/DashboardStaff")
 );
 
+//Admin routes
+const CreateAccount = React.lazy(() => 
+  import("../pages/Admins/AccountManager/components/CreateAccount")
+);
+const ViewAccounts = React.lazy(() => 
+  import("../pages/Admins/AccountManager/components/ViewListAccount")
+);
+
 //Doctor routes
 const DashboardDoctor = React.lazy(() =>
   import("../pages/Doctors/DashboardDoctor/DashboardDoctor")
@@ -58,7 +67,23 @@ export const staffRoutes = [
     element: wrapWithLazy(NotFound),
   },
 ];
-export const adminRoutes = [];
+
+
+export const adminRoutes = [
+  {
+    path: ROUTERS.TAO_ACCOUNT,
+    element: wrapWithLazy(CreateAccount),
+  },
+  {
+    path: ROUTERS.XEM_DANH_SACH_ACCOUNT,
+    element: wrapWithLazy(ViewAccounts),
+  },
+  {
+    path: "/not-found",
+    element: wrapWithLazy(NotFound),
+  },
+];
+
 export const patientRoutes = [];
 export const managerRoutes = [];
 
