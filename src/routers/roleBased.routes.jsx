@@ -37,10 +37,10 @@ const DashboardStaff = React.lazy(() =>
 
 //Admin routes
 const CreateAccount = React.lazy(() =>
-  import("../pages/Admins/AccountManager/components/CreateAccount")
+  import("../pages/Admins/AccountManager/CreateAccount")
 );
 const ViewAccounts = React.lazy(() =>
-  import("../pages/Admins/AccountManager/components/ViewListAccount")
+  import("../pages/Admins/AccountManager/ViewListAccount")
 );
 
 //Doctor routes

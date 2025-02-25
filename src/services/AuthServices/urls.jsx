@@ -5,3 +5,4 @@ export const apiRefresh = `/account/refresh`;
 export const apiSendOTP = `/account/sendOTP`;
 export const apiVerifyOTP = `/account/verifyOTP`;
 export const apiRegister = `/account/register`;
+export const apiGetAllAccount = `/account/listAccount`;

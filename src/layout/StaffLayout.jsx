@@ -46,7 +46,7 @@ const StaffLayout = () => {
       ROUTERS.DANH_SACH_LICH_KHAM,
       ROUTERS.HO_SO_BENH_AN_NHAN_VIEN,
     ],
-    admin: ["manage-users", "statistics"],
+    admin: [ROUTERS.XEM_DANH_SACH_ACCOUNT, "statistics"],
     manager: ["work-management", "report"],
   };
 
@@ -126,8 +126,7 @@ const StaffLayout = () => {
           <Content
             style={{
               margin: "24px 16px",
-              padding: 24,
-              minHeight: 280,
+              minHeight: 260,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
