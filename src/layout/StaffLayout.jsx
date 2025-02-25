@@ -47,6 +47,7 @@ const StaffLayout = ({ renderRoutes }) => {
     doctor: {
       1: "/doctor/patients", // Bệnh nhân
       2: "/doctor/diagnosis", // Chẩn đoán
+      3: "/doctor/", // Lịch khám
     },
     staff: {
       1: ROUTERS.DASHBOARD_STAFF,
