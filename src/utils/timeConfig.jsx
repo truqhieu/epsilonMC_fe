@@ -1,7 +1,6 @@
 import moment from "moment";
-
-export const fomatDate = (time) => {
-  return moment(time).format("DD/MM/YYYY");
+export const formatDate = (time) => {
+  return moment.utc(time).format("DD/MM/YYYY");
 };
 
 export const fomatTime = (time) => {

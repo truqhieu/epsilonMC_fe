@@ -6,7 +6,7 @@ import {
   apiSendOTP,
   apiVerifyOTP,
   apiLogout,
-
+  apiRegister,
 } from "./urls";
 
 const loginStaff = (body) => http.post(apiLoginStaff, body);
@@ -15,6 +15,7 @@ const logout = () => http.post(apiLogout, {}, { withCredentials: true });
 const refresh = () => http.post(apiRefresh, {}, { withCredentials: true });
 const sendOTP = (body) => http.post(apiSendOTP, body);
 const verifyOTP = (body) => http.post(apiVerifyOTP, body);
+const register = (body) => http.post(apiRegister, body);
 
 const AuthServices = {
   loginStaff,
@@ -23,7 +24,7 @@ const AuthServices = {
   sendOTP,
   verifyOTP,
   logout,
- 
+  register,
 };
 
 export default AuthServices;

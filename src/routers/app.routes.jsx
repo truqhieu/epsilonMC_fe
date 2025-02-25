@@ -20,7 +20,7 @@ const AppRouter = () => {
   const isDatLichPage = pathName === "/dat-lich";
   const isPatient = user?.role === "patient";
 
-  console.log(!user || isPatient);
+  console.log(!!user);
 
   return (
     <>
@@ -32,11 +32,7 @@ const AppRouter = () => {
             element={<GuestLayout isDatLichPage={isDatLichPage} />}
           >
             {guestRoutes.map((route, index) => (
-              <Route
-                key={index}
-                path={route.path.replace("/", "")}
-                element={route.element}
-              />
+              <Route key={index} path={route.path} element={route.element} />
             ))}
             {patientRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
