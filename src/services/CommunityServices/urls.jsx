@@ -1,2 +1,2 @@
-export const apiGetApprovedQuestions = "/questions/approved";
-export const apiCreateQuestion = "/questions/create";
+export const apiGetApprovedQuestions = "/question/approved";
+export const apiCreateQuestion = "/question/create";

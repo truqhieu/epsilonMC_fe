@@ -164,8 +164,8 @@
 }
 
 .service-package {
-    flex: 1; /* Để các gói dịch vụ linh hoạt chia sẻ không gian */
-    text-align: center; /* Canh giữa nội dung bên trong */
+    flex: 1; 
+    text-align: center; 
     border: 2px solid #587AC3;
     padding: 30px;
 }
