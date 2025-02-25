@@ -36,6 +36,14 @@ const DashboardStaff = React.lazy(() =>
   import("../pages/Staffs/DashboardStaff/DashboardStaff")
 );
 
+//Admin routes
+const CreateAccount = React.lazy(() =>
+  import("../pages/Admins/AccountManager/components/CreateAccount")
+);
+const ViewAccounts = React.lazy(() =>
+  import("../pages/Admins/AccountManager/components/ViewListAccount")
+);
+
 //Doctor routes
 const DashboardDoctor = React.lazy(() =>
   import("../pages/Doctors/DashboardDoctor/DashboardDoctor")
@@ -59,11 +67,15 @@ export const staffRoutes = [
     element: wrapWithLazy(NotFound),
   },
 ];
-export const adminRoutes = [];
-export const patientRoutes = [
+
+export const adminRoutes = [
   {
-    path: ROUTERS.DANG_KY_KHAM,
-    element: wrapWithLazy(Booking),
+    path: ROUTERS.TAO_ACCOUNT,
+    element: wrapWithLazy(CreateAccount),
+  },
+  {
+    path: ROUTERS.XEM_DANH_SACH_ACCOUNT,
+    element: wrapWithLazy(ViewAccounts),
   },
   {
     path: ROUTERS.NOTFOUND,
@@ -74,6 +86,8 @@ export const patientRoutes = [
     element: wrapWithLazy(CommunityPage),
   },
 ];
+
+export const patientRoutes = [];
 export const managerRoutes = [];
 
 export const doctorRoutes = [

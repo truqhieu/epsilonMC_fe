@@ -5,6 +5,8 @@ import AppointmentServices from "../../../services/AppointmentServices";
 import { TableCustom } from "./styles";
 import { Tag } from "antd";
 import AppointmentDetailModal from "./components/AppointmentDetailModal";
+import { getColorByStatus } from "../../../utils/getColorByStatus";
+import { formatDate } from "../../../utils/timeConfig";
 
 const AppointmentList = () => {
   const [loading, setLoading] = useState(false);
@@ -31,26 +33,9 @@ const AppointmentList = () => {
 
   useEffect(() => {
     listAppointment();
-  }, []);
+  }, [isOpenModal]);
 
   console.log(!!isOpenModal);
-
-  const getColorByStatus = (status) => {
-    switch (status) {
-      case "Approved":
-        return "green";
-      case "Cancelled":
-        return "red";
-      case "Pending":
-        return "gold";
-      case "Rejected":
-        return "volcano";
-      case "Completed":
-        return "blue";
-      default:
-        return "default";
-    }
-  };
 
   const columns = [
     {
@@ -80,7 +65,7 @@ const AppointmentList = () => {
     {
       title: "Ngày khám",
       key: "date",
-      render: (record) => moment(record.examinationDate).format("DD-MM-YYYY"),
+      render: (record) => formatDate(record.examinationDate),
     },
     {
       title: "Ca khám",

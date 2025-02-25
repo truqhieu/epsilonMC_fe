@@ -1,5 +1,3 @@
-const BAC_SI = "doctor";
-
 const ROUTERS = {
   //Guest
   HOME: "",
@@ -19,7 +17,7 @@ const ROUTERS = {
   HO_SO_BENH_AN: `ho-so-benh-an`,
 
   // Bác sĩ
-  DASHBOARD_DOCTOR: `/${BAC_SI}/dashboard`,
+  DASHBOARD_DOCTOR: `dashboard`,
 
   // Nhân viên
   DASHBOARD_STAFF: ``,
@@ -29,5 +27,7 @@ const ROUTERS = {
   // Quản lý
 
   // Admin
+  XEM_DANH_SACH_ACCOUNT: "/admin/manage-users",
+  TAO_ACCOUNT: "/admin/tao-tai-khoan",
 };
 export default ROUTERS;

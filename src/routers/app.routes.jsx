@@ -20,7 +20,7 @@ const AppRouter = () => {
   const isDatLichPage = pathName === "/dat-lich";
   const isPatient = user?.role === "patient";
 
-  console.log(!user || isPatient);
+  console.log(!!user);
 
   return (
     <>
