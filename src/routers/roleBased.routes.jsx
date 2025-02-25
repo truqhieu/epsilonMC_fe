@@ -1,7 +1,6 @@
 import ROUTERS from "./index";
 import wrapWithLazy from "../utils/wrapWithLazy";
 import React from "react";
-import { element } from "prop-types";
 
 //Guest routes
 const NotFound = React.lazy(() => import("../pages/NotFound/NotFound"));
@@ -37,10 +36,10 @@ const DashboardStaff = React.lazy(() =>
 );
 
 //Admin routes
-const CreateAccount = React.lazy(() => 
+const CreateAccount = React.lazy(() =>
   import("../pages/Admins/AccountManager/components/CreateAccount")
 );
-const ViewAccounts = React.lazy(() => 
+const ViewAccounts = React.lazy(() =>
   import("../pages/Admins/AccountManager/components/ViewListAccount")
 );
 
@@ -63,11 +62,10 @@ export const staffRoutes = [
     element: wrapWithLazy(MedicalRecords),
   },
   {
-    path: "/not-found",
+    path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
 ];
-
 
 export const adminRoutes = [
   {
@@ -79,7 +77,7 @@ export const adminRoutes = [
     element: wrapWithLazy(ViewAccounts),
   },
   {
-    path: "/not-found",
+    path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
 ];
@@ -93,7 +91,7 @@ export const doctorRoutes = [
     element: wrapWithLazy(DashboardDoctor),
   },
   {
-    path: "/not-found",
+    path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
 ];
@@ -132,7 +130,7 @@ export const guestRoutes = [
     element: wrapWithLazy(DoctorDetails),
   },
   {
-    path: "/not-found",
+    path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
 ];

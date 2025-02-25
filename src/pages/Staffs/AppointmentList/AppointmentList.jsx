@@ -3,9 +3,15 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import AppointmentServices from "../../../services/AppointmentServices";
 import { TableCustom } from "./styles";
+import { Tag } from "antd";
+import AppointmentDetailModal from "./components/AppointmentDetailModal";
+import { getColorByStatus } from "../../../utils/getColorByStatus";
+import { formatDate } from "../../../utils/timeConfig";
 
 const AppointmentList = () => {
   const [loading, setLoading] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState("");
   const [data, setData] = useState([]);
 
   const listAppointment = async () => {
@@ -27,7 +33,9 @@ const AppointmentList = () => {
 
   useEffect(() => {
     listAppointment();
-  }, []);
+  }, [isOpenModal]);
+
+  console.log(!!isOpenModal);
 
   const columns = [
     {
@@ -57,7 +65,7 @@ const AppointmentList = () => {
     {
       title: "Ngày khám",
       key: "date",
-      render: (record) => moment(record.examinationDate).format("DD-MM-YYYY"),
+      render: (record) => formatDate(record.examinationDate),
     },
     {
       title: "Ca khám",
@@ -72,55 +80,44 @@ const AppointmentList = () => {
     },
     {
       title: "Trạng thái",
-      dataIndex: "status",
       key: "status",
+      render: (record) => {
+        const color = getColorByStatus(record?.status);
+        return (
+          <Tag color={color} className="d-flex-center">
+            {record?.status}
+          </Tag>
+        );
+      },
     },
   ];
 
-  // const data = [
-  //   {
-  //     key: "1",
-  //     name: "John Brown",
-  //     age: 32,
-  //     phone: "0123456789",
-  //     email: "a",
-  //     date: "2021-09-01",
-  //     exam: "Ca sáng",
-  //     doctor: "Dr. Smith",
-  //     status: "Đã khám",
-  //   },
-  //   {
-  //     key: "2",
-  //     name: "Jim Green",
-  //     age: 42,
-  //     phone: "0123456789",
-  //     email: "",
-  //     date: "2021-09-01",
-  //     exam: "Ca chiều",
-  //     doctor: "Dr. Smith",
-  //     status: "Đã khám",
-  //   },
-  //   {
-  //     key: "3",
-  //     name: "Joe Black",
-  //     age: 32,
-  //     phone: "0123456789",
-  //     email: "",
-  //     date: "2021-09-01",
-  //     exam: "Ca sáng",
-  //     doctor: "Dr. Smith",
-  //     status: "Đã khám",
-  //   },
-  // ];
-
   return (
-    <TableCustom
-      columns={columns}
-      dataSource={data}
-      loading={loading}
-      bordered={true}
-      pagination={{ pageSize: 10 }}
-    />
+    <>
+      <TableCustom
+        columns={columns}
+        dataSource={data}
+        loading={loading}
+        bordered={true}
+        rowKey={(record) => record._id}
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              setIsOpenModal(true);
+              setSelectedAppointment(record?._id);
+            },
+          };
+        }}
+        pagination={{ pageSize: 10 }}
+      />
+      {!!setIsOpenModal && (
+        <AppointmentDetailModal
+          open={isOpenModal}
+          selectedAppointment={selectedAppointment}
+          onCancel={() => setIsOpenModal(false)}
+        />
+      )}
+    </>
   );
 };
 

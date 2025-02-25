@@ -28,8 +28,8 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
           })
         );
         dispatch(setUser(res.user));
-        navigate(`/${res?.user?.role}`);
         onCancel();
+        navigate(`/${res.user.role}`);
         toast.success("Đăng nhập thành công!");
       }
     } catch (error) {

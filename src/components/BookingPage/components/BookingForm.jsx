@@ -147,7 +147,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
       return Promise.reject("Vui lòng chọn ngày!");
     }
 
-    const minDate = dayjs().add(2, "day").startOf("day");
+    const minDate = dayjs().add(1, "day").startOf("day");
 
     if (value.isBefore(minDate)) {
       return Promise.reject(
