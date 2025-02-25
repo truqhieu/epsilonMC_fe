@@ -4,11 +4,12 @@ const ROUTERS = {
   BOOKING: "dat-lich",
   ABOUT: "gioi-thieu",
   INFORMATION: "thong-tin",
-  DOCTOR_DETAIL: "doctor-detail:id",
+  DOCTOR_DETAIL: "doctor-detail/:id",
   NEWS: "tin-tuc",
   NEWS_DETAIL: "tin-tuc-chi-tiet",
   CONTACT: "lien-he",
   NOTFOUND: "not-found",
+  COMMUNITY: "hoi-dap",
 
   //Bệnh nhân
   DANG_KY_KHAM: `dang-ky-kham`,

@@ -1,1 +1,1 @@
-export const apiGetDoctors = "/user/doctor";
+export const apiGetDoctors = "/doctor/consultations"; 

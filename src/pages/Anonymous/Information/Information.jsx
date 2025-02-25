@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { List, Spin, Alert } from "antd";
-import { useNavigate } from "react-router-dom"; // Import useNavigate để điều hướng
+import { List, Spin, Alert, Button } from "antd";
+import { useNavigate } from "react-router-dom";
 import UserServices from "../../../services/UserServices";
 import { assets } from "../../../assets/assets";
 import "./Information.css";
@@ -9,12 +9,14 @@ const Information = () => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Hook điều hướng
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
         const response = await UserServices.getDoctors();
+        console.log("Dữ liệu API:", response);
+
         if (Array.isArray(response) && response.length > 0) {
           setDoctors(response);
         } else {
@@ -22,6 +24,7 @@ const Information = () => {
           setError("Không có dữ liệu bác sĩ!");
         }
       } catch (err) {
+        console.error("Lỗi khi tải danh sách bác sĩ:", err);
         setError("Lỗi khi tải danh sách bác sĩ!");
       } finally {
         setLoading(false);
@@ -35,7 +38,9 @@ const Information = () => {
       <div className="mainstream">
         <img src={assets.doctor} alt="doctor" className="doctor-image" />
         <div className="mainstream-content">
-          <h1 className="mainstream-title">Khám - tư vấn - điều trị các bệnh</h1>
+          <h1 className="mainstream-title">
+            Khám - tư vấn - điều trị các bệnh
+          </h1>
           <div className="mainstream-description">
             <div className="mainstream-description-content">
               <p>- Rối loạn giấc ngủ</p>
@@ -64,17 +69,18 @@ const Information = () => {
           <Alert message={error} type="error" />
         ) : (
           <List
-            grid={{ gutter: 16, column: 4 }} // Hiển thị 4 cột ngang
+            grid={{ gutter: 16, column: 4 }}
             dataSource={doctors}
-            renderItem={(doctor, index) => (
+            renderItem={(doctor) => (
               <List.Item>
                 <div
                   className="doctor-card"
-                  onClick={() => navigate(`/doctor-detail/${index + 1}`)} // Chuyển hướng với số thứ tự
-                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/doctor-detail/${doctor._id}`)}
+                  style={{ cursor: "pointer" }} 
                 >
                   <h3>{doctor.name}</h3>
-                  <p>{doctor.specialization}</p>
+                  <p>{doctor.specialization || "Chưa cập nhật"}</p>
+                  <p>🩺 {doctor.consultations || 0} lượt tư vấn</p>
                 </div>
               </List.Item>
             )}

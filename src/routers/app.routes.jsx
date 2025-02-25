@@ -32,7 +32,11 @@ const AppRouter = () => {
             element={<GuestLayout isDatLichPage={isDatLichPage} />}
           >
             {guestRoutes.map((route, index) => (
-              <Route key={index} path={route.path} element={route.element} />
+              <Route
+                key={index}
+                path={route.path}
+                element={route.element}
+              />
             ))}
             {patientRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
