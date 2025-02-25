@@ -1,6 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
-import PropTypes from "prop-types";
 import {
   LogoutOutlined,
   MenuFoldOutlined,
@@ -8,33 +5,32 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
-import { StaffLayoutStyled } from "./styles";
-import { assets } from "../assets/assets";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
+import { assets } from "../assets/assets";
 import { logout } from "../reduxs/authReduxs/authSlice";
 import AuthServices from "../services/AuthServices";
-import {
-  adminRoutes,
-  doctorRoutes,
-  managerRoutes,
-  staffRoutes,
-} from "../routers/roleBased.routes";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import ROUTERS from "../routers";
 import { menuItemsStaff } from "./components/MenuItemStaff";
+import { StaffLayoutStyled } from "./styles";
+import ROUTERS from "../routers";
 
 const { Header, Sider, Content } = Layout;
 
-const StaffLayout = ({ renderRoutes }) => {
+const StaffLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userRole = user?.role || "staff";
+  const userRole = user?.role;
 
   const handleLogout = () => {
     dispatch(logout());
     AuthServices.logout();
+
+    setTimeout(() => {
+      navigate("/");
+    }, 100);
   };
 
   const {
@@ -43,30 +39,32 @@ const StaffLayout = ({ renderRoutes }) => {
 
   // Tạo menu dựa trên userRole
 
-  const navigationPaths = {
-    doctor: {
-      1: "/doctor/patients", // Bệnh nhân
-      2: "/doctor/diagnosis", // Chẩn đoán
-      3: "/doctor/", // Lịch khám
-    },
-    staff: {
-      1: ROUTERS.DASHBOARD_STAFF,
-      2: ROUTERS.DANH_SACH_LICH_KHAM,
-      3: ROUTERS.HO_SO_BENH_AN_NHAN_VIEN,
-    },
-    admin: {
-      1: "/admin/manage-users", // Quản lý người dùng
-      2: "/admin/statistics", // Thống kê
-    },
-    manager: {
-      1: "/manager/work-management", // Quản lý công việc
-      2: "/manager/report", // Báo cáo
-    },
+  const routes = {
+    doctor: [
+      "patients", 
+      "diagnosis",
+      ROUTERS.DANH_SACH_LICH_HEN,
+    ],
+    staff: [
+      ROUTERS.DASHBOARD_STAFF,
+      ROUTERS.DANH_SACH_LICH_KHAM,
+      ROUTERS.HO_SO_BENH_AN_NHAN_VIEN,
+    ],
+    admin: ["manage-users", "statistics"],
+    manager: ["work-management", "report"],
   };
 
-  const menu = menuItemsStaff[userRole] || menuItemsStaff.staff;
+  // Tạo navigationPaths tự động
+  const navigationPaths = Object.fromEntries(
+    Object.entries(routes).map(([role, paths]) => [
+      role,
+      Object.fromEntries(
+        paths.map((path, index) => [index + 1, `/${role}/${path}`])
+      ),
+    ])
+  );
 
-  console.log(userRole);
+  const menu = menuItemsStaff[userRole] || menuItemsStaff.staff;
 
   return (
     <StaffLayoutStyled>
@@ -82,7 +80,7 @@ const StaffLayout = ({ renderRoutes }) => {
             onClick={(e) => {
               const path = navigationPaths[userRole]?.[e.key];
               if (path) {
-                navigate(path);
+                navigate(path, { replace: true });
               } else {
                 console.log(`No path found for key ${e.key}`);
               }
@@ -138,27 +136,12 @@ const StaffLayout = ({ renderRoutes }) => {
               borderRadius: borderRadiusLG,
             }}
           >
-            <Routes>
-              <Route
-                path="/"
-                element={<Navigate to={ROUTERS.DASHBOARD_STAFF} replace />}
-              />
-              <>
-                {userRole === "doctor" && renderRoutes(doctorRoutes)}
-                {userRole === "staff" && renderRoutes(staffRoutes)}
-                {userRole === "admin" && renderRoutes(adminRoutes)}
-                {userRole === "manager" && renderRoutes(managerRoutes)}
-              </>
-              <Route path="/*" element={<Navigate to={ROUTERS.NOTFOUND} />} />
-            </Routes>
+            <Outlet />
           </Content>
         </Layout>
       </Layout>
     </StaffLayoutStyled>
   );
-};
-StaffLayout.propTypes = {
-  renderRoutes: PropTypes.func.isRequired,
 };
 
 export default StaffLayout;

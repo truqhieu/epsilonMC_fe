@@ -1,0 +1,60 @@
+/* Định dạng container chính */
+.appointment-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  /* Tiêu đề */
+  .appointment-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Bảng */
+  .appointment-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+  }
+  
+  .appointment-table th,
+  .appointment-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .appointment-table thead {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .appointment-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Trường hợp không có dữ liệu */
+  .no-appointments {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+  }
+  
+  /* Trạng thái tải và lỗi */
+  .loading-text {
+    text-align: center;
+    color: blue;
+  }
+  
+  .error-text {
+    text-align: center;
+    color: red;
+  }
+  
