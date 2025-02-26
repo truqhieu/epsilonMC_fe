@@ -4,6 +4,6 @@ import { apiGetApprovedQuestions, apiCreateQuestion } from "./urls";
 const getApprovedQuestions = () => http.get(apiGetApprovedQuestions);
 const createQuestion = (body) => http.post(apiCreateQuestion, body);
 
-const CommunityService = { getApprovedQuestions, createQuestion };
+const QuestionService = { getApprovedQuestions, createQuestion };
 
-export default CommunityService;
+export default QuestionService;
