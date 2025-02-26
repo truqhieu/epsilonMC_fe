@@ -23,7 +23,9 @@ const Booking = React.lazy(() =>
 const DoctorDetails = React.lazy(() =>
   import("../pages/Anonymous/Information/DoctorDetail")
 );
-const CommunityPage = React.lazy(() => import("../pages/Community/CommunityPage"));
+const CommunityPage = React.lazy(() =>
+  import("../pages/Community/CommunityPage")
+);
 
 //Staff routes
 const AppointmentList = React.lazy(() =>
@@ -37,11 +39,11 @@ const DashboardStaff = React.lazy(() =>
 );
 
 //Admin routes
-const CreateAccount = React.lazy(() =>
-  import("../pages/Admins/AccountManager/CreateAccount")
+const GrantsAccount = React.lazy(() =>
+  import("../pages/Admins/AccountManager/GrantsAccount")
 );
 const ViewAccounts = React.lazy(() =>
-  import("../pages/Admins/AccountManager/ViewListAccount")
+  import("../pages/Admins/AccountManager/ListAccount")
 );
 
 //Doctor routes
@@ -71,7 +73,7 @@ export const staffRoutes = [
 export const adminRoutes = [
   {
     path: ROUTERS.TAO_ACCOUNT,
-    element: wrapWithLazy(CreateAccount),
+    element: wrapWithLazy(GrantsAccount),
   },
   {
     path: ROUTERS.XEM_DANH_SACH_ACCOUNT,
@@ -87,7 +89,12 @@ export const adminRoutes = [
   },
 ];
 
-export const patientRoutes = [];
+export const patientRoutes = [
+  // {
+  //   path: ROUTERS.COMMUNITY,
+  //   element: wrapWithLazy(CommunityPage),
+  // },
+];
 export const managerRoutes = [];
 
 export const doctorRoutes = [

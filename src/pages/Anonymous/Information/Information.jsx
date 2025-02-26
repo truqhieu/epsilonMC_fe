@@ -1,9 +1,10 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { List, Spin, Alert, Button } from "antd";
+import { List, Spin, Alert } from "antd";
 import { useNavigate } from "react-router-dom";
-import UserServices from "../../../services/UserServices";
 import { assets } from "../../../assets/assets";
 import "./Information.css";
+import DoctorServices from "../../../services/DoctorServices";
 
 const Information = () => {
   const [doctors, setDoctors] = useState([]);
@@ -14,11 +15,11 @@ const Information = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await UserServices.getDoctors();
+        const response = await DoctorServices.getDoctors();
         console.log("Dữ liệu API:", response);
 
-        if (Array.isArray(response) && response.length > 0) {
-          setDoctors(response);
+        if (Array.isArray(response?.data) && response?.data.length > 0) {
+          setDoctors(response?.data);
         } else {
           setDoctors([]);
           setError("Không có dữ liệu bác sĩ!");
@@ -76,7 +77,7 @@ const Information = () => {
                 <div
                   className="doctor-card"
                   onClick={() => navigate(`/doctor-detail/${doctor._id}`)}
-                  style={{ cursor: "pointer" }} 
+                  style={{ cursor: "pointer" }}
                 >
                   <h3>{doctor.name}</h3>
                   <p>{doctor.specialization || "Chưa cập nhật"}</p>

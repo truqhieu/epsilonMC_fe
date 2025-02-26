@@ -85,7 +85,7 @@
 
 //             {/* Nút xem chi tiết */}
 //             <div className="question-footer">
-              
+
 //               <span className="question-reply" onClick={() => openModal(q)}>
 //                 <MessageOutlined className="reply-icon" />{" "}
 //                 {q.answer ? "1 Trả lời" : "Chưa có trả lời"}
@@ -148,11 +148,12 @@
 // };
 
 // export default QuestionList;
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
 import { MessageOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
-import CommunityService from "../../services/CommunityServices";
 import "./QuestionList.css";
+import QuestionService from "../../services/QuestionServices";
 
 const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
@@ -170,7 +171,7 @@ const QuestionList = () => {
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-      const response = await CommunityService.getApprovedQuestions();
+      const response = await QuestionService.getApprovedQuestions();
       setQuestions(response.data || []); // Đảm bảo response.data luôn là mảng
     } catch (error) {
       console.error("Lỗi khi lấy danh sách câu hỏi:", error);
@@ -200,7 +201,7 @@ const QuestionList = () => {
     }
 
     try {
-      const response = await CommunityService.toggleLike({
+      const response = await QuestionService.toggleLike({
         questionId,
         patientId, // ⚡ Lấy từ localStorage thay vì hardcode
       });
@@ -226,7 +227,7 @@ const QuestionList = () => {
         <p className="no-question-text">Chưa có câu hỏi nào.</p>
       ) : (
         questions.map((q) => {
-          const isLiked = q.likedBy?.some(id => id.toString() === patientId); // ⚠️ So sánh đúng kiểu dữ liệu
+          const isLiked = q.likedBy?.some((id) => id.toString() === patientId); // ⚠️ So sánh đúng kiểu dữ liệu
           return (
             <div key={q._id} className="question-item">
               {/* Hiển thị tiêu đề câu hỏi */}
@@ -244,7 +245,10 @@ const QuestionList = () => {
 
               {/* Thời gian đăng câu hỏi */}
               <p className="question-date">
-                📅 {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "Không xác định"}
+                📅{" "}
+                {q.createdAt
+                  ? new Date(q.createdAt).toLocaleDateString()
+                  : "Không xác định"}
               </p>
 
               {/* Nút xem chi tiết */}
@@ -253,8 +257,15 @@ const QuestionList = () => {
                   <MessageOutlined className="reply-icon" />{" "}
                   {q.answer ? "1 Trả lời" : "Chưa có trả lời"}
                 </span>
-                <span className="question-thanks" onClick={() => handleToggleLike(q._id)}>
-                  {isLiked ? <HeartFilled style={{ color: "red" }} /> : <HeartOutlined />}{" "}
+                <span
+                  className="question-thanks"
+                  onClick={() => handleToggleLike(q._id)}
+                >
+                  {isLiked ? (
+                    <HeartFilled style={{ color: "red" }} />
+                  ) : (
+                    <HeartOutlined />
+                  )}{" "}
                   {q.likedBy?.length || 0} Cảm ơn
                 </span>
               </div>
@@ -264,7 +275,12 @@ const QuestionList = () => {
       )}
 
       {/* Popup Modal hiển thị chi tiết câu hỏi */}
-      <Modal title="Chi tiết câu hỏi" open={isModalOpen} onCancel={closeModal} footer={null}>
+      <Modal
+        title="Chi tiết câu hỏi"
+        open={isModalOpen}
+        onCancel={closeModal}
+        footer={null}
+      >
         {selectedQuestion ? (
           <div className="modal-content">
             <h4 className="modal-question-title">{selectedQuestion.title}</h4>
@@ -274,7 +290,9 @@ const QuestionList = () => {
             <p className="modal-question-content">{selectedQuestion.content}</p>
             <p className="modal-question-date">
               📅 Ngày hỏi:{" "}
-              {selectedQuestion.createdAt ? new Date(selectedQuestion.createdAt).toLocaleDateString() : "Không xác định"}
+              {selectedQuestion.createdAt
+                ? new Date(selectedQuestion.createdAt).toLocaleDateString()
+                : "Không xác định"}
             </p>
 
             {selectedQuestion.answer ? (
@@ -291,7 +309,9 @@ const QuestionList = () => {
                 <p className="modal-answer-time">
                   ⏳ Ngày trả lời:{" "}
                   {selectedQuestion.doctorCommentedAt
-                    ? new Date(selectedQuestion.doctorCommentedAt).toLocaleDateString()
+                    ? new Date(
+                        selectedQuestion.doctorCommentedAt
+                      ).toLocaleDateString()
                     : "Chưa có"}
                 </p>
               </div>

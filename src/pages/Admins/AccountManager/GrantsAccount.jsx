@@ -1,24 +1,20 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { TableCustom } from "../../Staffs/AppointmentList/styles";
-import AuthServices from "../../../services/AuthServices";
-import { Button } from "antd";
+import { Button, Tag } from "antd";
+import UserServices from "../../../services/UserServices";
 
-const ViewListAccount = () => {
+const GrantsAccount = () => {
   const [loading, setLoading] = useState(false);
-  const [listAccount, setListAccount] = useState([]);
+  const [listUser, setListUser] = useState([]);
 
-  const getListAccount = async () => {
+  const getListUserNotAccount = async () => {
     try {
       setLoading(true);
-      const res = await AuthServices.getAllAccount({
-        page: 1,
-        limit: 10,
-      });
+      const res = await UserServices.listUserNotAccount();
       if (res?.success) {
-        setListAccount(res?.data);
+        setListUser(res?.data);
       }
-      console.log(listAccount.map((item) => item.isDisable));
     } catch (error) {
       console.log(error);
     } finally {
@@ -27,7 +23,7 @@ const ViewListAccount = () => {
   };
 
   useEffect(() => {
-    getListAccount();
+    getListUserNotAccount();
   }, []);
 
   const columns = [
@@ -39,17 +35,7 @@ const ViewListAccount = () => {
     {
       title: "Chủ sở hữu",
       key: "role",
-      render: ({ role, doctorId, patientId, userId }) => {
-        return (
-          {
-            doctor: doctorId?.name,
-            patient: patientId?.name,
-            admin: userId?.name,
-            manager: userId?.name,
-            staff: userId?.name,
-          }[role] || "N/A"
-        );
-      },
+      render: (record) => record.name || "N/A",
     },
     {
       title: "Chức danh",
@@ -57,22 +43,42 @@ const ViewListAccount = () => {
       render: (record) => record.role.toUpperCase(),
     },
     {
-      title: "Trạng thái tài khoản",
-      key: "isDisable",
-      render: (record) => (record.isDisable ? "Đã khóa" : "Đang hoạt động"),
+      title: "Số điện thoại",
+      key: "phone",
+      render: (record) => record.phone,
+    },
+    {
+      title: "Trạng thái",
+      key: "isAccount",
+      render: () => {
+        return <Tag color="yellow">Yêu cầu cấp tài khoản</Tag>;
+      },
     },
     {
       title: "Chức năng",
       key: "action",
-      render: (record) => <Button>Vô hiệu hóa</Button>,
+      width: 100,
+      render: () => {
+        return (
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button style={{ backgroundColor: "#E6F4FF" }}>Chấp nhận</Button>
+            <Button style={{ backgroundColor: "#ed7878" }}>Từ chối</Button>
+          </div>
+        );
+      },
     },
   ];
   return (
     <>
-      <Button>Thêm tài khoản</Button>
       <TableCustom
         columns={columns}
-        dataSource={listAccount}
+        dataSource={listUser}
         loading={loading}
         bordered={true}
         rowKey={(record) => record._id}
@@ -97,4 +103,4 @@ const ViewListAccount = () => {
   );
 };
 
-export default ViewListAccount;
+export default GrantsAccount;

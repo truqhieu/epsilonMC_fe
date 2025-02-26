@@ -46,7 +46,7 @@ const StaffLayout = () => {
       ROUTERS.DANH_SACH_LICH_KHAM,
       ROUTERS.HO_SO_BENH_AN_NHAN_VIEN,
     ],
-    admin: [ROUTERS.XEM_DANH_SACH_ACCOUNT, "statistics"],
+    admin: [ROUTERS.XEM_DANH_SACH_ACCOUNT, ROUTERS.TAO_ACCOUNT],
     manager: ["work-management", "report"],
   };
 
@@ -65,7 +65,13 @@ const StaffLayout = () => {
   return (
     <StaffLayoutStyled>
       <Layout>
-        <Sider trigger={null} collapsible collapsed={collapsed} theme="light">
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          theme="light"
+          width={230}
+        >
           <div className="demo-logo-vertical">
             <img src={assets.logo} className="logo" />
           </div>
@@ -127,6 +133,7 @@ const StaffLayout = () => {
             style={{
               margin: "24px 16px",
               minHeight: 260,
+              padding: 24,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
