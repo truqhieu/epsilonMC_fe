@@ -17,6 +17,11 @@ export const menuItemsStaff = {
       icon: <VideoCameraOutlined />,
       label: "Chẩn đoán",
     },
+    {
+      key: "3",
+      icon: <VideoCameraOutlined />,
+      label: "Danh sách cuộc hẹn",
+    },
   ],
   staff: [
     {

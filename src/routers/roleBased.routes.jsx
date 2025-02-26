@@ -50,6 +50,9 @@ const ViewAccounts = React.lazy(() =>
 const DashboardDoctor = React.lazy(() =>
   import("../pages/Doctors/DashboardDoctor/DashboardDoctor")
 );
+const listAppointmentDoctor = React.lazy(() =>
+  import("../pages/Doctors/AppointmentList/AppointmentList")
+);
 
 export const staffRoutes = [
   {
@@ -101,6 +104,10 @@ export const doctorRoutes = [
   {
     path: ROUTERS.DASHBOARD_DOCTOR,
     element: wrapWithLazy(DashboardDoctor),
+  },
+  {
+    path: ROUTERS.DANH_SACH_LICH_HEN,
+    element: wrapWithLazy(listAppointmentDoctor),
   },
   {
     path: ROUTERS.NOTFOUND,

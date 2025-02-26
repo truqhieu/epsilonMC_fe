@@ -18,7 +18,7 @@ const ROUTERS = {
 
   // Bác sĩ
   DASHBOARD_DOCTOR: `dashboard`,
-
+  DANH_SACH_LICH_HEN:`lich-hen`,
   // Nhân viên
   DASHBOARD_STAFF: ``,
   DANH_SACH_LICH_KHAM: `danh-sach-lich-kham`,
