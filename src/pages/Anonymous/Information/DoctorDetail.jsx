@@ -1,11 +1,16 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Card, Typography, Avatar, Spin } from "antd";
-import { PhoneOutlined, EnvironmentOutlined, CalendarOutlined, MedicineBoxOutlined } from "@ant-design/icons";
-
-import UserServices from "../../../services/UserServices";
+import {
+  PhoneOutlined,
+  EnvironmentOutlined,
+  CalendarOutlined,
+  MedicineBoxOutlined,
+} from "@ant-design/icons";
 import ListQuestionByDoctor from "./ListquestionbyDoctor"; // 🟢 Import component danh sách câu hỏi
 import "./DoctorDetail.css";
+import DoctorServices from "../../../services/DoctorServices";
 
 const { Title, Text } = Typography;
 
@@ -18,15 +23,16 @@ const DoctorDetail = () => {
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const response = await UserServices.getDoctors();
-        const selectedDoctor = response.find((doc) => doc._id === id);
+        const response = await DoctorServices.getDoctors();
+        console.log("Dữ liệu API:", response);
+        const selectedDoctor = response?.data.find((doc) => doc._id === id);
         if (selectedDoctor) {
           setDoctor(selectedDoctor);
         } else {
           setError("Không tìm thấy bác sĩ!");
         }
       } catch (err) {
-        setError("Lỗi khi tải thông tin bác sĩ!");
+        setError("Lỗi khi tải thông tin bác sĩ!", err);
       } finally {
         setLoading(false);
       }
@@ -34,7 +40,8 @@ const DoctorDetail = () => {
     fetchDoctor();
   }, [id]);
 
-  if (loading) return <Spin size="large" style={{ display: "block", margin: "auto" }} />;
+  if (loading)
+    return <Spin size="large" style={{ display: "block", margin: "auto" }} />;
   if (error) return <p>{error}</p>;
 
   return (
@@ -61,9 +68,10 @@ const DoctorDetail = () => {
       </Card>
 
       <Card className="doctor-info-card">
-      <div className="doctor-info-title">
-  <MedicineBoxOutlined style={{ color: "#1890ff" }} /> Kinh nghiệm khám chữa bệnh
-</div>
+        <div className="doctor-info-title">
+          <MedicineBoxOutlined style={{ color: "#1890ff" }} /> Kinh nghiệm khám
+          chữa bệnh
+        </div>
         <p>{doctor.specialization || "Chưa có thông tin"}</p>
       </Card>
 
@@ -74,7 +82,7 @@ const DoctorDetail = () => {
         <p>{doctor.exp || "Chưa có thông tin"}</p>
       </Card>
 
-      {/* 🟢 Thêm danh sách câu hỏi mà bác sĩ đã trả lời */}
+      {/* Thêm danh sách câu hỏi mà bác sĩ đã trả lời */}
       <ListQuestionByDoctor doctorId={doctor._id} />
     </div>
   );

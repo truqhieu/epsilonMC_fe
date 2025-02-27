@@ -1,0 +1,10 @@
+export const apiGetAllQuestions = "/question/all";
+export const apiGetPatientQuestions = "/question/patient";
+export const apiGetApprovedQuestions = "/question/approved";
+export const apiGetCommentsByQuestionId = "/question/comments";
+export const apiCreateQuestion = "/question/create";
+export const apiDoctorAnswerQuestion = "/question/answer";
+export const apiDoctorCommentOnQuestion = "/question/doctor-comment";
+export const apiPatientCommentOnQuestion = "/question/patient-comment";
+export const apiRejectQuestion = "/question/reject";
+export const apiToggleLike = "/question/toggle-like";

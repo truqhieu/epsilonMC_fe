@@ -1,5 +1,6 @@
 import {
   HomeOutlined,
+  UserAddOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
@@ -47,8 +48,8 @@ export const menuItemsStaff = {
     },
     {
       key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "Thống kê",
+      icon: <UserAddOutlined />,
+      label: "Yêu cầu cấp tài khoản",
     },
   ],
   manager: [
