@@ -63,3 +63,92 @@
 .modal-body p {
     margin: 5px 0;
 }
+
+.comments-section {
+  margin-top: 15px;
+}
+
+.comment-item {
+  padding: 10px;
+  background: #f7f7f7;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.comment-meta {
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-content {
+  font-size: 14px;
+  color: #444;
+  margin-top: 5px;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: #888;
+  margin-top: 5px;
+}
+
+.modal-content {
+  padding: 10px;
+}
+
+.question-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Căn chỉnh khoảng cách hợp lý */
+  margin-top: 10px;
+}
+
+/* Định dạng lại icon số lượng bình luận và lượt thích */
+.question-reply, .question-thanks {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Giữ khoảng cách hợp lý giữa icon và số lượng */
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Định dạng lại comment-item */
+.comment-item {
+  background: #f6f6f6;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px; /* Khoảng cách giữa các bình luận */
+}
+
+/* Định dạng lại tiêu đề người bình luận */
+.comment-meta {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+/* Định dạng lại nội dung bình luận */
+.comment-content {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Căn chỉnh thời gian bình luận */
+.comment-date {
+  font-size: 12px;
+  color: gray;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Điều chỉnh modal nội dung */
+.modal-content {
+  padding: 10px;
+}
+
+/* Thêm khoảng cách giữa icon và text trong phần footer của câu hỏi */
+.question-footer span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

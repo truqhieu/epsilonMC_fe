@@ -81,13 +81,24 @@ export const adminRoutes = [
     path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
+  // {
+  //   path: ROUTERS.COMMUNITY,
+  //   element: wrapWithLazy(CommunityPage),
+  // },
+];
+
+export const patientRoutes = [
   {
     path: ROUTERS.COMMUNITY,
     element: wrapWithLazy(CommunityPage),
   },
-];
 
-export const patientRoutes = [];
+  {
+    path: ROUTERS.NOTFOUND,
+    element: wrapWithLazy(NotFound),
+  },
+
+];
 export const managerRoutes = [];
 
 export const doctorRoutes = [

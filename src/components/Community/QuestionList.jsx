@@ -1,157 +1,7 @@
-// import React, { useEffect, useState } from "react";
-// import { Modal, Button } from "antd";
-// import { MessageOutlined } from "@ant-design/icons";
-// import CommunityService from "../../services/CommunityServices";
-// import "./QuestionList.css";
-
-// const QuestionList = () => {
-//   const [questions, setQuestions] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [selectedQuestion, setSelectedQuestion] = useState(null);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-
-//   useEffect(() => {
-//     fetchQuestions();
-//   }, []);
-
-//   const fetchQuestions = async () => {
-//     setLoading(true);
-//     try {
-//       const response = await CommunityService.getApprovedQuestions();
-//       setQuestions(response.data);
-//     } catch (error) {
-//       console.error("Lỗi khi lấy danh sách câu hỏi:", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // Xử lý mở popup
-//   const openModal = (question) => {
-//     setSelectedQuestion(question);
-//     setIsModalOpen(true);
-//   };
-
-//   // Xử lý đóng popup
-//   const closeModal = () => {
-//     setIsModalOpen(false);
-//     setSelectedQuestion(null);
-//   };
-//   const handleToggleLike = async (questionId) => {
-//     try {
-//       const response = await CommunityService.toggleLike({
-//         questionId,
-//         patientId: USER_ID, // Lấy từ state hoặc context của user
-//       });
-
-//       setQuestions((prevQuestions) =>
-//         prevQuestions.map((q) =>
-//           q._id === questionId
-//             ? { ...q, likes: response.data.likes, likedBy: response.data.likedBy }
-//             : q
-//         )
-//       );
-//     } catch (error) {
-//       console.error("Lỗi khi like/unlike:", error);
-//     }
-//   };
-//   return (
-//     <div className="question-list-container">
-//       <h3 className="question-list-title">Các câu hỏi đã được trả lời</h3>
-//       {loading ? (
-//         <p className="loading-text">Đang tải dữ liệu...</p>
-//       ) : questions.length === 0 ? (
-//         <p className="no-question-text">Chưa có câu hỏi nào.</p>
-//       ) : (
-//         questions.map((q) => (
-//           <div key={q._id} className="question-item">
-//             {/* Hiển thị tiêu đề câu hỏi */}
-//             <h4 className="question-title">{q.title}</h4>
-
-//             {/* Hiển thị thông tin người hỏi */}
-//             <p className="question-meta">
-//               <strong>
-//                 {q.gender}, {q.age} tuổi
-//               </strong>
-//             </p>
-
-//             {/* Nội dung câu hỏi */}
-//             <p className="question-content">{q.content}</p>
-
-//             {/* Thời gian đăng câu hỏi */}
-//             <p className="question-date">
-//               📅 {new Date(q.createdAt).toLocaleDateString()}
-//             </p>
-
-//             {/* Nút xem chi tiết */}
-//             <div className="question-footer">
-              
-//               <span className="question-reply" onClick={() => openModal(q)}>
-//                 <MessageOutlined className="reply-icon" />{" "}
-//                 {q.answer ? "1 Trả lời" : "Chưa có trả lời"}
-//               </span>
-//               <span className="question-thanks" onClick={() => handleToggleLike(q._id)}>
-//   ❤️ {q.likes} Cảm ơn
-// </span>
-//             </div>
-//           </div>
-//         ))
-//       )}
-
-//       {/* Popup Modal hiển thị chi tiết câu hỏi */}
-//       <Modal
-//         title="Chi tiết câu hỏi"
-//         open={isModalOpen}
-//         onCancel={closeModal}
-//         footer={null}
-//       >
-//         {selectedQuestion && (
-//           <div className="modal-content">
-//             <h4 className="modal-question-title">{selectedQuestion.title}</h4>
-//             <p className="modal-question-meta">
-//               {selectedQuestion.gender}, {selectedQuestion.age} tuổi
-//             </p>
-//             <p className="modal-question-content">{selectedQuestion.content}</p>
-//             <p className="modal-question-date">
-//               📅 Ngày hỏi:{" "}
-//               {new Date(selectedQuestion.createdAt).toLocaleDateString()}
-//             </p>
-
-//             {selectedQuestion.answer ? (
-//               <div className="modal-answer-section">
-//                 <p>
-//                   <strong>Bác sĩ:</strong>{" "}
-//                   <span className="doctor-name">
-//                     {selectedQuestion.doctorId?.name || "Chưa cập nhật"}
-//                   </span>
-//                 </p>
-//                 <p>
-//                   <strong>Trả lời:</strong> {selectedQuestion.answer}
-//                 </p>
-//                 <p className="modal-answer-time">
-//                   ⏳ Ngày trả lời:
-//                   {selectedQuestion.doctorCommentedAt
-//                     ? new Date(
-//                         selectedQuestion.doctorCommentedAt
-//                       ).toLocaleDateString()
-//                     : "Chưa có"}
-//                 </p>
-//               </div>
-//             ) : (
-//               <p className="no-answer">Chưa có câu trả lời.</p>
-//             )}
-//           </div>
-//         )}
-//       </Modal>
-//     </div>
-//   );
-// };
-
-// export default QuestionList;
 import React, { useEffect, useState } from "react";
-import { Modal } from "antd";
+import { Modal, Spin } from "antd";
 import { MessageOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
-import CommunityService from "../../services/CommunityServices";
+import CommunityService from "../../services/QuestionServices";
 import "./QuestionList.css";
 
 const QuestionList = () => {
@@ -159,9 +9,10 @@ const QuestionList = () => {
   const [loading, setLoading] = useState(true);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(false);
 
-  // ⚡ Lấy patientId từ localStorage (hoặc từ Context nếu bạn có)
-  const patientId = localStorage.getItem("patientId"); // Giả sử user đã đăng nhập và ID được lưu vào localStorage
+  const patientId = localStorage.getItem("patientId");
 
   useEffect(() => {
     fetchQuestions();
@@ -171,7 +22,7 @@ const QuestionList = () => {
     setLoading(true);
     try {
       const response = await CommunityService.getApprovedQuestions();
-      setQuestions(response.data || []); // Đảm bảo response.data luôn là mảng
+      setQuestions(response.data || []);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách câu hỏi:", error);
       setQuestions([]);
@@ -180,19 +31,47 @@ const QuestionList = () => {
     }
   };
 
-  // Xử lý mở popup
+  const fetchComments = async (questionId) => {
+    setLoadingComments(true);
+    try {
+      const response = await CommunityService.getCommentsByQuestionId(
+        questionId
+      );
+      // Kiểm tra xem response.data có phải là object không
+      if (typeof response.data === "object" && response.data !== null) {
+        console.log("✅ API trả về object hợp lệ");
+
+        // Trường hợp API trả về `data` là object nhưng không có `data` bên trong
+        const { doctorComments = [], patientComments = [] } = response.data;
+        const combinedComments = [...doctorComments, ...patientComments];
+        setComments(combinedComments);
+        console.log("✅ State comments sau khi cập nhật:", combinedComments);
+      } else {
+        console.log(
+          "🚨 response.data không phải object hoặc không có dữ liệu."
+        );
+        setComments([]);
+      }
+    } catch (error) {
+      console.error("❌ Lỗi khi lấy danh sách bình luận:", error);
+      setComments([]);
+    } finally {
+      setLoadingComments(false);
+    }
+  };
+
   const openModal = (question) => {
     setSelectedQuestion(question);
     setIsModalOpen(true);
+    fetchComments(question._id); // Gọi API lấy bình luận khi mở modal
   };
 
-  // Xử lý đóng popup
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedQuestion(null);
+    setComments([]);
   };
 
-  // Xử lý Like / Unlike
   const handleToggleLike = async (questionId) => {
     if (!patientId) {
       console.error("Không thể like vì patientId chưa được tải");
@@ -202,7 +81,7 @@ const QuestionList = () => {
     try {
       const response = await CommunityService.toggleLike({
         questionId,
-        patientId, // ⚡ Lấy từ localStorage thay vì hardcode
+        patientId,
       });
 
       setQuestions((prevQuestions) =>
@@ -226,35 +105,37 @@ const QuestionList = () => {
         <p className="no-question-text">Chưa có câu hỏi nào.</p>
       ) : (
         questions.map((q) => {
-          const isLiked = q.likedBy?.some(id => id.toString() === patientId); // ⚠️ So sánh đúng kiểu dữ liệu
+          const isLiked = q.likedBy?.some((id) => id.toString() === patientId);
           return (
             <div key={q._id} className="question-item">
-              {/* Hiển thị tiêu đề câu hỏi */}
               <h4 className="question-title">{q.title}</h4>
-
-              {/* Hiển thị thông tin người hỏi */}
               <p className="question-meta">
                 <strong>
                   {q.gender}, {q.age} tuổi
                 </strong>
               </p>
-
-              {/* Nội dung câu hỏi */}
               <p className="question-content">{q.content}</p>
-
-              {/* Thời gian đăng câu hỏi */}
               <p className="question-date">
-                📅 {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "Không xác định"}
+                📅{" "}
+                {q.createdAt
+                  ? new Date(q.createdAt).toLocaleDateString()
+                  : "Không xác định"}
               </p>
-
-              {/* Nút xem chi tiết */}
               <div className="question-footer">
                 <span className="question-reply" onClick={() => openModal(q)}>
                   <MessageOutlined className="reply-icon" />{" "}
-                  {q.answer ? "1 Trả lời" : "Chưa có trả lời"}
+                  {q.commentCount || 0} Bình luận
                 </span>
-                <span className="question-thanks" onClick={() => handleToggleLike(q._id)}>
-                  {isLiked ? <HeartFilled style={{ color: "red" }} /> : <HeartOutlined />}{" "}
+
+                <span
+                  className="question-thanks"
+                  onClick={() => handleToggleLike(q._id)}
+                >
+                  {isLiked ? (
+                    <HeartFilled style={{ color: "red" }} />
+                  ) : (
+                    <HeartOutlined />
+                  )}{" "}
                   {q.likedBy?.length || 0} Cảm ơn
                 </span>
               </div>
@@ -263,41 +144,71 @@ const QuestionList = () => {
         })
       )}
 
-      {/* Popup Modal hiển thị chi tiết câu hỏi */}
-      <Modal title="Chi tiết câu hỏi" open={isModalOpen} onCancel={closeModal} footer={null}>
+      {/* Popup Modal hiển thị chi tiết câu hỏi + bình luận */}
+      <Modal
+        title="Chi tiết câu hỏi"
+        open={isModalOpen}
+        onCancel={closeModal}
+        footer={null}
+      >
         {selectedQuestion ? (
           <div className="modal-content">
             <h4 className="modal-question-title">{selectedQuestion.title}</h4>
             <p className="modal-question-meta">
-              {selectedQuestion.gender}, {selectedQuestion.age} tuổi
+              <strong>
+                {selectedQuestion.gender}, {selectedQuestion.age} tuổi
+              </strong>
             </p>
             <p className="modal-question-content">{selectedQuestion.content}</p>
             <p className="modal-question-date">
               📅 Ngày hỏi:{" "}
-              {selectedQuestion.createdAt ? new Date(selectedQuestion.createdAt).toLocaleDateString() : "Không xác định"}
+              {selectedQuestion.createdAt
+                ? new Date(selectedQuestion.createdAt).toLocaleDateString()
+                : "Không xác định"}
             </p>
+            <div className="question-footer">
+              <span className="question-reply">
+              <MessageOutlined className="reply-icon" /> {comments.length} Bình luận
+              </span>
+              <span className="question-thanks">
+                ❤️ {selectedQuestion.likedBy?.length || 0} Cảm ơn
+              </span>
+            </div>
 
-            {selectedQuestion.answer ? (
-              <div className="modal-answer-section">
-                <p>
-                  <strong>Bác sĩ:</strong>{" "}
-                  <span className="doctor-name">
-                    {selectedQuestion.doctorId?.name || "Chưa cập nhật"}
-                  </span>
-                </p>
-                <p>
-                  <strong>Trả lời:</strong> {selectedQuestion.answer}
-                </p>
-                <p className="modal-answer-time">
-                  ⏳ Ngày trả lời:{" "}
-                  {selectedQuestion.doctorCommentedAt
-                    ? new Date(selectedQuestion.doctorCommentedAt).toLocaleDateString()
-                    : "Chưa có"}
-                </p>
-              </div>
-            ) : (
-              <p className="no-answer">Chưa có câu trả lời.</p>
-            )}
+            {/*  Hiển thị bình luận */}
+            <div className="comments-section">
+              <h4>Bình luận</h4>
+              {loadingComments ? (
+                <Spin />
+              ) : comments && comments.length > 0 ? (
+                [...comments]
+                  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                  .map((c, index) => (
+                    <div key={index} className="comment-item">
+                      <p className="comment-meta">
+                        <strong>
+                          {c.doctorId
+                            ? `Bác sĩ ${c.doctorId.name || "Không rõ"}`
+                            : c.patientId
+                            ? `Bệnh nhân ${selectedQuestion.gender}, ${selectedQuestion.age} tuổi`
+                            : "Người dùng"}
+                        </strong>
+                      </p>
+                      <p className="comment-content">
+                        {c.content || "Không có nội dung"}
+                      </p>
+                      <p className="comment-date">
+                        ⏳{" "}
+                        {c.createdAt
+                          ? new Date(c.createdAt).toLocaleString()
+                          : "Không rõ thời gian"}
+                      </p>
+                    </div>
+                  ))
+              ) : (
+                <p>Chưa có bình luận nào.</p>
+              )}
+            </div>
           </div>
         ) : (
           <p className="no-data">Không có dữ liệu.</p>

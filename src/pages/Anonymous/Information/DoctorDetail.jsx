@@ -4,7 +4,7 @@ import { Card, Typography, Avatar, Spin } from "antd";
 import { PhoneOutlined, EnvironmentOutlined, CalendarOutlined, MedicineBoxOutlined } from "@ant-design/icons";
 
 import UserServices from "../../../services/UserServices";
-import ListQuestionByDoctor from "./ListquestionbyDoctor"; // 🟢 Import component danh sách câu hỏi
+import ListQuestionByDoctor from "./ListquestionbyDoctor"; 
 import "./DoctorDetail.css";
 
 const { Title, Text } = Typography;
@@ -74,7 +74,7 @@ const DoctorDetail = () => {
         <p>{doctor.exp || "Chưa có thông tin"}</p>
       </Card>
 
-      {/* 🟢 Thêm danh sách câu hỏi mà bác sĩ đã trả lời */}
+      {/* Thêm danh sách câu hỏi mà bác sĩ đã trả lời */}
       <ListQuestionByDoctor doctorId={doctor._id} />
     </div>
   );

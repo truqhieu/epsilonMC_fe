@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Spin, Modal } from "antd";
-import { MessageOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
-import CommunityService from "../../../services/CommunityServices";
+import { MessageOutlined } from "@ant-design/icons";
+import CommunityService from "../../../services/QuestionServices";
 import "./ListQuestionByDoctor.css";
 
 const ListQuestionByDoctor = ({ doctorId }) => {
@@ -9,6 +9,8 @@ const ListQuestionByDoctor = ({ doctorId }) => {
   const [loading, setLoading] = useState(true);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [comments, setComments] = useState([]); 
+  const [loadingComments, setLoadingComments] = useState(false);
 
   useEffect(() => {
     if (doctorId) {
@@ -20,10 +22,23 @@ const ListQuestionByDoctor = ({ doctorId }) => {
     setLoading(true);
     try {
       const response = await CommunityService.getApprovedQuestions();
-      const filteredQuestions = response.data.filter((q) => 
-        q.doctorId?._id === doctorId || q.doctorId === doctorId
-      );
+      const filteredQuestions = response.data.map((q) => ({
+        ...q,
+        commentCount: 0 // Ban đầu set commentCount = 0, sẽ cập nhật sau
+      })).filter((q) => q.doctorId?._id === doctorId || q.doctorId === doctorId);
+
       setQuestions(filteredQuestions);
+
+      // Gọi API lấy số lượng bình luận cho từng câu hỏi
+      for (let q of filteredQuestions) {
+        const commentResponse = await CommunityService.getCommentsByQuestionId(q._id);
+        if (commentResponse?.data) {
+          q.commentCount = (commentResponse.data.doctorComments?.length || 0) +
+                           (commentResponse.data.patientComments?.length || 0);
+        }
+      }
+
+      setQuestions([...filteredQuestions]); // Cập nhật lại danh sách câu hỏi
     } catch (error) {
       console.error("Lỗi khi lấy danh sách câu hỏi:", error);
       setQuestions([]);
@@ -32,14 +47,38 @@ const ListQuestionByDoctor = ({ doctorId }) => {
     }
   };
 
+  const fetchComments = async (questionId) => {
+    setLoadingComments(true);
+    try {
+      const response = await CommunityService.getCommentsByQuestionId(questionId);
+
+      if (response?.data) {
+        const { doctorComments = [], patientComments = [] } = response.data;
+        const combinedComments = [...doctorComments, ...patientComments].sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
+        setComments(combinedComments);
+      } else {
+        setComments([]);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách bình luận:", error);
+      setComments([]);
+    } finally {
+      setLoadingComments(false);
+    }
+  };
+
   const openModal = (question) => {
     setSelectedQuestion(question);
     setIsModalOpen(true);
+    fetchComments(question._id);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedQuestion(null);
+    setComments([]);
   };
 
   return (
@@ -59,12 +98,13 @@ const ListQuestionByDoctor = ({ doctorId }) => {
                 <strong>{q.gender}, {q.age} tuổi</strong>
               </p>
               <p className="question-content">{q.content}</p>
-              <p className="question-date">📅 {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "Không xác định"}</p>
+              <p className="question-date">
+                📅 {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "Không xác định"}
+              </p>
 
               <div className="question-footer">
                 <span className="question-reply" onClick={() => openModal(q)}>
-                  <MessageOutlined className="reply-icon" />{" "}
-                  {q.answer ? "1 Trả lời" : "Chưa có trả lời"}
+                  <MessageOutlined className="reply-icon" /> {q.commentCount || 0} Bình luận
                 </span>
               </div>
             </Card>
@@ -84,13 +124,33 @@ const ListQuestionByDoctor = ({ doctorId }) => {
               📅 Ngày hỏi: {selectedQuestion.createdAt ? new Date(selectedQuestion.createdAt).toLocaleDateString() : "Không xác định"}
             </p>
 
-            {selectedQuestion.answer ? (
-              <div className="modal-answer-section">
-                <p><strong>Trả lời:</strong> {selectedQuestion.answer}</p>
-              </div>
-            ) : (
-              <p className="no-answer">Chưa có câu trả lời.</p>
-            )}
+            <div className="comments-section">
+              <h4>Bình luận</h4>
+              {loadingComments ? (
+                <Spin />
+              ) : comments.length === 0 ? (
+                <p>Chưa có bình luận nào.</p>
+              ) : (
+                comments.map((c, index) => (
+                  <div key={index} className="comment-item">
+                    <p>
+                      <strong>
+                        {c.doctorId
+                          ? `Bác sĩ ${c.doctorId.name || "Không rõ"}`
+                          : c.patientId
+                          ? `Bệnh nhân ${c.patientId.name || "Không rõ"}`
+                          : "Người dùng"}
+                        :
+                      </strong>{" "}
+                      {c.content}
+                    </p>
+                    <p className="comment-date">
+                      ⏳ {c.createdAt ? new Date(c.createdAt).toLocaleString() : "Không rõ thời gian"}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         ) : (
           <p className="no-data">Không có dữ liệu.</p>
