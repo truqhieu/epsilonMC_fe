@@ -36,7 +36,7 @@ const AuthLoader = () => {
       dispatch(setUser(user));
       if (user.role) {
         if (user.role === "patient") {
-          navigate("/");
+          // navigate("/");
         } else {
           navigate(`/${user.role}`);
         }
