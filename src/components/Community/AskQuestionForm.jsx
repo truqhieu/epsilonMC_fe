@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CommunityService from "../../services/QuestionServices"; // Import đúng file service
+import QuestionService from "../../services/QuestionServices"; // Import đúng file service
 import "./AskQuestionForm.css";
 
 const AskQuestionForm = ({ onSuccess }) => {
@@ -27,7 +27,7 @@ const AskQuestionForm = ({ onSuccess }) => {
     setLoading(true);
 
     try {
-      const response = await CommunityService.createQuestion({
+      const response = await QuestionService.createQuestion({
         patientId,
         title,
         content,

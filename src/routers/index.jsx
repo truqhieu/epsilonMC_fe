@@ -18,7 +18,7 @@ const ROUTERS = {
 
   // Bác sĩ
   DASHBOARD_DOCTOR: `dashboard`,
-
+  DANH_SACH_LICH_HEN:`lich-hen`,
   // Nhân viên
   DASHBOARD_STAFF: ``,
   DANH_SACH_LICH_KHAM: `danh-sach-lich-kham`,
@@ -27,7 +27,7 @@ const ROUTERS = {
   // Quản lý
 
   // Admin
-  XEM_DANH_SACH_ACCOUNT: "/admin/manage-users",
-  TAO_ACCOUNT: "/admin/tao-tai-khoan",
+  XEM_DANH_SACH_ACCOUNT: "danh-sach-account",
+  TAO_ACCOUNT: "tao-tai-khoan",
 };
 export default ROUTERS;

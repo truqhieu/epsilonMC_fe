@@ -40,13 +40,17 @@ const StaffLayout = () => {
   // Tạo menu dựa trên userRole
 
   const routes = {
-    doctor: ["patients", "diagnosis"],
+    doctor: [
+      "patients", 
+      "diagnosis",
+      ROUTERS.DANH_SACH_LICH_HEN,
+    ],
     staff: [
       ROUTERS.DASHBOARD_STAFF,
       ROUTERS.DANH_SACH_LICH_KHAM,
       ROUTERS.HO_SO_BENH_AN_NHAN_VIEN,
     ],
-    admin: ["manage-users", "statistics"],
+    admin: [ROUTERS.XEM_DANH_SACH_ACCOUNT, ROUTERS.TAO_ACCOUNT],
     manager: ["work-management", "report"],
   };
 
@@ -65,7 +69,13 @@ const StaffLayout = () => {
   return (
     <StaffLayoutStyled>
       <Layout>
-        <Sider trigger={null} collapsible collapsed={collapsed} theme="light">
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          theme="light"
+          width={230}
+        >
           <div className="demo-logo-vertical">
             <img src={assets.logo} className="logo" />
           </div>
@@ -126,8 +136,8 @@ const StaffLayout = () => {
           <Content
             style={{
               margin: "24px 16px",
+              minHeight: 260,
               padding: 24,
-              minHeight: 280,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}

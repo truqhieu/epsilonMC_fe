@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Spin } from "antd";
 import { MessageOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
-import CommunityService from "../../services/QuestionServices";
+
 import "./QuestionList.css";
+import QuestionService from "../../services/QuestionServices";
 
 const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
@@ -21,7 +22,7 @@ const QuestionList = () => {
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-      const response = await CommunityService.getApprovedQuestions();
+      const response = await QuestionService.getApprovedQuestions();
       setQuestions(response.data || []);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách câu hỏi:", error);
@@ -34,7 +35,7 @@ const QuestionList = () => {
   const fetchComments = async (questionId) => {
     setLoadingComments(true);
     try {
-      const response = await CommunityService.getCommentsByQuestionId(
+      const response = await QuestionService.getCommentsByQuestionId(
         questionId
       );
       // Kiểm tra xem response.data có phải là object không
@@ -79,7 +80,7 @@ const QuestionList = () => {
     }
 
     try {
-      const response = await CommunityService.toggleLike({
+      const response = await QuestionService.toggleLike({
         questionId,
         patientId,
       });
@@ -126,7 +127,6 @@ const QuestionList = () => {
                   <MessageOutlined className="reply-icon" />{" "}
                   {q.commentCount || 0} Bình luận
                 </span>
-
                 <span
                   className="question-thanks"
                   onClick={() => handleToggleLike(q._id)}
