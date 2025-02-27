@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; // Import useParams
 import axios from "axios";
 import "./styles.css"; // Import file CSS
 
 function AppointmentList() {
+  const { doctorId } = useParams(); // Lấy doctorId từ URL param
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const doctorId = "677fbb344a9b7218d99c9d10"; // Thay bằng ID của bác sĩ hiện tại
-  const API_URL = `http://localhost:9999/api/appointment/listAppointmentsDoctor/${doctorId}`;
 
   useEffect(() => {
+    if (!doctorId) {
+      setError("Không tìm thấy thông tin bác sĩ.");
+      setLoading(false);
+      return;
+    }
+
+    const API_URL = `http://localhost:9999/api/appointment/listAppointmentsDoctor/${doctorId}`;
+
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(API_URL);
@@ -26,7 +34,7 @@ function AppointmentList() {
     };
 
     fetchAppointments();
-  }, [API_URL]);
+  }, [doctorId]); // useEffect sẽ chạy lại khi doctorId thay đổi
 
   if (loading) return <p className="loading-text">Đang tải danh sách cuộc hẹn...</p>;
   if (error) return <p className="error-text">{error}</p>;
