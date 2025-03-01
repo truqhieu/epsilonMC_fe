@@ -20,7 +20,7 @@ export const menuItemsStaff = {
     {
       key: "3",
       icon: <VideoCameraOutlined />,
-      label: "Danh sách cuộc hẹn",
+      label: "Lịch khám trực tiếp",
     },
   ],
   staff: [

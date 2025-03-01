@@ -142,9 +142,8 @@ const HomePage = () => {
               </div>
               <hr />
               <div className="package-price">
-                250.000 <span> VND</span>
+                1.000.000 <span> VND</span>
               </div>
-              <div className="book-button">Đặt lịch hẹn</div>
             </div>
             <div className="service-package">
               <div className="package-title">
@@ -158,9 +157,8 @@ const HomePage = () => {
               </div>
               <hr />
               <div className="package-price">
-                200.000 <span> VND</span>
+                800.000 <span> VND</span>
               </div>
-              <div className="book-button">Đặt lịch hẹn</div>
             </div>
             <div className="service-package">
               <div className="package-title">
@@ -174,9 +172,8 @@ const HomePage = () => {
               </div>
               <hr />
               <div className="package-price">
-                250.000 <span> VND</span>
+                1.000.000 <span> VND</span>
               </div>
-              <div className="book-button">Đặt lịch hẹn</div>
             </div>
           </div>
         </div>

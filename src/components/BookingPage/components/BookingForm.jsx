@@ -1,17 +1,19 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { Form, Input, Select, DatePicker, Spin } from "antd";
+import { Form, Input, Select, DatePicker, Spin, Row, Col } from "antd";
 import dayjs from "dayjs";
 import AppointmentServices from "../../../services/AppointmentServices";
 import ExamServices from "../../../services/ExamServices";
 import axios from "axios";
 import PropTypes from "prop-types";
+import DoctorServices from "../../../services/DoctorServices";
 
 const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [birthday, setBirthday] = useState(null);
   const [loading, setLoading] = useState(false);
   const [listExam, setListExam] = useState([]);
+  const [examinationType, setExaminationType] = useState(1);
   const [listProvices, setListProvinces] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [codeProvinces, setCodeProvinces] = useState(0);
@@ -19,10 +21,14 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
   const [districts, setDistricts] = useState([]);
   const [codeDistricts, setCodeDistricts] = useState(0);
   const [listWards, setListWards] = useState([]);
+  const [listDoctor, setListDoctor] = useState([]);
+  const [doctor, setDoctor] = useState();
   const [wards, setWards] = useState([]);
   const [exam, setExam] = useState();
 
   const [formBooking] = Form.useForm();
+  const values = formBooking.getFieldsValue();
+  console.log(values);
 
   const validateAge = (_, value) => {
     if (!value) {
@@ -35,10 +41,60 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
     return Promise.resolve();
   };
 
+  const validateDate = (_, value) => {
+    if (!value) {
+      return Promise.reject("Vui lòng chọn ngày!");
+    }
+
+    const minDate = dayjs().add(1, "day").startOf("day");
+
+    if (value.isBefore(minDate)) {
+      return Promise.reject(
+        "Ngày khám phải từ ngày " + minDate.format("DD/MM/YYYY") + " trở đi!"
+      );
+    }
+
+    return Promise.resolve();
+  };
+
+  const getLocation = async (url, setData) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(url);
+      setData(data.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getLocation(
+      "https://open.oapi.vn/location/provinces?page=0&size=63",
+      setListProvinces
+    );
+  }, []);
+
+  useEffect(() => {
+    if (codeProvinces) {
+      getLocation(
+        `https://open.oapi.vn/location/districts/${codeProvinces}?page=0&size=100`,
+        setListDistricts
+      );
+    }
+    if (codeDistricts) {
+      getLocation(
+        `https://open.oapi.vn/location/wards/${codeDistricts}?page=0&size=100`,
+        setListWards
+      );
+    }
+  }, [codeProvinces, codeDistricts]);
+
   const getListExam = async () => {
     try {
       setLoading(true);
-      const res = await ExamServices.listExam();
+      const res = await ExamServices.listExam(examinationType);
       if (res.success) {
         setListExam(res.exams);
       }
@@ -49,16 +105,15 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
     }
   };
 
-  const getAllProvices = async () => {
+  const getListDoctorByExam = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        "https://open.oapi.vn/location/provinces?page=0&size=63"
-      );
-
-      if (res) {
-        setListProvinces(res?.data?.data);
-      }
+      const res = await DoctorServices.getListDoctorsByExam({
+        date: selectedDate,
+        exam_id: exam,
+      });
+      if (res.success) setListDoctor(res.data);
+      console.log(listDoctor);
     } catch (error) {
       console.log(error);
     } finally {
@@ -66,37 +121,14 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
     }
   };
 
-  const getDistrictsByProvices = async (code) => {
-    try {
-      setLoading(true);
-      const res = await axios.get(
-        `https://open.oapi.vn/location/districts/${code}?page=0&size=100`
-      );
-      if (res) {
-        setListDistricts(res?.data?.data);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    getListExam();
+    if (examinationType === 1) {
+      getListExam();
+    } else {
+      getListDoctorByExam();
     }
-  };
-
-  const getWardsByDistricts = async (code) => {
-    try {
-      setLoading(true);
-      const res = await axios.get(
-        `https://open.oapi.vn/location/wards/${code}?page=0&size=100`
-      );
-      if (res) {
-        setListWards(res?.data?.data);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [examinationType]);
 
   const addAppointment = async (values) => {
     try {
@@ -128,66 +160,40 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
       });
   };
 
-  useEffect(() => {
-    getListExam();
-    getAllProvices();
-  }, []);
-
-  useEffect(() => {
-    if (codeProvinces) {
-      getDistrictsByProvices(codeProvinces);
-    }
-    if (codeDistricts) {
-      getWardsByDistricts(codeDistricts);
-    }
-  }, [codeProvinces, codeDistricts]);
-
-  const validateDate = (_, value) => {
-    if (!value) {
-      return Promise.reject("Vui lòng chọn ngày!");
-    }
-
-    const minDate = dayjs().add(1, "day").startOf("day");
-
-    if (value.isBefore(minDate)) {
-      return Promise.reject(
-        "Ngày khám phải từ ngày " + minDate.format("DD/MM/YYYY") + " trở đi!"
-      );
-    }
-
-    return Promise.resolve();
-  };
+  const filterOption = (input, option) =>
+    option.label.toLowerCase().includes(input.toLowerCase());
 
   return (
     <Spin spinning={loading}>
       <div className="booking-form">
         <Form layout="vertical" form={formBooking}>
-          <Form.Item style={{ marginBottom: 0 }}>
-            <div style={{ display: "flex", gap: "10px" }}>
+          {/* Thông tin cá nhân */}
+          <Row gutter={16}>
+            <Col xs={24} sm={8}>
               <Form.Item
                 name="name"
                 label="Họ và Tên"
-                rules={[
-                  { required: true, message: "Vui loàng nhập họ và tên" },
-                ]}
-                style={{ flex: 1 }}
+                rules={[{ required: true, message: "Vui lòng nhập họ và tên" }]}
               >
                 <Input placeholder="Họ và tên" />
               </Form.Item>
+            </Col>
+            <Col xs={24} sm={8}>
               <Form.Item
-                label="Giới tính"
                 name="gender"
+                label="Giới tính"
                 rules={[{ required: true, message: "Vui lòng chọn giới tính" }]}
-                style={{ flex: 1 }}
               >
                 <Select placeholder="Chọn giới tính">
                   <Select.Option value="male">Nam</Select.Option>
                   <Select.Option value="female">Nữ</Select.Option>
                 </Select>
               </Form.Item>
+            </Col>
+            <Col xs={24} sm={8}>
               <Form.Item
-                label="Ngày sinh"
                 name="birthday"
+                label="Ngày sinh"
                 rules={[{ validator: validateAge }]}
                 required
               >
@@ -198,14 +204,15 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                   placeholder="Chọn ngày sinh"
                 />
               </Form.Item>
-            </div>
-          </Form.Item>
+            </Col>
+          </Row>
 
-          <Form.Item style={{ marginBottom: 0 }}>
-            <div style={{ display: "flex", gap: "10px" }}>
+          {/* Liên hệ */}
+          <Row gutter={16}>
+            <Col xs={24} sm={12}>
               <Form.Item
-                label="Số điện thoại"
                 name="phone"
+                label="Số điện thoại"
                 rules={[
                   {
                     required: true,
@@ -213,13 +220,14 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                     pattern: /^[0-9]{10}$/,
                   },
                 ]}
-                style={{ flex: 1 }}
               >
                 <Input placeholder="Nhập số điện thoại" />
               </Form.Item>
+            </Col>
+            <Col xs={24} sm={12}>
               <Form.Item
-                label="Email"
                 name="email"
+                label="Email"
                 rules={[
                   {
                     required: true,
@@ -227,22 +235,21 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                     message: "Vui lòng nhập email hợp lệ",
                   },
                 ]}
-                style={{ flex: 1 }}
               >
                 <Input placeholder="example@example.com" />
               </Form.Item>
-            </div>
-          </Form.Item>
+            </Col>
+          </Row>
 
-          <Form.Item style={{ marginBottom: 0 }}>
-            <div style={{ display: "flex", gap: "10px" }}>
+          {/* Địa chỉ */}
+          <Row gutter={16}>
+            <Col xs={24} sm={8}>
               <Form.Item
                 name="provinces"
                 label="Tỉnh/Thành phố"
                 rules={[
                   { required: true, message: "Vui lòng chọn Tỉnh/Thành phố" },
                 ]}
-                style={{ flex: 1 }}
               >
                 <Select
                   value={provinces}
@@ -256,21 +263,19 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                     value: item.name,
                     label: item.name,
                   }))}
-                  virtual
-                  allowClear={true}
+                  allowClear
                   showSearch
-                  filterOption={(input, option) =>
-                    option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
+                  filterOption={filterOption}
                 />
               </Form.Item>
+            </Col>
+            <Col xs={24} sm={8}>
               <Form.Item
                 name="districts"
                 label="Quận/Huyện"
                 rules={[
-                  { required: true, message: "Vui loàng chọn Quận/Huyện" },
+                  { required: true, message: "Vui lòng chọn Quận/Huyện" },
                 ]}
-                style={{ flex: 1 }}
               >
                 <Select
                   value={districts}
@@ -284,20 +289,17 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                     value: item.name,
                     label: item.name,
                   }))}
-                  allowClear={true}
+                  allowClear
                   showSearch
-                  filterOption={(input, option) =>
-                    option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
+                  filterOption={filterOption}
                 />
               </Form.Item>
+            </Col>
+            <Col xs={24} sm={8}>
               <Form.Item
                 name="wards"
                 label="Phường/Xã"
-                rules={[
-                  { required: true, message: "Vui loàng chọn Phường/Xã" },
-                ]}
-                style={{ flex: 1 }}
+                rules={[{ required: true, message: "Vui lòng chọn Phường/Xã" }]}
               >
                 <Select
                   value={wards}
@@ -307,25 +309,43 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                     value: item.name,
                     label: item.name,
                   }))}
-                  allowClear={true}
+                  allowClear
                   showSearch
-                  filterOption={(input, option) =>
-                    option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
+                  filterOption={filterOption}
                 />
               </Form.Item>
-            </div>
-          </Form.Item>
+            </Col>
+          </Row>
 
-          <Form.Item label="Địa chỉ" name="address" style={{ flex: 1 }}>
+          <Form.Item name="address" label="Địa chỉ">
             <Input placeholder="Địa chỉ" />
           </Form.Item>
 
-          <Form.Item style={{ marginBottom: 0 }}>
-            <div style={{ display: "flex", gap: "10px" }}>
+          {/* Thông tin khám */}
+          <Row gutter={16}>
+            <Col xs={24} sm={6}>
               <Form.Item
-                label="Ngày khám"
+                name="examinationType"
+                label="Hình thức khám"
+                rules={[
+                  { required: true, message: "Vui lòng chọn hình thức khám" },
+                ]}
+              >
+                <Select
+                  value={examinationType}
+                  onChange={(value) => setExaminationType(value)}
+                  placeholder="Chọn hình thức khám"
+                  options={[
+                    { value: 2, label: "Online" },
+                    { value: 1, label: "Trực tiếp" },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={6}>
+              <Form.Item
                 name="examinationDate"
+                label="Ngày khám"
                 rules={[{ validator: validateDate }]}
                 required
               >
@@ -336,10 +356,12 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                   placeholder="Chọn ngày khám"
                 />
               </Form.Item>
+            </Col>
+            <Col xs={24} sm={6}>
               <Form.Item
                 name="exam"
                 label="Ca khám"
-                rules={[{ required: true, message: "Vui loàng chọn ca khám" }]}
+                rules={[{ required: true, message: "Vui lòng chọn ca khám" }]}
               >
                 <Select
                   value={exam}
@@ -349,18 +371,39 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                     value: item._id,
                     label: item.examination,
                   }))}
+                  allowClear
                 />
               </Form.Item>
-            </div>
-          </Form.Item>
+            </Col>
+            {examinationType === 2 && (
+              <Col xs={24} sm={6}>
+                <Form.Item
+                  name="doctor"
+                  label="Chọn bác sĩ"
+                  rules={[{ required: true, message: "Vui lòng chọn bác sĩ" }]}
+                >
+                  <Select
+                    value={doctor || undefined}
+                    onChange={(value) => setDoctor(value)}
+                    placeholder="Chọn bác sĩ phụ trách"
+                    options={(listDoctor || []).map((item) => ({
+                      value: item._id,
+                      label: item.name,
+                    }))}
+                    allowClear
+                  />
+                </Form.Item>
+              </Col>
+            )}
+          </Row>
 
           <Form.Item
-            label="Triệu chứng"
             name="symptom"
+            label="Triệu chứng"
             rules={[
               {
                 required: true,
-                message: "Vui loàng nhập triệu chứng bạn đang gặp phải",
+                message: "Vui lòng nhập triệu chứng bạn đang gặp phải",
               },
             ]}
           >

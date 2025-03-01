@@ -1,26 +1,33 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
+import { TableCustom } from "../../Staffs/AppointmentList/styles";
+import { getColorByStatus } from "../../../utils/getColorByStatus";
+import { Tag } from "antd";
+import { formatDate } from "../../../utils/timeConfig";
 import moment from "moment";
 import AppointmentServices from "../../../services/AppointmentServices";
-import { TableCustom } from "./styles";
-import { Tag } from "antd";
-import AppointmentDetailModal from "./components/AppointmentDetailModal";
-import { getColorByStatus } from "../../../utils/getColorByStatus";
-import { formatDate } from "../../../utils/timeConfig";
+import { useSelector } from "react-redux";
+import AppointmentDetail from "./components/AppointmentDetail";
 
-const AppointmentList = () => {
+const AppointmentListbyDoctor = () => {
   const [loading, setLoading] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState("");
   const [data, setData] = useState([]);
 
-  const listAppointment = async () => {
+  const { user } = useSelector((state) => state.auth);
+  const doctorId = user?.id;
+
+  const getListAppointmentDoctor = async () => {
     try {
       setLoading(true);
-      const res = await AppointmentServices.listAppointment({
+      const res = await AppointmentServices.listAppointmentDoctor({
+        doctorId,
+        examinationType: 1,
         page: 1,
         limit: 10,
       });
+
       if (res.success) {
         setData(res.data);
       }
@@ -32,7 +39,8 @@ const AppointmentList = () => {
   };
 
   useEffect(() => {
-    listAppointment();
+    getListAppointmentDoctor();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpenModal]);
 
   const columns = [
@@ -56,11 +64,6 @@ const AppointmentList = () => {
       render: (record) => record.patient.phone,
     },
     {
-      title: "Email",
-      key: "email",
-      render: (record) => record.patient.email,
-    },
-    {
       title: "Ngày khám",
       key: "date",
       render: (record) => formatDate(record.examinationDate),
@@ -71,10 +74,9 @@ const AppointmentList = () => {
       render: (record) => record.exam_id.examination,
     },
     {
-      title: "Bác sĩ",
-      key: "doctor",
-      render: (record) =>
-        record.doctor ? record.doctor.name : "Chưa có bác sĩ",
+      title: "Triệu chứng",
+      key: "symptom",
+      render: (record) => record.symptom,
     },
     {
       title: "Trạng thái",
@@ -89,13 +91,12 @@ const AppointmentList = () => {
       },
     },
   ];
-
   return (
     <>
       <TableCustom
         columns={columns}
-        dataSource={data}
         loading={loading}
+        dataSource={data}
         bordered={true}
         rowKey={(record) => record._id}
         onRow={(record) => {
@@ -109,7 +110,7 @@ const AppointmentList = () => {
         pagination={{ pageSize: 10 }}
       />
       {!!setIsOpenModal && (
-        <AppointmentDetailModal
+        <AppointmentDetail
           open={isOpenModal}
           selectedAppointment={selectedAppointment}
           onCancel={() => setIsOpenModal(false)}
@@ -119,4 +120,4 @@ const AppointmentList = () => {
   );
 };
 
-export default AppointmentList;
+export default AppointmentListbyDoctor;

@@ -17,8 +17,8 @@ const updateAppointment = (id, body) =>
   http.post(apiUpdateAppointment.replace(":id", id), body);
 const sendMailRejected = (body) => http.post(apiSendMailRejected, body);
 const sendMailApproved = (body) => http.post(apiSendMailApproved, body);
-const listAppointmentDoctor = (doctorId) =>
-  http.get(apiAppointmentListDoctor.replace(":doctorId", doctorId));
+const listAppointmentDoctor = (body) =>
+  http.post(apiAppointmentListDoctor, body);
 
 const AppointmentServices = {
   addAppointment,
