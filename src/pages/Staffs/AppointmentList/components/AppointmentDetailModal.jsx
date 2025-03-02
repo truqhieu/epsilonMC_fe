@@ -53,6 +53,7 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
         status: status,
         date: appointment.examinationDate,
         exam_id: appointment.exam_id._id,
+        patientId: appointment.patient._id,
       });
       if (res.success) {
         onCancel();

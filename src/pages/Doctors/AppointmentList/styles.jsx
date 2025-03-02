@@ -11,7 +11,6 @@ export const DetailAppointment = styled.div`
   .info-row {
     display: flex;
     gap: 100px;
-    align-items: center;
   }
 
   .info-row strong {
@@ -34,5 +33,10 @@ export const DetailAppointment = styled.div`
     display: flex;
     gap: 50px;
     justify-content: center;
+  }
+
+  .ant-form-item-required {
+    font-size: 17px !important;
+    font-weight: 600;
   }
 `;
