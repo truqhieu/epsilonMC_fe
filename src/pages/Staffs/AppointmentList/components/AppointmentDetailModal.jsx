@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import CustomModal from "../../../../components/CustomModal";
 import AppointmentServices from "../../../../services/AppointmentServices";
 import { DetailAppointment } from "../styles";
-import { formatDate } from "../../../../utils/timeConfig";
+import { convertToVietnamTime, formatDate } from "../../../../utils/timeConfig";
 import { Button, Select, Tag } from "antd";
 import { getColorByStatus } from "../../../../utils/getColorByStatus";
 import DoctorServices from "../../../../services/DoctorServices";
@@ -38,7 +38,6 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
         exam_id: appointment.exam_id._id,
       });
       if (res.success) setListDoctor(res.data);
-      console.log(listDoctor);
     } catch (error) {
       console.log(error);
     } finally {
@@ -183,7 +182,7 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
             <div className="examination-date">
               <InfoRow
                 label="Ngày khám:"
-                value={formatDate(appointment.examinationDate)}
+                value={convertToVietnamTime(appointment.examinationDate)}
               />
               {appointment.exam_id?.examination}
             </div>

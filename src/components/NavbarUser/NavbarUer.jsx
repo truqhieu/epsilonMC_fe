@@ -7,7 +7,13 @@ import { Link, useNavigate } from "react-router-dom";
 import LoginForm from "../LoginModel/LoginModel";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../reduxs/authReduxs/authSlice";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  LogoutOutlined,
+  ScheduleOutlined,
+  ShoppingCartOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import AuthServices from "../../services/AuthServices";
 
 const NavbarUser = () => {
@@ -50,6 +56,25 @@ const NavbarUser = () => {
                 <p style={{ width: "max-content" }}>Tài khoản</p>
               </li>
               <hr />
+              {user?.role === "patient" && (
+                <>
+                  <li>
+                    <ScheduleOutlined />
+                    <p style={{ width: "max-content" }}>Lịch sử đặt khám</p>
+                  </li>
+                  <hr />
+                  <li>
+                    <BookOutlined />
+                    <p style={{ width: "max-content" }}>Hồ sơ bệnh án</p>
+                  </li>
+                  <hr />
+                  <li>
+                    <ShoppingCartOutlined />
+                    <p style={{ width: "max-content" }}>Đơn hàng</p>
+                  </li>
+                  <hr />
+                </>
+              )}
               <li onClick={() => handleLogout()}>
                 <LogoutOutlined />
                 <p style={{ width: "max-content" }}>Đăng xuất</p>

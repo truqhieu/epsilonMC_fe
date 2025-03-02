@@ -1,33 +1,29 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { TableCustom } from "../../Staffs/AppointmentList/styles";
+import { convertToVietnamTime } from "../../../utils/timeConfig";
 import { getColorByStatus } from "../../../utils/getColorByStatus";
 import { Tag } from "antd";
-import { convertToVietnamTime } from "../../../utils/timeConfig";
 import moment from "moment";
-import AppointmentServices from "../../../services/AppointmentServices";
 import { useSelector } from "react-redux";
-import AppointmentDetail from "./components/AppointmentDetail";
+import MedicalRecordDetail from "./modal/MedicalRecordDetail";
+import MedicalRecordServices from "../../../services/MedicalRecordServices";
 
-const AppointmentListbyDoctor = () => {
+const ListMedicalRecord = () => {
   const [loading, setLoading] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState("");
+  const [selectedRecord, setSelectedRecord] = useState("");
   const [data, setData] = useState([]);
 
   const { user } = useSelector((state) => state.auth);
   const doctorId = user?.id;
 
-  const getListAppointmentDoctor = async () => {
+  const getListMedicalRecord = async () => {
     try {
       setLoading(true);
-      const res = await AppointmentServices.listAppointmentDoctor({
-        doctorId,
-        examinationType: 1,
-        page: 1,
-        limit: 10,
-        status: "Approved",
-      });
+      const res = await MedicalRecordServices.listMedicalRecordbyDoctorId(
+        doctorId
+      );
 
       if (res.success) {
         setData(res.data);
@@ -40,39 +36,46 @@ const AppointmentListbyDoctor = () => {
   };
 
   useEffect(() => {
-    getListAppointmentDoctor();
+    getListMedicalRecord();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpenModal]);
 
   const columns = [
     {
-      title: "Họ và tên",
+      title: "Tên bệnh nhân",
       key: "name",
-      render: (record) => record.patient.name,
+      render: (record) => record?.patientId?.name,
     },
     {
       title: "Tuổi",
       key: "age",
       render: (record) => {
-        const birthday = moment(record.patient.birthDay, "YYYY-MM-DD");
+        const birthday = moment(record?.patientId?.birthDay, "YYYY-MM-DD");
         const age = moment().diff(birthday, "years");
         return age;
       },
     },
     {
-      title: "Số Điện Thoại",
-      key: "phone",
-      render: (record) => record.patient.phone,
+      title: "Giới tính",
+      key: "gender",
+      render: (record) => {
+        return record.patient?.gender === "male" ? "Nam" : "Nữ";
+      },
     },
     {
       title: "Ngày khám",
       key: "date",
-      render: (record) => convertToVietnamTime(record.examinationDate),
+      render: (record) =>
+        convertToVietnamTime(record?.appointmentId?.examinationDate),
     },
     {
       title: "Ca khám",
       key: "exam",
-      render: (record) => record.exam_id.examination,
+      render: (record) => {
+        return record?.appointmentId?.examinationType === 1
+          ? "Trực tiếp"
+          : "Online";
+      },
     },
     {
       title: "Triệu chứng",
@@ -83,10 +86,10 @@ const AppointmentListbyDoctor = () => {
       title: "Trạng thái",
       key: "status",
       render: (record) => {
-        const color = getColorByStatus(record?.status);
+        const color = getColorByStatus(record?.appointmentId?.status);
         return (
           <Tag color={color} className="d-flex-center">
-            {record?.status}
+            {record?.appointmentId?.status}
           </Tag>
         );
       },
@@ -104,16 +107,16 @@ const AppointmentListbyDoctor = () => {
           return {
             onClick: () => {
               setIsOpenModal(true);
-              setSelectedAppointment(record?._id);
+              setSelectedRecord(record?._id);
             },
           };
         }}
         pagination={{ pageSize: 10 }}
       />
       {!!setIsOpenModal && (
-        <AppointmentDetail
+        <MedicalRecordDetail
           open={isOpenModal}
-          selectedAppointment={selectedAppointment}
+          selectedRecord={selectedRecord}
           onCancel={() => setIsOpenModal(false)}
         />
       )}
@@ -121,4 +124,4 @@ const AppointmentListbyDoctor = () => {
   );
 };
 
-export default AppointmentListbyDoctor;
+export default ListMedicalRecord;

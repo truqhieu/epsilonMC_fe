@@ -6,7 +6,7 @@ import { TableCustom } from "./styles";
 import { Tag } from "antd";
 import AppointmentDetailModal from "./components/AppointmentDetailModal";
 import { getColorByStatus } from "../../../utils/getColorByStatus";
-import { formatDate } from "../../../utils/timeConfig";
+import { convertToVietnamTime } from "../../../utils/timeConfig";
 
 const AppointmentList = () => {
   const [loading, setLoading] = useState(false);
@@ -63,7 +63,7 @@ const AppointmentList = () => {
     {
       title: "Ngày khám",
       key: "date",
-      render: (record) => formatDate(record.examinationDate),
+      render: (record) => convertToVietnamTime(record.examinationDate),
     },
     {
       title: "Ca khám",

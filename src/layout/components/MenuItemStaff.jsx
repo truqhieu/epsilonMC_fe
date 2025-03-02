@@ -1,4 +1,5 @@
 import {
+  BookOutlined,
   HomeOutlined,
   UserAddOutlined,
   UserOutlined,
@@ -15,12 +16,12 @@ export const menuItemsStaff = {
     {
       key: "2",
       icon: <VideoCameraOutlined />,
-      label: "Chẩn đoán",
+      label: "Lịch khám trực tiếp",
     },
     {
       key: "3",
-      icon: <VideoCameraOutlined />,
-      label: "Lịch khám trực tiếp",
+      icon: <BookOutlined />,
+      label: "Hồ sơ bệnh án",
     },
   ],
   staff: [

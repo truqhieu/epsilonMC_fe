@@ -1,1 +1,3 @@
-    export const apiMedicalRecords = `/medicalrecord/medical-record/:patientId`;
+export const apiGetMedicalRecordsById = `/medicalrecord/getMedicalRecordsById/:id`;
+export const apiAddMedicalRecord = `/medicalrecord/addMedicalRecord`;
+export const apiGetListMedicalRecordbyDoctorId = `/medicalrecord/getListMedicalRecord/:doctorId`;

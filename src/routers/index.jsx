@@ -17,7 +17,8 @@ const ROUTERS = {
   HO_SO_BENH_AN: `benh-nhan/ho-so-benh-an/:patientId`,
   // Bác sĩ
   DASHBOARD_DOCTOR: `dashboard`,
-  DANH_SACH_LICH_HEN: `lich-hen-truc-tiep`,
+  DANH_SACH_LICH_HEN_TRUC_TIEP: `lich-hen-truc-tiep`,
+  HO_SO_BENH_AN_BAC_SI: `ho-so-benh-an`,
   // Nhân viên
   DASHBOARD_STAFF: ``,
   DANH_SACH_LICH_KHAM: `danh-sach-lich-kham`,

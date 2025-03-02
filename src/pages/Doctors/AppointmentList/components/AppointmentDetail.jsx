@@ -1,22 +1,20 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Tag } from "antd";
+import { Button, Col, Form, Row } from "antd";
 import PropTypes from "prop-types";
-
-import { getColorByStatus } from "../../../../utils/getColorByStatus";
 import CustomModal from "../../../../components/CustomModal";
 import { DetailAppointment } from "../styles";
 import { formatDate } from "../../../../utils/timeConfig";
 import AppointmentServices from "../../../../services/AppointmentServices";
 import TextArea from "antd/es/input/TextArea";
+import MedicalRecordServices from "../../../../services/MedicalRecordServices";
+import { InfoRow } from "../../../../components/InfoRow";
 
 const AppointmentDetail = ({ open, onCancel, selectedAppointment }) => {
   const [loading, setLoading] = useState(false);
   const [appointment, setAppointment] = useState({});
 
   const [formMedicalRecord] = Form.useForm();
-  const values = formMedicalRecord.getFieldsValue();
-  console.log(values);
 
   const getAppointmentById = async (id) => {
     try {
@@ -32,32 +30,33 @@ const AppointmentDetail = ({ open, onCancel, selectedAppointment }) => {
     }
   };
 
+  const addMedicalRecord = async () => {
+    const values = formMedicalRecord.getFieldsValue();
+    try {
+      setLoading(true);
+      const res = await MedicalRecordServices.addMedicalRecord({
+        ...values,
+        symptom: appointment.symptom,
+        patientId: appointment.patient._id,
+        appointmentId: appointment._id,
+        doctorId: appointment.doctor._id,
+      });
+      if (res.success) {
+        onCancel();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (open && selectedAppointment) {
       getAppointmentById(selectedAppointment);
     }
   }, [open, selectedAppointment]);
 
-  const InfoRow = ({ label, value, isTag }) => (
-    <div className="info-row">
-      <strong>{label}</strong>
-      {isTag ? (
-        <Tag color={getColorByStatus(value)}>{value}</Tag>
-      ) : (
-        <span>{value}</span>
-      )}
-    </div>
-  );
-
-  InfoRow.propTypes = {
-    label: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.element,
-    ]),
-    isTag: PropTypes.bool,
-  };
   return (
     <CustomModal
       title="Hồ sơ bệnh án"
@@ -80,6 +79,7 @@ const AppointmentDetail = ({ open, onCancel, selectedAppointment }) => {
               value={formatDate(appointment.patient?.birthDay)}
             />
             <InfoRow label="Triệu chứng:" value={appointment.symptom} />
+
             <Form layout="vertical" form={formMedicalRecord}>
               <Row gutter={16}>
                 <Col span={24}>
@@ -131,15 +131,19 @@ const AppointmentDetail = ({ open, onCancel, selectedAppointment }) => {
               </Row>
             </Form>
           </div>
-          <div className="button-action">
-            <Button
-              type="primary"
-              style={{ backgroundColor: "#389E0D" }}
-              onClick={() => {}}
-            >
-              Hoàn thành ca khám
-            </Button>
-          </div>
+          {appointment?.status === "Approved" && (
+            <div className="button-action">
+              <Button
+                type="primary"
+                style={{ backgroundColor: "#389E0D" }}
+                onClick={() => {
+                  addMedicalRecord();
+                }}
+              >
+                Hoàn thành ca khám
+              </Button>
+            </div>
+          )}
         </div>
       </DetailAppointment>
     </CustomModal>

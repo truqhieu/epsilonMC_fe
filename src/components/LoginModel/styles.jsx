@@ -77,4 +77,8 @@ export const LoginForStaffStyled = styled.div`
     display: flex;
     gap: 10px;
   }
+
+  .booing-order {
+    text-align: center;
+  }
 `;

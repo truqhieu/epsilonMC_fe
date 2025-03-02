@@ -7,6 +7,7 @@ import AuthServices from "../../../services/AuthServices";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setTokens, setUser } from "../../../reduxs/authReduxs/authSlice";
+import { Link } from "react-router-dom";
 
 const LoginForPatient = ({ setRoleLogin, onCancel }) => {
   const [email, setEmail] = useState("");
@@ -157,6 +158,10 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
             </Button>
           </Form.Item>
         </Form>
+        <div className="booing-order">
+          Nếu đây là lần đầu bạn đến với chúng tôi vui lòng{" "}
+          <Link to="/dat-lich">đăng ký</Link> !
+        </div>
       </LoginForStaffStyled>
     </Spin>
   );

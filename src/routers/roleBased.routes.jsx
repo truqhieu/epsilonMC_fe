@@ -53,9 +53,15 @@ const DashboardDoctor = React.lazy(() =>
 const listAppointmentDoctor = React.lazy(() =>
   import("../pages/Doctors/AppointmentList/AppointmentListbyDoctor")
 );
-const MedicalRecordPatient = React.lazy(() =>
-  import("../pages/Patients/MedicalRecords/MedicalRecord")
+const MedicalRecordDoctor = React.lazy(() =>
+  import("../pages/Doctors/MedicalRecords/ListMedicalRecord")
 );
+
+//Patient routes
+const AppointmetnPatient = React.lazy(() =>
+  import("../pages/Patients/AppointmentList/index")
+);
+
 export const staffRoutes = [
   {
     path: ROUTERS.DASHBOARD_STAFF,
@@ -96,9 +102,13 @@ export const adminRoutes = [
 
 export const patientRoutes = [
   {
-    path: ROUTERS.HO_SO_BENH_AN,
-    element: wrapWithLazy(MedicalRecordPatient),
+    path: ROUTERS.LICH_SU_KHAM,
+    element: wrapWithLazy(AppointmetnPatient),
   },
+  // {
+  //   path: ROUTERS.HO_SO_BENH_AN,
+  //   element: wrapWithLazy(MedicalRecordPatient),
+  // },
   {
     path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
@@ -112,8 +122,12 @@ export const doctorRoutes = [
     element: wrapWithLazy(DashboardDoctor),
   },
   {
-    path: ROUTERS.DANH_SACH_LICH_HEN,
+    path: ROUTERS.DANH_SACH_LICH_HEN_TRUC_TIEP,
     element: wrapWithLazy(listAppointmentDoctor),
+  },
+  {
+    path: ROUTERS.HO_SO_BENH_AN_BAC_SI,
+    element: wrapWithLazy(MedicalRecordDoctor),
   },
   {
     path: ROUTERS.NOTFOUND,

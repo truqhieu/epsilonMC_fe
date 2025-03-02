@@ -7,7 +7,13 @@ import { Link, useNavigate } from "react-router-dom";
 import LoginForm from "../LoginModel/LoginModel";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../reduxs/authReduxs/authSlice";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  LogoutOutlined,
+  ScheduleOutlined,
+  ShoppingCartOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import AuthServices from "../../services/AuthServices";
 
 const Navbar = () => {
@@ -82,9 +88,33 @@ const Navbar = () => {
             <ul className="navbar-profile-dropdown">
               <li onClick={() => setMenu("profile")}>
                 <UserOutlined />
-                <p style={{ width: "max-content" }}>Tài khoản</p>
+                <p style={{ width: "max-content" }}>Thông tin cá nhân</p>
               </li>
               <hr />
+              {user?.role === "patient" && (
+                <>
+                  <li>
+                    <ScheduleOutlined />
+                    <Link
+                      to="lich-su-kham"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <p style={{ width: "max-content" }}>Lịch sử đặt khám</p>
+                    </Link>
+                  </li>
+                  <hr />
+                  <li onClick={() => setMenu("profile")}>
+                    <BookOutlined />
+                    <p style={{ width: "max-content" }}>Hồ sơ bệnh án</p>
+                  </li>
+                  <hr />
+                  <li onClick={() => setMenu("profile")}>
+                    <ShoppingCartOutlined />
+                    <p style={{ width: "max-content" }}>Đơn hàng</p>
+                  </li>
+                  <hr />
+                </>
+              )}
               <li onClick={() => handleLogout()}>
                 <LogoutOutlined />
                 <p style={{ width: "max-content" }}>Đăng xuất</p>

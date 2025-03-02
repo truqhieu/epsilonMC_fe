@@ -7,6 +7,7 @@ import ExamServices from "../../../services/ExamServices";
 import axios from "axios";
 import PropTypes from "prop-types";
 import DoctorServices from "../../../services/DoctorServices";
+import { convertToVietnamTime } from "../../../utils/timeConfig";
 
 const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -198,8 +199,10 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                 required
               >
                 <DatePicker
-                  value={birthday}
-                  onChange={(date) => setBirthday(date)}
+                  value={birthday ? convertToVietnamTime(birthday) : null}
+                  onChange={(date) =>
+                    setBirthday(date ? convertToVietnamTime(date) : null)
+                  }
                   format="DD/MM/YYYY"
                   placeholder="Chọn ngày sinh"
                 />
@@ -350,8 +353,12 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                 required
               >
                 <DatePicker
-                  value={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
+                  value={
+                    selectedDate ? convertToVietnamTime(selectedDate) : null
+                  }
+                  onChange={(date) =>
+                    setSelectedDate(date ? convertToVietnamTime(date) : null)
+                  }
                   format="DD/MM/YYYY"
                   placeholder="Chọn ngày khám"
                 />
