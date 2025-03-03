@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Spin } from "antd";
 import { MessageOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
-
-import "./QuestionList.css";
 import QuestionService from "../../services/QuestionServices";
-
+import { QuestionListContainer } from "./styles";
 const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +20,7 @@ const QuestionList = () => {
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-      const response = await QuestionService.getApprovedQuestions();
+      const response = await QuestionService.getPublicApprovedQuestions();
       setQuestions(response.data || []);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách câu hỏi:", error);
@@ -35,26 +33,12 @@ const QuestionList = () => {
   const fetchComments = async (questionId) => {
     setLoadingComments(true);
     try {
-      const response = await QuestionService.getCommentsByQuestionId(
-        questionId
-      );
-      // Kiểm tra xem response.data có phải là object không
-      if (typeof response.data === "object" && response.data !== null) {
-        console.log("✅ API trả về object hợp lệ");
-
-        // Trường hợp API trả về `data` là object nhưng không có `data` bên trong
-        const { doctorComments = [], patientComments = [] } = response.data;
-        const combinedComments = [...doctorComments, ...patientComments];
-        setComments(combinedComments);
-        console.log("✅ State comments sau khi cập nhật:", combinedComments);
-      } else {
-        console.log(
-          "🚨 response.data không phải object hoặc không có dữ liệu."
-        );
-        setComments([]);
-      }
+      const response = await QuestionService.getCommentsByQuestionId(questionId);
+      console.log("Comments Response:", response); // Check data structure
+      const { data = [] } = response || {}; // Ensure data exists
+      setComments(data);
     } catch (error) {
-      console.error("❌ Lỗi khi lấy danh sách bình luận:", error);
+      console.error("Lỗi khi lấy bình luận của câu hỏi:", error);
       setComments([]);
     } finally {
       setLoadingComments(false);
@@ -64,7 +48,7 @@ const QuestionList = () => {
   const openModal = (question) => {
     setSelectedQuestion(question);
     setIsModalOpen(true);
-    fetchComments(question._id); // Gọi API lấy bình luận khi mở modal
+    fetchComments(question._id); // Fetch comments when modal opens
   };
 
   const closeModal = () => {
@@ -80,7 +64,7 @@ const QuestionList = () => {
     }
 
     try {
-      const response = await QuestionService.toggleLike({
+      const response = await QuestionService.toggleLikeQuestion({
         questionId,
         patientId,
       });
@@ -98,6 +82,7 @@ const QuestionList = () => {
   };
 
   return (
+    <QuestionListContainer>
     <div className="question-list-container">
       <h3 className="question-list-title">Các câu hỏi đã được trả lời</h3>
       {loading ? (
@@ -111,21 +96,15 @@ const QuestionList = () => {
             <div key={q._id} className="question-item">
               <h4 className="question-title">{q.title}</h4>
               <p className="question-meta">
-                <strong>
-                  {q.gender}, {q.age} tuổi
-                </strong>
+                <strong>{q.gender}, {q.age} tuổi</strong>
               </p>
               <p className="question-content">{q.content}</p>
               <p className="question-date">
-                📅{" "}
-                {q.createdAt
-                  ? new Date(q.createdAt).toLocaleDateString()
-                  : "Không xác định"}
+                📅 {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "Không xác định"}
               </p>
               <div className="question-footer">
                 <span className="question-reply" onClick={() => openModal(q)}>
-                  <MessageOutlined className="reply-icon" />{" "}
-                  {q.commentCount || 0} Bình luận
+                  <MessageOutlined className="reply-icon" /> {q.commentCount || 0} Bình luận
                 </span>
                 <span
                   className="question-thanks"
@@ -135,7 +114,7 @@ const QuestionList = () => {
                     <HeartFilled style={{ color: "red" }} />
                   ) : (
                     <HeartOutlined />
-                  )}{" "}
+                  )}
                   {q.likedBy?.length || 0} Cảm ơn
                 </span>
               </div>
@@ -144,7 +123,6 @@ const QuestionList = () => {
         })
       )}
 
-      {/* Popup Modal hiển thị chi tiết câu hỏi + bình luận */}
       <Modal
         title="Chi tiết câu hỏi"
         open={isModalOpen}
@@ -155,56 +133,39 @@ const QuestionList = () => {
           <div className="modal-content">
             <h4 className="modal-question-title">{selectedQuestion.title}</h4>
             <p className="modal-question-meta">
-              <strong>
-                {selectedQuestion.gender}, {selectedQuestion.age} tuổi
-              </strong>
+              <strong>{selectedQuestion.gender}, {selectedQuestion.age} tuổi</strong>
             </p>
             <p className="modal-question-content">{selectedQuestion.content}</p>
             <p className="modal-question-date">
-              📅 Ngày hỏi:{" "}
-              {selectedQuestion.createdAt
-                ? new Date(selectedQuestion.createdAt).toLocaleDateString()
-                : "Không xác định"}
+              📅 Ngày hỏi: {selectedQuestion.createdAt ? new Date(selectedQuestion.createdAt).toLocaleDateString() : "Không xác định"}
             </p>
             <div className="question-footer">
               <span className="question-reply">
-              <MessageOutlined className="reply-icon" /> {comments.length} Bình luận
+                <MessageOutlined className="reply-icon" /> {comments.length} Bình luận
               </span>
               <span className="question-thanks">
                 ❤️ {selectedQuestion.likedBy?.length || 0} Cảm ơn
               </span>
             </div>
 
-            {/*  Hiển thị bình luận */}
             <div className="comments-section">
               <h4>Bình luận</h4>
               {loadingComments ? (
                 <Spin />
-              ) : comments && comments.length > 0 ? (
-                [...comments]
-                  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-                  .map((c, index) => (
-                    <div key={index} className="comment-item">
-                      <p className="comment-meta">
-                        <strong>
-                          {c.doctorId
-                            ? `Bác sĩ ${c.doctorId.name || "Không rõ"}`
-                            : c.patientId
-                            ? `Bệnh nhân ${selectedQuestion.gender}, ${selectedQuestion.age} tuổi`
-                            : "Người dùng"}
-                        </strong>
-                      </p>
-                      <p className="comment-content">
-                        {c.content || "Không có nội dung"}
-                      </p>
-                      <p className="comment-date">
-                        ⏳{" "}
-                        {c.createdAt
-                          ? new Date(c.createdAt).toLocaleString()
-                          : "Không rõ thời gian"}
-                      </p>
-                    </div>
-                  ))
+              ) : comments.length > 0 ? (
+                comments.map((c, index) => (
+                  <div key={index} className="comment-item">
+                    <p className="comment-meta">
+                      <strong>
+                        {c.doctorId ? `Bác sĩ ${c.doctorId.name || "Không rõ"}` : c.patientId ? `Bệnh nhân ${selectedQuestion.gender}, ${selectedQuestion.age} tuổi` : "Người dùng"}
+                      </strong>
+                    </p>
+                    <p className="comment-content">{c.content || "Không có nội dung"}</p>
+                    <p className="comment-date">
+                      ⏳ {c.createdAt ? new Date(c.createdAt).toLocaleString() : "Không rõ thời gian"}
+                    </p>
+                  </div>
+                ))
               ) : (
                 <p>Chưa có bình luận nào.</p>
               )}
@@ -215,7 +176,9 @@ const QuestionList = () => {
         )}
       </Modal>
     </div>
+    </QuestionListContainer>
   );
+  
 };
 
 export default QuestionList;
