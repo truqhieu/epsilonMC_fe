@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { Card, Spin, Modal } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
@@ -16,11 +15,11 @@ const ListQuestionByDoctor = ({ doctorId }) => {
 
   useEffect(() => {
     if (doctorId) {
-      fetchQuestions();
+      fetchDoctorAnsweredQuestions();
     }
   }, [doctorId]);
 
-  const fetchQuestions = async () => {
+  const fetchDoctorAnsweredQuestions = async () => {
     setLoading(true);
     try {
       const response = await QuestionServices.getApprovedQuestions();
@@ -48,7 +47,7 @@ const ListQuestionByDoctor = ({ doctorId }) => {
 
       setQuestions([...filteredQuestions]); // Cập nhật lại danh sách câu hỏi
     } catch (error) {
-      console.error("Lỗi khi lấy danh sách câu hỏi:", error);
+      console.error("Lỗi khi lấy danh sách câu hỏi bác sĩ đã tư vấn:", error);
       setQuestions([]);
     } finally {
       setLoading(false);
@@ -72,7 +71,7 @@ const ListQuestionByDoctor = ({ doctorId }) => {
         setComments([]);
       }
     } catch (error) {
-      console.error("Lỗi khi lấy danh sách bình luận:", error);
+      console.error("Lỗi khi lấy bình luận của câu hỏi:", error);
       setComments([]);
     } finally {
       setLoadingComments(false);
@@ -81,14 +80,18 @@ const ListQuestionByDoctor = ({ doctorId }) => {
 
   const openModal = (question) => {
     setSelectedQuestion(question);
-    setIsModalOpen(true);
     fetchComments(question._id);
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedQuestion(null);
-    setComments([]);
+  };
+
+  const formatDate = (date) => {
+    const newDate = new Date(date);
+    return newDate.toLocaleDateString();
   };
 
   return (

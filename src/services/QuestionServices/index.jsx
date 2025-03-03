@@ -1,39 +1,39 @@
 import http from "../../utils/axiosConfigs";
 import {
-  apiGetAllQuestions,
+  apiCreateGuestQuestion,
+  apiCreatePatientQuestion,
+  apiDoctorAnswerGuestQuestion,
+  apiRejectGuestQuestion,
+  apiGetPublicApprovedQuestions,
   apiGetPatientQuestions,
-  apiGetApprovedQuestions,
-  apiGetCommentsByQuestionId,
-  apiCreateQuestion,
-  apiDoctorAnswerQuestion,
-  apiDoctorCommentOnQuestion,
-  apiPatientCommentOnQuestion,
-  apiRejectQuestion,
-  apiToggleLike,
+  apiToggleLikeQuestion,
+  apiGetDoctorAnsweredQuestions,
+  apiGetCommentsByQuestionId
 } from "./urls";
 
-const getAllQuestions = () => http.get(apiGetAllQuestions);
-const getPatientQuestions = (patientId) => http.get(`${apiGetPatientQuestions}/${patientId}`);
-const getApprovedQuestions = () => http.get(apiGetApprovedQuestions);
-const getCommentsByQuestionId = (questionId) => http.get(`${apiGetCommentsByQuestionId}/${questionId}`);
-const createQuestion = (body) => http.post(apiCreateQuestion, body);
-const doctorAnswerQuestion = (body) => http.put(apiDoctorAnswerQuestion, body);
-const doctorCommentOnQuestion = (body) => http.post(apiDoctorCommentOnQuestion, body);
-const patientCommentOnQuestion = (body) => http.post(apiPatientCommentOnQuestion, body);
-const rejectQuestion = (body) => http.put(apiRejectQuestion, body);
-const toggleLike = (body) => http.post(apiToggleLike, body);
 
-const CommunityService = {
-  getAllQuestions,
+const createGuestQuestion = (body) => http.post(apiCreateGuestQuestion, body);
+const createPatientQuestion = (body) => http.post(apiCreatePatientQuestion, body);
+const doctorAnswerGuestQuestion = (body) => http.put(apiDoctorAnswerGuestQuestion, body);
+const rejectGuestQuestion = (body) => http.put(apiRejectGuestQuestion, body);
+const getPublicApprovedQuestions = () => http.get(apiGetPublicApprovedQuestions);
+const getPatientQuestions = (patientId) => http.get(`${apiGetPatientQuestions}/${patientId}`);
+const toggleLikeQuestion = (body) => http.post(apiToggleLikeQuestion, body);
+const getDoctorAnsweredQuestions = (doctorId) => http.get(`${apiGetDoctorAnsweredQuestions}/${doctorId}`);
+const getCommentsByQuestionId = (questionId) => http.get(apiGetCommentsByQuestionId.replace(':questionId', questionId));
+
+
+
+const QuestionService = {
+  createGuestQuestion,
+  createPatientQuestion,
+  doctorAnswerGuestQuestion,
+  rejectGuestQuestion,
+  getPublicApprovedQuestions,
   getPatientQuestions,
-  getApprovedQuestions,
-  getCommentsByQuestionId,
-  createQuestion,
-  doctorAnswerQuestion,
-  doctorCommentOnQuestion,
-  patientCommentOnQuestion,
-  rejectQuestion,
-  toggleLike,
+  toggleLikeQuestion,
+  getDoctorAnsweredQuestions,
+  getCommentsByQuestionId
 };
 
-export default CommunityService;
+export default QuestionService;

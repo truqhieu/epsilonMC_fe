@@ -1,3 +1,89 @@
+import styled from "styled-components";
+export const AskQuestionFormContainer = styled.div`
+.ask-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ask-form label {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.ask-form input,
+.ask-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+}
+
+.ask-form textarea {
+  resize: none;
+  height: 80px;
+}
+
+
+.gender-age {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.gender-age label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+
+.gender-age input[type="radio"] {
+  margin-left: 5px;
+}
+
+
+.ask-form button {
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease-in-out;
+}
+
+.ask-form button:hover {
+  background: #0056b3;
+}
+
+
+@media (max-width: 480px) {
+  .ask-form {
+      width: 90%;
+      padding: 15px;
+  }
+  
+  .gender-age {
+      flex-direction: column;
+      gap: 10px;
+  }
+}
+
+`;
+
+export const QuestionListContainer = styled.div`
 .question-item {
     border-bottom: 1px solid #ddd;
     padding: 15px 0;
@@ -99,40 +185,39 @@
 .question-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Căn chỉnh khoảng cách hợp lý */
+  justify-content: space-between; 
   margin-top: 10px;
 }
 
-/* Định dạng lại icon số lượng bình luận và lượt thích */
 .question-reply, .question-thanks {
   display: flex;
   align-items: center;
-  gap: 5px; /* Giữ khoảng cách hợp lý giữa icon và số lượng */
+  gap: 5px; 
   font-size: 14px;
   cursor: pointer;
 }
 
-/* Định dạng lại comment-item */
+
 .comment-item {
   background: #f6f6f6;
   padding: 10px;
   border-radius: 6px;
-  margin-bottom: 10px; /* Khoảng cách giữa các bình luận */
+  margin-bottom: 10px; 
 }
 
-/* Định dạng lại tiêu đề người bình luận */
+
 .comment-meta {
   font-weight: bold;
   margin-bottom: 2px;
 }
 
-/* Định dạng lại nội dung bình luận */
+
 .comment-content {
   font-size: 14px;
   color: #333;
 }
 
-/* Căn chỉnh thời gian bình luận */
+
 .comment-date {
   font-size: 12px;
   color: gray;
@@ -141,14 +226,15 @@
   gap: 5px;
 }
 
-/* Điều chỉnh modal nội dung */
+
 .modal-content {
   padding: 10px;
 }
 
-/* Thêm khoảng cách giữa icon và text trong phần footer của câu hỏi */
+
 .question-footer span {
   display: flex;
   align-items: center;
   gap: 5px;
 }
+  `
