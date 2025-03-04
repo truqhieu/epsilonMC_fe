@@ -10,13 +10,15 @@ import NavbarUser from "../components/NavbarUser/NavbarUer";
 
 const GuestLayout = ({ isDatLichPage }) => {
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       {!isDatLichPage && <BookingButton />}
       {!isDatLichPage && <AppHeader />}
       {!isDatLichPage ? <Navbar /> : <NavbarUser />}
-      <Outlet />
+      <div style={{ flex: 1 }}>
+        <Outlet />
+      </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

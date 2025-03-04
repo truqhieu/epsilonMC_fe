@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
-export const AppointmentListPatient = styled.div`
-  .container-appointment {
+export const MedicalRecordListPatient = styled.div`
+  .container-medical-record {
     width: 100%;
     display: flex;
     flex-direction: column;
     padding: 50px 180px;
   }
 
-  .title-appointment {
+  .title-medical-record {
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 20px;
@@ -20,19 +20,18 @@ export const AppointmentListPatient = styled.div`
     color: #fff;
   }
 
-  .list-appointment {
+  .list-medical-record {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
   }
 
-  .appointment {
+  .medical-record {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     gap: 10px;
-    cursor: pointer;
     background: #fff;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 10px;
     border-radius: 16px;
@@ -41,7 +40,7 @@ export const AppointmentListPatient = styled.div`
     height: 120px;
   }
 
-  .appointment-time {
+  .medical-record-time {
     width: 20%;
     display: flex;
     flex-direction: column;
@@ -67,7 +66,7 @@ export const AppointmentListPatient = styled.div`
     font-size: 18px;
   }
 
-  .content-appointment {
+  .content-medical-record {
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -75,22 +74,22 @@ export const AppointmentListPatient = styled.div`
     gap: 5px;
   }
 
-  .appointment-name {
+  .medical-record-name {
     font-weight: 700;
     color: rgb(7, 91, 181);
     font-size: 20px;
   }
 
-  .appointment-doctor {
+  .medical-record-doctor {
     padding-top: 8px;
     font-size: 18px;
   }
 
-  .appointment-exam {
+  .medical-record-exam {
     font-size: 16px;
   }
 
-  .appointment-status {
+  .medical-record-status {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -99,11 +98,20 @@ export const AppointmentListPatient = styled.div`
     height: 50px;
     font-size: 16px;
     margin-top: 10px;
+    margin-right: 10px;
+    border: #73d0f4 solid 1px;
     border-radius: 16px;
+    background: #fff;
+    padding: 10px;
+    cursor: pointer;
+    &:hover {
+      background: #73d0f4;
+      color: #fff;
+    }
   }
 `;
 
-export const DetailAppointmentStyles = styled.div`
+export const DetailMedicalRecordStyles = styled.div`
   .detail-container {
     display: flex;
     flex-direction: column;

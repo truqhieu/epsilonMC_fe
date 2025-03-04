@@ -385,6 +385,27 @@ export const ListQuestionByDoctorStyled = styled.div`
   .modal-question-meta {
     font-size: 14px;
     color: #777;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .modal-question-meta .doctor-name {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .modal-question-date {
+    font-size: 14px;
+    color: #888;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  .doctor-name {
+    font-weight: bold;
+    color: #333;
   }
 
   .modal-answer-section {
@@ -396,5 +417,60 @@ export const ListQuestionByDoctorStyled = styled.div`
 
   .modal-answer-section p {
     margin: 5px 0;
+  }
+
+  .modal-comments {
+    margin-top: 15px;
+  }
+
+  .modal-comments .comment-item {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .modal-comments .comment-item .doctor-name {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .modal-comments .comment-item .comment-content {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+  }
+
+  .modal-comments .comment-item .comment-time {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+    display: block;
+    margin-top: 10px;
+  }
+
+  /* Đảm bảo phần bình luận dễ nhìn và căn chỉnh hợp lý */
+  .modal-comments .comment-item p {
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  .modal-comments .comment-item .doctor-name {
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  .modal-comments .comment-item .comment-content {
+    font-size: 14px;
+    color: #555;
+  }
+
+  .modal-comments .comment-item .comment-time {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
   }
 `;

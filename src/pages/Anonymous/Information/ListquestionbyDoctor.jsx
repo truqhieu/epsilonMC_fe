@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { Card, Spin, Modal } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
@@ -89,10 +90,10 @@ const ListQuestionByDoctor = ({ doctorId }) => {
     setSelectedQuestion(null);
   };
 
-  const formatDate = (date) => {
-    const newDate = new Date(date);
-    return newDate.toLocaleDateString();
-  };
+  // const formatDate = (date) => {
+  //   const newDate = new Date(date);
+  //   return newDate.toLocaleDateString();
+  // };
 
   return (
     <ListQuestionByDoctorStyled>

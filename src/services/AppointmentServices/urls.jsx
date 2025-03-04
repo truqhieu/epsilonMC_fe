@@ -5,3 +5,4 @@ export const apiUpdateAppointment = `/appointment/updateAppointment/:id`;
 export const apiSendMailRejected = `/appointment/sendMailRejected`;
 export const apiSendMailApproved = `/appointment/sendMailApproved`;
 export const apiAppointmentListDoctor = "/appointment/listAppointmentsDoctor";
+export const apiAppointmentListPatient = "/appointment/listAppointmentsPatient";

@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import "./Navbar.css";
-import PropTypes from "prop-types";
 import { assets } from "../../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
 import LoginForm from "../LoginModel/LoginModel";
@@ -10,6 +9,7 @@ import { logout } from "../../reduxs/authReduxs/authSlice";
 import {
   BookOutlined,
   LogoutOutlined,
+  QuestionCircleOutlined,
   ScheduleOutlined,
   ShoppingCartOutlined,
   UserOutlined,
@@ -95,22 +95,28 @@ const Navbar = () => {
                 <>
                   <li>
                     <ScheduleOutlined />
-                    <Link
-                      to="lich-su-kham"
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
+                    <Link to="/lich-su-kham" style={{ textDecoration: "none", color: "inherit" }}>
                       <p style={{ width: "max-content" }}>Lịch sử đặt khám</p>
                     </Link>
                   </li>
                   <hr />
-                  <li onClick={() => setMenu("profile")}>
+                  <li>
                     <BookOutlined />
-                    <p style={{ width: "max-content" }}>Hồ sơ bệnh án</p>
+                    <Link to="/ho-so-benh-an" style={{ textDecoration: "none", color: "inherit" }}>
+                      <p style={{ width: "max-content" }}>Hồ sơ bệnh án</p>
+                    </Link>
                   </li>
                   <hr />
                   <li onClick={() => setMenu("profile")}>
                     <ShoppingCartOutlined />
                     <p style={{ width: "max-content" }}>Đơn hàng</p>
+                  </li>
+                  <hr />
+                  <li>
+                    <QuestionCircleOutlined />
+                    <Link to="/hoi-dap" style={{ textDecoration: "none", color: "inherit" }}>
+                      <p style={{ width: "max-content" }}>Câu hỏi của tôi</p>
+                    </Link>
                   </li>
                   <hr />
                 </>
@@ -124,15 +130,9 @@ const Navbar = () => {
         )}
       </div>
 
-      {!!showLogin && (
-        <LoginForm open={showLogin} onCancel={() => setShowLogin(false)} />
-      )}
+      {!!showLogin && <LoginForm open={showLogin} onCancel={() => setShowLogin(false)} />}
     </div>
   );
-};
-
-Navbar.propTypes = {
-  setShowLogin: PropTypes.func.isRequired,
 };
 
 export default Navbar;

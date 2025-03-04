@@ -4,47 +4,25 @@ import React from "react";
 
 //Guest routes
 const NotFound = React.lazy(() => import("../pages/NotFound/NotFound"));
-const HomePage = React.lazy(() =>
-  import("../pages/Anonymous/HomePage/HomePage")
-);
+const HomePage = React.lazy(() => import("../pages/Anonymous/HomePage/HomePage"));
 const About = React.lazy(() => import("../pages/Anonymous/About/About"));
 const News = React.lazy(() => import("../pages/Anonymous/News/News"));
-const NewsDetail = React.lazy(() =>
-  import("../pages/Anonymous/News/NewsDetails")
-);
-const Information = React.lazy(() =>
-  import("../pages/Anonymous/Information/Information")
-);
+const NewsDetail = React.lazy(() => import("../pages/Anonymous/News/NewsDetails"));
+const Information = React.lazy(() => import("../pages/Anonymous/Information/Information"));
 const Contact = React.lazy(() => import("../pages/Anonymous/Contact/Contact"));
-const Booking = React.lazy(() =>
-  import("../components/BookingPage/BookingPage")
-);
+const Booking = React.lazy(() => import("../components/BookingPage/BookingPage"));
 
-const DoctorDetails = React.lazy(() =>
-  import("../pages/Anonymous/Information/DoctorDetail")
-);
-const CommunityPage = React.lazy(() =>
-  import("../pages/Community/CommunityPage")
-);
+const DoctorDetails = React.lazy(() => import("../pages/Anonymous/Information/DoctorDetail"));
+const CommunityPage = React.lazy(() => import("../pages/Community/CommunityPage"));
 
 //Staff routes
-const AppointmentList = React.lazy(() =>
-  import("../pages/Staffs/AppointmentList/AppointmentList")
-);
-const MedicalRecords = React.lazy(() =>
-  import("../pages/Staffs/MedicalRecords/MedicalRecords")
-);
-const DashboardStaff = React.lazy(() =>
-  import("../pages/Staffs/DashboardStaff/DashboardStaff")
-);
+const AppointmentList = React.lazy(() => import("../pages/Staffs/AppointmentList/AppointmentList"));
+const MedicalRecords = React.lazy(() => import("../pages/Staffs/MedicalRecords/MedicalRecords"));
+const DashboardStaff = React.lazy(() => import("../pages/Staffs/DashboardStaff/DashboardStaff"));
 
 //Admin routes
-const GrantsAccount = React.lazy(() =>
-  import("../pages/Admins/AccountManager/GrantsAccount")
-);
-const ViewAccounts = React.lazy(() =>
-  import("../pages/Admins/AccountManager/ListAccount")
-);
+const GrantsAccount = React.lazy(() => import("../pages/Admins/AccountManager/GrantsAccount"));
+const ViewAccounts = React.lazy(() => import("../pages/Admins/AccountManager/ListAccount"));
 
 //Doctor routes
 const DashboardDoctor = React.lazy(() =>
@@ -59,7 +37,10 @@ const MedicalRecordDoctor = React.lazy(() =>
 
 //Patient routes
 const AppointmetnPatient = React.lazy(() =>
-  import("../pages/Patients/AppointmentList/index")
+  import("../pages/Patients/AppointmentList/AppointmentList")
+);
+const MedicalRecordPatient = React.lazy(() =>
+  import("../pages/Patients/MedicalRecords/MedicalRecord")
 );
 
 export const staffRoutes = [
@@ -105,10 +86,10 @@ export const patientRoutes = [
     path: ROUTERS.LICH_SU_KHAM,
     element: wrapWithLazy(AppointmetnPatient),
   },
-  // {
-  //   path: ROUTERS.HO_SO_BENH_AN,
-  //   element: wrapWithLazy(MedicalRecordPatient),
-  // },
+  {
+    path: ROUTERS.HO_SO_BENH_AN,
+    element: wrapWithLazy(MedicalRecordPatient),
+  },
   {
     path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
