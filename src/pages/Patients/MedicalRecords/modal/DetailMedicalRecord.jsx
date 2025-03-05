@@ -6,8 +6,10 @@ import { DetailMedicalRecordStyles } from "../styles";
 import { InfoRow } from "../../../../components/InfoRow";
 import { convertToVietnamTime } from "../../../../utils/timeConfig";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const DetailMedicalRecord = ({ open, onCancel, selectedMedicalRecord }) => {
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   return (
     <CustomModal title="Chi tiết hồ sơ" open={open} onCancel={onCancel} footer={false} width={650}>
@@ -40,6 +42,9 @@ const DetailMedicalRecord = ({ open, onCancel, selectedMedicalRecord }) => {
             <InfoRow label="Phương pháp điều trị" value={selectedMedicalRecord?.treatment_plan} />
             <InfoRow label="Ghi chú" value={selectedMedicalRecord?.note} />
           </div>
+          <button className="reAppointment" onClick={() => navigate("/dat-lich")}>
+            Đặt lịch tái khám
+          </button>
         </div>
       </DetailMedicalRecordStyles>
     </CustomModal>

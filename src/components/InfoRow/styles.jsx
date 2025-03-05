@@ -8,7 +8,7 @@ export const InfoRowStyled = styled.div`
   }
 
   .info-row-label {
-    width: 90px;
+    width: 100px;
   }
 
   .info-row strong {

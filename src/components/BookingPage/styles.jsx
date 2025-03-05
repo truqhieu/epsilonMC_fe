@@ -35,6 +35,31 @@ export const BookingPageContainer = styled.div`
   .booking-btn:hover {
     background-color: #cc0000;
   }
+
+  .info-patient {
+    margin-bottom: 20px;
+  }
+
+  .info-patient-title {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+
+  .info-patient-content {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1em;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border: 1px solid #d4d9e4;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .patient-icon {
+    margin-right: 10px;
+  }
 `;
 
 export const PaymentContainer = styled.div`
@@ -105,5 +130,43 @@ export const ConfirmBookingContainer = styled.div`
     border: none;
     border-radius: 25px;
     cursor: pointer;
+  }
+`;
+
+export const DetailStyles = styled.div`
+  .detail-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .detail-content {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 10px;
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .examination-date {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .reAppointment {
+    margin: 0 auto;
+    background: #73d0f4;
+    color: #fff;
+    border-radius: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+    &:hover {
+      background: #3161ad;
+    }
   }
 `;

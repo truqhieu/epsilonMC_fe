@@ -133,4 +133,18 @@ export const DetailMedicalRecordStyles = styled.div`
     gap: 10px;
     align-items: center;
   }
+
+  .reAppointment {
+    margin: 0 auto;
+    background: #73d0f4;
+    color: #fff;
+    border-radius: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+    &:hover {
+      background: #3161ad;
+    }
+  }
 `;

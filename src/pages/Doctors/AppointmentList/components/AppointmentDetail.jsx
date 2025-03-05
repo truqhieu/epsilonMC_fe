@@ -72,12 +72,9 @@ const AppointmentDetail = ({ open, onCancel, selectedAppointment }) => {
           <div className="personal-info">
             <div className="examination-date">
               <InfoRow label="Bệnh nhân:" value={appointment.patient?.name} />
-              {appointment.patient?.gender === "male" ? "Nam" : "Nữ"}
+              <strong>{appointment.patient?.gender === "male" ? "Nam" : "Nữ"}</strong>
             </div>
-            <InfoRow
-              label="Ngày sinh:"
-              value={formatDate(appointment.patient?.birthDay)}
-            />
+            <InfoRow label="Ngày sinh:" value={formatDate(appointment.patient?.birthDay)} />
             <InfoRow label="Triệu chứng:" value={appointment.symptom} />
 
             <Form layout="vertical" form={formMedicalRecord}>

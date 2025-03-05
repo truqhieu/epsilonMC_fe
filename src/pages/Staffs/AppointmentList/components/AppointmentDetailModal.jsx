@@ -15,7 +15,6 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
   const [appointment, setAppointment] = useState({});
   const [listDoctor, setListDoctor] = useState([]);
   const [doctor, setDoctor] = useState("");
-
   const getAppointmentById = async (id) => {
     try {
       setLoading(true);
@@ -48,7 +47,7 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
   const updateAppointment = async (id, status) => {
     try {
       const res = await AppointmentServices.updateAppointment(id, {
-        doctor: doctor,
+        doctor: doctor ? doctor : appointment?.doctor?._id,
         status: status,
         date: appointment.examinationDate,
         exam_id: appointment.exam_id._id,
@@ -99,6 +98,7 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
       const res = await (status === "approved"
         ? AppointmentServices.sendMailApproved
         : AppointmentServices.sendMailRejected)({
+        id: appointment._id,
         email: appointment.patient.email,
         date: appointment.examinationDate,
         exam: appointment.exam_id.examination,
@@ -134,21 +134,13 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
   const InfoRow = ({ label, value, isTag }) => (
     <div className="info-row">
       <strong>{label}</strong>
-      {isTag ? (
-        <Tag color={getColorByStatus(value)}>{value}</Tag>
-      ) : (
-        <span>{value}</span>
-      )}
+      {isTag ? <Tag color={getColorByStatus(value)}>{value}</Tag> : <span>{value}</span>}
     </div>
   );
 
   InfoRow.propTypes = {
     label: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.element,
-    ]),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.element]),
     isTag: PropTypes.bool,
   };
 
@@ -169,14 +161,8 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
               label="Giới tính:"
               value={appointment.patient?.gender === "male" ? "Nam" : "Nữ"}
             />
-            <InfoRow
-              label="Ngày sinh:"
-              value={formatDate(appointment.patient?.birthDay)}
-            />
-            <InfoRow
-              label="Số điện thoại:"
-              value={appointment.patient?.phone}
-            />
+            <InfoRow label="Ngày sinh:" value={formatDate(appointment.patient?.birthDay)} />
+            <InfoRow label="Số điện thoại:" value={appointment.patient?.phone} />
             <InfoRow label="Email:" value={appointment.patient?.email} />
             <InfoRow label="Địa chỉ:" value={appointment.patient?.address} />
             <div className="examination-date">
@@ -186,11 +172,7 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
               />
               {appointment.exam_id?.examination}
             </div>
-            <InfoRow
-              label="Trạng thái:"
-              value={appointment.status}
-              isTag={true}
-            />
+            <InfoRow label="Trạng thái:" value={appointment.status} isTag={true} />
             <InfoRow label="Triệu chứng:" value={appointment.symptom} />
             <InfoRow
               label="Bác sĩ phụ trách:"

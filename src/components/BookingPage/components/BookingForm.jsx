@@ -28,8 +28,6 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
   const [exam, setExam] = useState();
 
   const [formBooking] = Form.useForm();
-  const values = formBooking.getFieldsValue();
-  console.log(values);
 
   const validateAge = (_, value) => {
     if (!value) {
@@ -50,9 +48,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
     const minDate = dayjs().add(1, "day").startOf("day");
 
     if (value.isBefore(minDate)) {
-      return Promise.reject(
-        "Ngày khám phải từ ngày " + minDate.format("DD/MM/YYYY") + " trở đi!"
-      );
+      return Promise.reject("Ngày khám phải từ ngày " + minDate.format("DD/MM/YYYY") + " trở đi!");
     }
 
     return Promise.resolve();
@@ -71,10 +67,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
   };
 
   useEffect(() => {
-    getLocation(
-      "https://open.oapi.vn/location/provinces?page=0&size=63",
-      setListProvinces
-    );
+    getLocation("https://open.oapi.vn/location/provinces?page=0&size=63", setListProvinces);
   }, []);
 
   useEffect(() => {
@@ -129,6 +122,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
     } else {
       getListDoctorByExam();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [examinationType]);
 
   const addAppointment = async (values) => {
@@ -137,6 +131,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
       const res = await AppointmentServices.addAppointment({
         ...values,
         amount: 5000,
+        emailSent: false,
       });
       if (res?.success) {
         localStorage.setItem("invoiceId", res.invoiceId);
@@ -161,8 +156,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
       });
   };
 
-  const filterOption = (input, option) =>
-    option.label.toLowerCase().includes(input.toLowerCase());
+  const filterOption = (input, option) => option.label.toLowerCase().includes(input.toLowerCase());
 
   return (
     <Spin spinning={loading}>
@@ -200,9 +194,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
               >
                 <DatePicker
                   value={birthday ? convertToVietnamTime(birthday) : null}
-                  onChange={(date) =>
-                    setBirthday(date ? convertToVietnamTime(date) : null)
-                  }
+                  onChange={(date) => setBirthday(date ? convertToVietnamTime(date) : null)}
                   format="DD/MM/YYYY"
                   placeholder="Chọn ngày sinh"
                 />
@@ -250,9 +242,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
               <Form.Item
                 name="provinces"
                 label="Tỉnh/Thành phố"
-                rules={[
-                  { required: true, message: "Vui lòng chọn Tỉnh/Thành phố" },
-                ]}
+                rules={[{ required: true, message: "Vui lòng chọn Tỉnh/Thành phố" }]}
               >
                 <Select
                   value={provinces}
@@ -276,9 +266,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
               <Form.Item
                 name="districts"
                 label="Quận/Huyện"
-                rules={[
-                  { required: true, message: "Vui lòng chọn Quận/Huyện" },
-                ]}
+                rules={[{ required: true, message: "Vui lòng chọn Quận/Huyện" }]}
               >
                 <Select
                   value={districts}
@@ -330,9 +318,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
               <Form.Item
                 name="examinationType"
                 label="Hình thức khám"
-                rules={[
-                  { required: true, message: "Vui lòng chọn hình thức khám" },
-                ]}
+                rules={[{ required: true, message: "Vui lòng chọn hình thức khám" }]}
               >
                 <Select
                   value={examinationType}
@@ -353,12 +339,8 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                 required
               >
                 <DatePicker
-                  value={
-                    selectedDate ? convertToVietnamTime(selectedDate) : null
-                  }
-                  onChange={(date) =>
-                    setSelectedDate(date ? convertToVietnamTime(date) : null)
-                  }
+                  value={selectedDate ? convertToVietnamTime(selectedDate) : null}
+                  onChange={(date) => setSelectedDate(date ? convertToVietnamTime(date) : null)}
                   format="DD/MM/YYYY"
                   placeholder="Chọn ngày khám"
                 />
@@ -436,6 +418,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
     </Spin>
   );
 };
+
 BookingForm.propTypes = {
   setCurrent: PropTypes.func.isRequired,
   setAmount: PropTypes.func.isRequired,
