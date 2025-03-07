@@ -74,3 +74,69 @@ export const StaffLayoutStyled = styled.div`
     margin-bottom: 10px;
   }
 `;
+
+export const ChangeDoctorStyles = styled.div`
+  .change-doctor-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .change-doctor-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 10px;
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .change-doctor-content-title {
+    font-weight: 700;
+    color: rgb(7, 91, 181);
+    font-size: 20px;
+  }
+
+  .change-doctor-content-list-item-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 10%;
+    object-fit: cover;
+    margin-left: 10px;
+  }
+
+  .change-doctor-content-list-item-info {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e8e8e8;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      background-color: #f2f8fa;
+    }
+  }
+
+  .change-doctor-content-list-item-info.selected {
+    background-color: #d7ecfc;
+    border: 2px solid rgb(90, 187, 231);
+    border-radius: 5px;
+  }
+
+  .change-doctor-content-list-item-detail {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .change-doctor-button {
+    margin: 0 auto;
+    width: max-content;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgb(101, 192, 238);
+    color: white;
+    border: none;
+    border-radius: 50px;
+  }
+`;

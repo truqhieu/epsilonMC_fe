@@ -40,6 +40,8 @@ const AppointmentDetail = ({ open, onCancel, selectedAppointment }) => {
         patientId: appointment.patient._id,
         appointmentId: appointment._id,
         doctorId: appointment.doctor._id,
+        createdBy: appointment.doctor._id,
+        typeAppointment: appointment?.typeAppointment,
       });
       if (res.success) {
         onCancel();
@@ -53,7 +55,7 @@ const AppointmentDetail = ({ open, onCancel, selectedAppointment }) => {
 
   useEffect(() => {
     if (open && selectedAppointment) {
-      getAppointmentById(selectedAppointment);
+      getAppointmentById(selectedAppointment?._id);
     }
   }, [open, selectedAppointment]);
 
@@ -149,7 +151,7 @@ const AppointmentDetail = ({ open, onCancel, selectedAppointment }) => {
 AppointmentDetail.propTypes = {
   open: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
-  selectedAppointment: PropTypes.string.isRequired,
+  selectedAppointment: PropTypes.object,
 };
 
 export default AppointmentDetail;

@@ -45,10 +45,13 @@ const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
           <div className="detail-content">
             <InfoRow label="Người khám" value={selectedAppointment?.patient?.name} />
             <InfoRow label="Trạng thái" value={selectedAppointment?.status} isTag={true} />
-            <InfoRow label="Triệu chứng" value={selectedAppointment?.symptom} />
+            <InfoRow
+              label="Triệu chứng"
+              value={selectedAppointment?.symptom ? selectedAppointment?.symptom : "Tái khám"}
+            />
           </div>
           <div className="detail-content">
-            <InfoRow label="Bác sĩ" value={selectedAppointment?.doctor?.name.upLowerCase()} />
+            <InfoRow label="Bác sĩ" value={selectedAppointment?.doctor?.name?.toUpperCase()} />
             <InfoRow
               label="Dịch vụ"
               value={`Tư vấn ${

@@ -8,11 +8,15 @@ import moment from "moment";
 import AppointmentServices from "../../../services/AppointmentServices";
 import { useSelector } from "react-redux";
 import AppointmentDetail from "./components/AppointmentDetail";
+import ButtonCircle from "../../../components/ButtonCircle";
+import { PlusCircleOutlined } from "@ant-design/icons";
+import ReBookingModal from "./components/ReBookingModal";
 
 const AppointmentListbyDoctor = () => {
   const [loading, setLoading] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState("");
+  const [isOpenReBookingForm, setIsOpenReBookingForm] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [data, setData] = useState([]);
 
   const { user } = useSelector((state) => state.auth);
@@ -26,7 +30,6 @@ const AppointmentListbyDoctor = () => {
         examinationType: 1,
         page: 1,
         limit: 10,
-        status: "Approved",
       });
 
       if (res.success) {
@@ -75,9 +78,9 @@ const AppointmentListbyDoctor = () => {
       render: (record) => record.exam_id.examination,
     },
     {
-      title: "Triệu chứng",
+      title: "Ghi chú",
       key: "symptom",
-      render: (record) => record.symptom,
+      render: (record) => (record.symptom ? record.symptom : "Tái khám"),
     },
     {
       title: "Trạng thái",
@@ -88,6 +91,27 @@ const AppointmentListbyDoctor = () => {
           <Tag color={color} className="d-flex-center">
             {record?.status}
           </Tag>
+        );
+      },
+    },
+    {
+      title: "",
+      key: "action",
+      render: (record) => {
+        return (
+          record.status === "Completed" && (
+            <ButtonCircle
+              title="Đặt lịch tái khám"
+              enable={true}
+              placement="bottom"
+              icon={<PlusCircleOutlined style={{ fontSize: 21 }} />}
+              btntype="btn-circle"
+              onClick={() => {
+                setIsOpenReBookingForm(true);
+                setSelectedAppointment(record);
+              }}
+            />
+          )
         );
       },
     },
@@ -103,18 +127,30 @@ const AppointmentListbyDoctor = () => {
         onRow={(record) => {
           return {
             onClick: () => {
-              setIsOpenModal(true);
-              setSelectedAppointment(record?._id);
+              if (record.status === "Approved") {
+                setIsOpenModal(true);
+                setSelectedAppointment(record);
+              } else if (record.status === "Completed") {
+                setIsOpenReBookingForm(true);
+                setSelectedAppointment(record);
+              }
             },
           };
         }}
         pagination={{ pageSize: 10 }}
       />
-      {!!setIsOpenModal && (
+      {isOpenModal && (
         <AppointmentDetail
           open={isOpenModal}
           selectedAppointment={selectedAppointment}
           onCancel={() => setIsOpenModal(false)}
+        />
+      )}
+      {isOpenReBookingForm && (
+        <ReBookingModal
+          open={isOpenReBookingForm}
+          selectedAppointment={selectedAppointment}
+          onCancel={() => setIsOpenReBookingForm(false)}
         />
       )}
     </>

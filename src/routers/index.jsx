@@ -16,7 +16,7 @@ const ROUTERS = {
   LICH_SU_KHAM: `lich-su-kham`,
   HO_SO_BENH_AN: `ho-so-benh-an`,
   // Bác sĩ
-  DASHBOARD_DOCTOR: `dashboard`,
+  DASHBOARD_DOCTOR: ``,
   DANH_SACH_LICH_HEN_TRUC_TIEP: `lich-hen-truc-tiep`,
   HO_SO_BENH_AN_BAC_SI: `ho-so-benh-an`,
   // Nhân viên
@@ -25,7 +25,10 @@ const ROUTERS = {
   HO_SO_BENH_AN_NHAN_VIEN: `ho-so-benh-an`,
 
   // Quản lý
-
+  DASHBOARD_MANAGER: ``,
+  MANAGE_EMPLOYEES: `danh-sach-nhan-vien`,
+  MANAGE_DOCTORS: `danh-sach-bac-si`,
+  MANAGE_PATIENTS: `danh-sach-benh-nhan`,
   // Admin
   XEM_DANH_SACH_ACCOUNT: "danh-sach-account",
   TAO_ACCOUNT: "tao-tai-khoan",

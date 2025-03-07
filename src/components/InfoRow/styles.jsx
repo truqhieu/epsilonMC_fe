@@ -12,6 +12,6 @@ export const InfoRowStyled = styled.div`
   }
 
   .info-row strong {
-    min-width: 135px;
+    max-width: 300px;
   }
 `;

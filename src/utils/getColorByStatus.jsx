@@ -10,6 +10,8 @@ export const getColorByStatus = (status) => {
       return "volcano";
     case "Completed":
       return "blue";
+    case "PendingPayment":
+      return "orange";
     default:
       return "default";
   }

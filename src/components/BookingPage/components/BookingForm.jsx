@@ -132,6 +132,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
         ...values,
         amount: 5000,
         emailSent: false,
+        typeAppointment: 1,
       });
       if (res?.success) {
         localStorage.setItem("invoiceId", res.invoiceId);

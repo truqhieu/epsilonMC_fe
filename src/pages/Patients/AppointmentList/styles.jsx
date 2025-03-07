@@ -113,7 +113,6 @@ export const DetailAppointmentStyles = styled.div`
   .detail-content {
     display: flex;
     flex-direction: column;
-
     gap: 10px;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 10px;
     border-radius: 16px;

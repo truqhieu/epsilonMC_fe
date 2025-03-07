@@ -8,14 +8,6 @@ export const DetailAppointment = styled.div`
     font-size: 1.2em;
   }
 
-  .info-row {
-    display: flex;
-    gap: 100px;
-  }
-
-  .info-row strong {
-    min-width: 135px;
-  }
   .personal-info {
     display: flex;
     flex-direction: column;
@@ -38,5 +30,41 @@ export const DetailAppointment = styled.div`
   .ant-form-item-required {
     font-size: 17px !important;
     font-weight: 600;
+  }
+`;
+
+export const ReBookingStyles = styled.div`
+  .detail-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 10px;
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .info-detail {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .detail-content-title {
+    font-weight: 700;
+    color: rgb(7, 91, 181);
+    font-size: 20px;
+  }
+
+  .button-action {
+    margin-top: 10px;
+    display: flex;
+    gap: 50px;
+    justify-content: center;
   }
 `;
