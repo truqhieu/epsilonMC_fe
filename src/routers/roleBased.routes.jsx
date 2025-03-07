@@ -1,6 +1,7 @@
 import ROUTERS from "./index";
 import wrapWithLazy from "../utils/wrapWithLazy";
 import React from "react";
+import ViewProducts from "../pages/Patients/ViewProducts/ViewProducts";
 
 //Guest routes
 const NotFound = React.lazy(() => import("../pages/NotFound/NotFound"));
@@ -56,6 +57,12 @@ const listAppointmentDoctor = React.lazy(() =>
 const MedicalRecordPatient = React.lazy(() =>
   import("../pages/Patients/MedicalRecords/MedicalRecord")
 );
+const ViewProduct = React.lazy(() =>
+  import("../pages/Patients/ViewProducts/ViewProducts")
+);
+const CartPage = React.lazy(() =>
+  import("../pages/Patients/Cart/CartPage")
+);
 export const staffRoutes = [
   {
     path: ROUTERS.DASHBOARD_STAFF,
@@ -101,10 +108,17 @@ export const patientRoutes = [
     element: wrapWithLazy(MedicalRecordPatient),
   },
   {
+    path: ROUTERS.SAN_PHAM,
+    element: wrapWithLazy(ViewProduct),
+  },
+  {
+    path: ROUTERS.GIO_HANG,
+    element: wrapWithLazy(CartPage), 
+  },
+  {
     path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
-
 ];
 export const managerRoutes = [];
 
@@ -165,4 +179,8 @@ export const guestRoutes = [
     path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
   },
+  {
+    path: ROUTERS.SAN_PHAM,
+    element: wrapWithLazy(ViewProducts),
+  }
 ];

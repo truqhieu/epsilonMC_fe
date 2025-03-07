@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout, setTokens, setUser } from "./authSlice";
 import AuthServices from "../../services/AuthServices";
 import { useNavigate } from "react-router-dom";
@@ -8,9 +8,10 @@ const AuthLoader = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Truy xuất thông tin người dùng và accessToken từ Redux
+  const { accessToken, user } = useSelector((state) => state.auth);
+
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    const user = JSON.parse(localStorage.getItem("user"));
     const hasTriedRefresh = sessionStorage.getItem("hasTriedRefresh");
 
     const refreshAccessToken = async () => {
@@ -32,8 +33,10 @@ const AuthLoader = () => {
     };
 
     if (accessToken && user) {
+      // Nếu đã có accessToken và user trong Redux, set lại chúng
       dispatch(setTokens({ accessToken }));
       dispatch(setUser(user));
+
       if (user.role) {
         if (user.role === "patient") {
           // navigate("/");
@@ -42,9 +45,10 @@ const AuthLoader = () => {
         }
       }
     } else if (!hasTriedRefresh && document.cookie.includes("refreshToken")) {
+      // Nếu chưa thử refresh, và có refresh token trong cookie, thực hiện refresh
       refreshAccessToken();
     }
-  }, [dispatch]);
+  }, [dispatch, accessToken, user, navigate]);
 
   return null;
 };

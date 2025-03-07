@@ -84,11 +84,12 @@ const Navbar = () => {
                 <UserOutlined />
                 <p style={{ width: "max-content" }}>Tài khoản</p>
               </li>
-              <hr />
+              <hr/>
               <li onClick={() => handleLogout()}>
                 <LogoutOutlined />
                 <p style={{ width: "max-content" }}>Đăng xuất</p>
               </li>
+              
             </ul>
           </div>
         )}

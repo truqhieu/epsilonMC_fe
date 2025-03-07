@@ -8,6 +8,7 @@ import {
   apiLogout,
   apiRegister,
   apiGetAllAccount,
+  apigetCurrentAccount, // Thêm API mới
 } from "./urls";
 
 const loginStaff = (body) => http.post(apiLoginStaff, body);
@@ -18,6 +19,7 @@ const sendOTP = (body) => http.post(apiSendOTP, body);
 const verifyOTP = (body) => http.post(apiVerifyOTP, body);
 const register = (body) => http.post(apiRegister, body);
 const getAllAccount = (body) => http.post(apiGetAllAccount, body);
+const getCurrentAccount = () => http.get(apigetCurrentAccount); // Thêm hàm mới
 
 const AuthServices = {
   loginStaff,
@@ -28,6 +30,7 @@ const AuthServices = {
   logout,
   register,
   getAllAccount,
+  getCurrentAccount, // Thêm vào AuthServices
 };
 
 export default AuthServices;
