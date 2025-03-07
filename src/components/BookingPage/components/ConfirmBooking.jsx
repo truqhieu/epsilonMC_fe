@@ -2,8 +2,10 @@
 import React from "react";
 import { CheckOutlined } from "@ant-design/icons";
 import { ConfirmBookingContainer } from "../styles";
+import { useNavigate } from "react-router-dom";
 
 const ConfirmBooking = () => {
+  const navigate = useNavigate();
   return (
     <ConfirmBookingContainer>
       <div className="confirm-booking-page">
@@ -12,10 +14,7 @@ const ConfirmBooking = () => {
         <div className="note">
           Tài khoản hệ thống của bạn sẽ sớm được cấp. Hẹn gặp bạn tại buổi hẹn
         </div>
-        <button
-          className="button-confirm"
-          onClick={() => window.location.replace("/")}
-        >
+        <button className="button-confirm" onClick={() => navigate("/")}>
           Trở lại trang chủ
         </button>
       </div>

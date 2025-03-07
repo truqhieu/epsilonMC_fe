@@ -41,9 +41,9 @@ const StaffLayout = () => {
 
   const routes = {
     doctor: [
-      "patients", 
-      "diagnosis",
-      ROUTERS.DANH_SACH_LICH_HEN,
+      "patients",
+      ROUTERS.DANH_SACH_LICH_HEN_TRUC_TIEP,
+      ROUTERS.HO_SO_BENH_AN_BAC_SI,
     ],
     staff: [
       ROUTERS.DASHBOARD_STAFF,

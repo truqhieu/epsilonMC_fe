@@ -20,17 +20,12 @@ const AppRouter = () => {
   const isDatLichPage = pathName === "/dat-lich";
   const isPatient = user?.role === "patient";
 
-  console.log(user && !isPatient);
-
   return (
     <>
       <AuthLoader />
       <Routes>
         {(isPatient || !user) && (
-          <Route
-            path="/*"
-            element={<GuestLayout isDatLichPage={isDatLichPage} />}
-          >
+          <Route path="/*" element={<GuestLayout isDatLichPage={isDatLichPage} />}>
             {guestRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}

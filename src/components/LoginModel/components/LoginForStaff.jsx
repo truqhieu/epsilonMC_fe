@@ -104,6 +104,7 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
             </Button>
           </Form.Item>
         </Form>
+        <div className="booing-order">Chỉ sử dụng cho nhân viên phòng khám</div>
       </LoginForStaffStyled>
     </Spin>
   );

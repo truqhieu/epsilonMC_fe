@@ -197,12 +197,3 @@
     margin: 40px auto;
     background-color: #e2f2f5;
 }
-
-.book-button{
-    width: 50%;
-    cursor: pointer;
-    border: 1px solid #9AD8E2;
-    border-radius: 50px;
-    padding: 8px;
-    margin: auto;
-}

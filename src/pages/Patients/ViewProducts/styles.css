@@ -17,6 +17,22 @@
   gap: 15px;
   margin-bottom: 20px;
 }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.cart-icon {
+  font-size: 28px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.cart-icon:hover {
+  color: #1890ff;
+}
 
 .filter-tabs button {
   background: none;

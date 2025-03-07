@@ -1,7 +1,8 @@
 import http from "../../utils/axiosConfigs";
 import { apiListExam } from "./urls";
 
-const listExam = () => http.get(apiListExam);
+const listExam = (examinationType) =>
+  http.get(apiListExam.replace(":examinationType", examinationType));
 
 const ExamServices = {
   listExam,

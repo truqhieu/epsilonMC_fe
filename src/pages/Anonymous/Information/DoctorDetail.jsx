@@ -8,9 +8,9 @@ import {
   CalendarOutlined,
   MedicineBoxOutlined,
 } from "@ant-design/icons";
-import ListQuestionByDoctor from "./ListquestionbyDoctor"; // 🟢 Import component danh sách câu hỏi
-import "./DoctorDetail.css";
+import ListQuestionByDoctor from "./ListquestionbyDoctor";
 import DoctorServices from "../../../services/DoctorServices";
+import { DoctorDetailStyled } from "./styles";
 
 const { Title, Text } = Typography;
 
@@ -45,46 +45,48 @@ const DoctorDetail = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="doctor-detail-container">
-      <Card className="doctor-card">
-        <Avatar
-          size={120}
-          src="https://via.placeholder.com/150"
-          alt={doctor.name}
-          className="doctor-avatar"
-        />
-        <Title level={3}>{doctor.name}</Title>
+    <DoctorDetailStyled>
+      <div className="doctor-detail-container">
+        <Card className="doctor-card">
+          <Avatar
+            size={120}
+            src="https://via.placeholder.com/150"
+            alt={doctor.name}
+            className="doctor-avatar"
+          />
+          <Title level={3}>{doctor.name}</Title>
 
-        <div className="doctor-contact">
-          <p>
-            <PhoneOutlined style={{ color: "#1890ff" }} />{" "}
-            <Text strong>Số điện thoại:</Text> {doctor.phone}
-          </p>
-          <p>
-            <EnvironmentOutlined style={{ color: "#1890ff" }} />{" "}
-            <Text strong>Địa chỉ:</Text> {doctor.address || "Chưa cập nhật"}
-          </p>
-        </div>
-      </Card>
+          <div className="doctor-contact">
+            <p>
+              <PhoneOutlined style={{ color: "#1890ff" }} />{" "}
+              <Text strong>Số điện thoại:</Text> {doctor.phone}
+            </p>
+            <p>
+              <EnvironmentOutlined style={{ color: "#1890ff" }} />{" "}
+              <Text strong>Địa chỉ:</Text> {doctor.address || "Chưa cập nhật"}
+            </p>
+          </div>
+        </Card>
 
-      <Card className="doctor-info-card">
-        <div className="doctor-info-title">
-          <MedicineBoxOutlined style={{ color: "#1890ff" }} /> Kinh nghiệm khám
-          chữa bệnh
-        </div>
-        <p>{doctor.specialization || "Chưa có thông tin"}</p>
-      </Card>
+        <Card className="doctor-info-card">
+          <div className="doctor-info-title">
+            <MedicineBoxOutlined style={{ color: "#1890ff" }} /> Kinh nghiệm
+            khám chữa bệnh
+          </div>
+          <p>{doctor.specialization || "Chưa có thông tin"}</p>
+        </Card>
 
-      <Card className="doctor-info-card">
-        <div className="doctor-info-title">
-          <CalendarOutlined style={{ color: "#ff4d4f" }} /> Quá trình công tác
-        </div>
-        <p>{doctor.exp || "Chưa có thông tin"}</p>
-      </Card>
+        <Card className="doctor-info-card">
+          <div className="doctor-info-title">
+            <CalendarOutlined style={{ color: "#ff4d4f" }} /> Quá trình công tác
+          </div>
+          <p>{doctor.exp || "Chưa có thông tin"}</p>
+        </Card>
 
-      {/* Thêm danh sách câu hỏi mà bác sĩ đã trả lời */}
-      <ListQuestionByDoctor doctorId={doctor._id} />
-    </div>
+        {/* Thêm danh sách câu hỏi mà bác sĩ đã trả lời */}
+        <ListQuestionByDoctor doctorId={doctor._id} />
+      </div>
+    </DoctorDetailStyled>
   );
 };
 

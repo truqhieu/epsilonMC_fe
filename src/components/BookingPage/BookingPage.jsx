@@ -6,6 +6,8 @@ import PaymentPage from "./components/PaymentPage";
 import { BookingPageContainer } from "./styles";
 import InvoiceServices from "../../services/InvoiceServices";
 import ConfirmBooking from "./components/ConfirmBooking";
+import { useSelector } from "react-redux";
+import ReBookingForm from "./components/ReBookingForm";
 
 const BookingPage = () => {
   const [current, setCurrent] = useState(0);
@@ -13,12 +15,13 @@ const BookingPage = () => {
   const [isBooking, setIsBooking] = useState(false);
 
   const invoiceId = localStorage.getItem("invoiceId");
+  const { user } = useSelector((state) => state.auth);
 
   const getInvoiceById = async (id, intervalId) => {
     try {
       const res = await InvoiceServices.getInvoiceById(id);
       console.log(res?.invoice?.status);
-      if (res?.invoice?.status === "paid") {
+      if (res?.invoice?.status === "Paid") {
         setCurrent(2);
         clearInterval(intervalId);
       }
@@ -71,14 +74,20 @@ const BookingPage = () => {
         </ConfigProvider>
 
         <div className="steps-content">
-          {current === 0 && (
-            <BookingForm
-              setCurrent={setCurrent}
-              setAmount={setAmount}
-              amount={amount}
-              setIsBooking={setIsBooking}
-            />
-          )}
+          {current === 0 &&
+            (user?.role === "patient" ? (
+              <ReBookingForm
+                setCurrent={setCurrent}
+                setAmount={setAmount}
+                setIsBooking={setIsBooking}
+              />
+            ) : (
+              <BookingForm
+                setCurrent={setCurrent}
+                setAmount={setAmount}
+                setIsBooking={setIsBooking}
+              />
+            ))}
           {current === 1 && <PaymentPage qr_url={qr_url} amount={amount} />}
           {current === 2 && <ConfirmBooking />}
         </div>

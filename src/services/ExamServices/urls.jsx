@@ -1,1 +1,1 @@
-export const apiListExam = `/exam/list`;
+export const apiListExam = `/exam/list/:examinationType`;

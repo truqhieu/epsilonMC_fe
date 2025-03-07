@@ -4,6 +4,7 @@ import {
   apiGetCart,
   apiUpdateCart,
   apiRemoveCart,
+  apiClearCart
 } from "./urls";
 
 const CartServices = {
@@ -18,6 +19,8 @@ const CartServices = {
 
   // Xóa sản phẩm khỏi giỏ hàng (DELETE, truyền productId trong body)
   removeFromCart: (data) => http.delete(apiRemoveCart, { data }),
+  clearCart: (data) => http.post(apiClearCart, data), // Thêm API clearCart
+
 };
 
 export default CartServices;

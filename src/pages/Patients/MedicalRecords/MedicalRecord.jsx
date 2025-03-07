@@ -1,65 +1,85 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import "./styles.css"; // Import file CSS
+import { MedicalRecordListPatient } from "./styles";
+import { Spin } from "antd";
+import dayjs from "dayjs";
+import DetailMedicalRecord from "./modal/DetailMedicalRecord";
+import { useSelector } from "react-redux";
+import MedicalRecordServices from "../../../services/MedicalRecordServices";
 
-function MedicalRecord() {
-  const { patientId } = useParams();
-  const [medicalRecords, setMedicalRecords] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const MedicalRecord = () => {
+  const [loading, setLoading] = useState(false);
+  const [listMedicalRecord, setListMedicalRecord] = useState([]);
+  const [selectedMedicalRecord, setSelectedMedicalRecord] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const { user } = useSelector((state) => state.auth);
+
+  const getListMedicalRecord = async (id) => {
+    try {
+      setLoading(true);
+      const res = await MedicalRecordServices.listMedicalRecordbyPatientId(id);
+      if (res?.success) {
+        setListMedicalRecord(res?.data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (patientId) {
-      const apiUrl = `http://localhost:9999/api/medicalrecord/medical-record/${patientId}`;
-      fetch(apiUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          if (Array.isArray(data)) {
-            setMedicalRecords(data);
-          } else {
-            setMedicalRecords([]); // Đảm bảo không bị lỗi khi render
-          }
-          setLoading(false);
-        })
-        .catch((err) => {
-          setError(err.message);
-          setLoading(false);
-        });
-    }
-  }, [patientId]);
-
-  if (loading) return <div className="loading">Đang tải...</div>;
-  if (error) return <div className="error">Lỗi: {error}</div>;
-
+    getListMedicalRecord(user?.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
-    <div className="medical-record-container">
-      <h2>Hồ Sơ Bệnh Án</h2>
-      {medicalRecords.length > 0 ? (
-        <table className="medical-record-table">
-          <thead>
-            <tr>
-              <th>Chẩn Đoán</th>
-              <th>Ghi Chú</th>
-              <th>Ngày Tạo</th>
-              <th>Ngày Cập Nhật</th>
-            </tr>
-          </thead>
-          <tbody>
-            {medicalRecords.map((record) => (
-              <tr key={record._id}>
-                <td>{record.diagnose}</td>
-                <td>{record.note}</td>
-                <td>{record.created_at}</td>
-                <td>{record.updated_at}</td>
-              </tr>
+    <MedicalRecordListPatient>
+      <div className="container-medical-record">
+        <div className="title-medical-record">HỒ SƠ BỆNH ÁN</div>
+        <Spin spinning={loading}>
+          <div className="list-medical-record">
+            {listMedicalRecord?.map((item) => (
+              <div className="medical-record" key={item._id}>
+                <div className="medical-record-time">
+                  <div className="date">
+                    {dayjs(item?.appointmentId?.examinationDate).format("DD")}
+                  </div>
+                  <div className="month-year">
+                    {dayjs(item?.appointmentId?.examinationDate).format("MM/YYYY")}
+                  </div>
+                </div>
+                <div className="content-medical-record">
+                  <div className="medical-record-name">{user?.name}</div>
+                  <div className="medical-record-doctor">
+                    Tư vấn {item?.appointmentId?.examinationType === 1 ? "Trực tiếp" : "Online"} với
+                    BS {item?.doctorId?.name}
+                  </div>
+                  <div className="medical-record-exam">{item?.exam_id?.examination}</div>
+                </div>
+                <div
+                  className="medical-record-status"
+                  onClick={() => {
+                    setSelectedMedicalRecord(item);
+                    setShowModal(true);
+                  }}
+                >
+                  Hồ sơ bệnh án
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
-      ) : (
-        <p className="no-data">Không tìm thấy hồ sơ bệnh án.</p>
+          </div>
+        </Spin>
+      </div>
+      {!!showModal && (
+        <DetailMedicalRecord
+          open={showModal}
+          onCancel={() => setShowModal(false)}
+          selectedMedicalRecord={selectedMedicalRecord}
+        />
       )}
-    </div>
+    </MedicalRecordListPatient>
   );
-}
+};
 
 export default MedicalRecord;

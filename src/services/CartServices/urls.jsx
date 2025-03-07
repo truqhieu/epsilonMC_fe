@@ -11,3 +11,5 @@ export const apiUpdateCart = `${apiCart}/update`;  // PATCH
 
 // API xóa sản phẩm khỏi giỏ hàng (DELETE thay vì POST)
 export const apiRemoveCart = `${apiCart}/remove`;  // DELETE
+export const apiClearCart = `${apiCart}/clear`; // Thêm API clearCart
+

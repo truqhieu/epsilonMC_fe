@@ -2,8 +2,10 @@ import "./About.css";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { assets } from "../../../assets/assets";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const About = () => {
+  const { user } = useSelector((state) => state.auth);
   return (
     <div className="homepage">
       <div className="mainstream">
@@ -52,11 +54,8 @@ const About = () => {
           </div>
         </div>
         <button className="appointment-btn">
-          <Link
-            to="/dat-lich"
-            style={{ color: "white", textDecoration: "none" }}
-          >
-            Đặt hẹn ngay →
+          <Link to="/dat-lich" style={{ color: "white", textDecoration: "none" }}>
+            {user ? "Đặt lịch tái khám →" : "Đặt hẹn ngay →"}
           </Link>
         </button>
       </div>
@@ -64,11 +63,7 @@ const About = () => {
       <div className="treatment-section">
         <div className="treatment-grid">
           <div className="treatment-item">
-            <img
-              src={assets.brain}
-              alt="Khám bệnh người lớn"
-              className="treatment-img"
-            />
+            <img src={assets.brain} alt="Khám bệnh người lớn" className="treatment-img" />
           </div>
           <div className="treatment-item">
             <ul>
@@ -96,18 +91,10 @@ const About = () => {
           </div>
 
           <div className="treatment-item">
-            <img
-              src={assets.hands}
-              alt="Chuyên khoa thần kinh"
-              className="treatment-img"
-            />
+            <img src={assets.hands} alt="Chuyên khoa thần kinh" className="treatment-img" />
           </div>
           <div className="treatment-item">
-            <img
-              src={assets.psychology}
-              alt="Chuyên khoa thần kinh"
-              className="treatment-img"
-            />
+            <img src={assets.psychology} alt="Chuyên khoa thần kinh" className="treatment-img" />
           </div>
           <div className="treatment-item">
             <ul>
@@ -124,11 +111,7 @@ const About = () => {
             <h3>Tư vấn tâm lý</h3>
           </div>
           <div className="treatment-item">
-            <img
-              src={assets.network}
-              alt="Chuyên khoa thần kinh"
-              className="treatment-img"
-            />
+            <img src={assets.network} alt="Chuyên khoa thần kinh" className="treatment-img" />
           </div>
         </div>
       </div>
