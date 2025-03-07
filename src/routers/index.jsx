@@ -19,6 +19,8 @@ const ROUTERS = {
   DASHBOARD_DOCTOR: ``,
   DANH_SACH_LICH_HEN_TRUC_TIEP: `lich-hen-truc-tiep`,
   HO_SO_BENH_AN_BAC_SI: `ho-so-benh-an`,
+ 
+  CAU_HOI_KHACH: `cau-hoi-khach`,
   // Nhân viên
   DASHBOARD_STAFF: ``,
   DANH_SACH_LICH_KHAM: `danh-sach-lich-kham`,
