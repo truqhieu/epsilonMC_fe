@@ -1,0 +1,18 @@
+.messenger-icon {
+  position: fixed;
+  bottom: 80px;  /* Đẩy icon lên trên để không bị che */
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  z-index: 1050;  /* Đặt giá trị cao hơn để hiển thị trên nút đặt hẹn */
+}
+
+.messenger-icon:hover {
+  transform: scale(1.1);
+  background-color: #0056b3;
+}

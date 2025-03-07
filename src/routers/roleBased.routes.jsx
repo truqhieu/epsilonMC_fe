@@ -56,6 +56,10 @@ const listAppointmentDoctor = React.lazy(() =>
 const MedicalRecordPatient = React.lazy(() =>
   import("../pages/Patients/MedicalRecords/MedicalRecord")
 );
+const GuestQuestionsList = React.lazy(() => 
+  import("../pages/Doctors/GuestQuestionList/GuestQuestionList")
+);
+
 export const staffRoutes = [
   {
     path: ROUTERS.DASHBOARD_STAFF,
@@ -120,6 +124,10 @@ export const doctorRoutes = [
   {
     path: ROUTERS.NOTFOUND,
     element: wrapWithLazy(NotFound),
+  },
+  {
+    path: ROUTERS.CAU_HOI_KHACH, 
+    element: wrapWithLazy(GuestQuestionsList),
   },
 ];
 

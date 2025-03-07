@@ -7,14 +7,20 @@ import Footer from "../components/Footer/Footer";
 import AppHeader from "../components/Header/Header";
 import Navbar from "../components/Navbar/Navbar";
 import NavbarUser from "../components/NavbarUser/NavbarUer";
-
+import { useSelector } from "react-redux"; // Lấy user từ Redux
+import MessengerIcon from "../components/MessWithDoctorButton/MessengerIcon"; // Component mới
 const GuestLayout = ({ isDatLichPage }) => {
+  const { user } = useSelector((state) => state.auth); // Lấy user từ Redux
+  const isPatient = user?.role === "patient"; // Kiểm tra nếu là patient
   return (
     <>
       {!isDatLichPage && <BookingButton />}
       {!isDatLichPage && <AppHeader />}
       {!isDatLichPage ? <Navbar /> : <NavbarUser />}
       <Outlet />
+
+{/* Hiển thị MessengerIcon nếu là patient */}
+{isPatient && <MessengerIcon />}
       <Footer />
     </>
   );
