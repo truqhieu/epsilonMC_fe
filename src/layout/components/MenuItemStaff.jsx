@@ -1,6 +1,8 @@
 import {
   BookOutlined,
+  CommentOutlined,
   HomeOutlined,
+  QuestionCircleOutlined,
   UserAddOutlined,
   UserOutlined,
   VideoCameraOutlined,
@@ -22,6 +24,16 @@ export const menuItemsStaff = {
       key: "3",
       icon: <BookOutlined />,
       label: "Hồ sơ bệnh án",
+    },
+    {
+      key: "4",
+      icon: <CommentOutlined />,
+      label: "Trò chuyện với bệnh nhân",
+    },
+    {
+      key: "5",
+      icon: <QuestionCircleOutlined />,
+      label: "Câu hỏi của khách",
     },
   ],
   staff: [

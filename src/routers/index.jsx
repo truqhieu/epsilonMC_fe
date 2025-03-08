@@ -21,6 +21,7 @@ const ROUTERS = {
   HO_SO_BENH_AN_BAC_SI: `ho-so-benh-an`,
  
   CAU_HOI_KHACH: `cau-hoi-khach`,
+  CHAT_BENH_NHAN: `chat-benh-nhan`,
   // Nhân viên
   DASHBOARD_STAFF: ``,
   DANH_SACH_LICH_KHAM: `danh-sach-lich-kham`,
