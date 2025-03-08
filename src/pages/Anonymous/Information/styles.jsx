@@ -311,31 +311,33 @@ export const ListQuestionByDoctorStyled = styled.div`
   .question-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px; /* Giảm khoảng cách giữa các câu hỏi */
   }
 
   .question-card {
-    padding: 15px;
+    padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
     transition: 0.3s;
     cursor: pointer;
+    background: #fdfdfd;
   }
 
   .question-card:hover {
     background-color: #f8f9fa;
   }
 
+  .question-meta {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 4px;
+  }
+
   .question-title {
     font-size: 18px;
     font-weight: bold;
     color: #333;
-  }
-
-  .question-meta {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
   .question-content {
@@ -351,7 +353,7 @@ export const ListQuestionByDoctorStyled = styled.div`
   }
 
   .question-footer {
-    margin-top: 10px;
+    margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -361,64 +363,39 @@ export const ListQuestionByDoctorStyled = styled.div`
     color: #007bff;
     cursor: pointer;
     font-size: 14px;
+    display: flex;
+    align-items: center;
   }
 
   .reply-icon {
     margin-right: 5px;
   }
 
-  .no-question-text {
-    text-align: center;
-    font-size: 16px;
-    color: #888;
-  }
-
+  /* 🛠 Điều chỉnh modal */
   .modal-content {
     font-size: 16px;
-  }
-
-  .modal-question-title {
-    font-weight: bold;
-    font-size: 18px;
+    padding: 15px; /* Giảm padding dư thừa */
   }
 
   .modal-question-meta {
     font-size: 14px;
     color: #777;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
-  .modal-question-meta .doctor-name {
+  .modal-question-title {
     font-weight: bold;
-    color: #333;
+    font-size: 18px;
+    margin-bottom: 5px;
   }
 
   .modal-question-date {
     font-size: 14px;
     color: #888;
-    white-space: nowrap;
-    display: inline-block;
+    margin-top: 5px;
   }
 
-  .doctor-name {
-    font-weight: bold;
-    color: #333;
-  }
-
-  .modal-answer-section {
-    background: #f1f1f1;
-    padding: 10px;
-    border-radius: 6px;
-    margin-top: 10px;
-  }
-
-  .modal-answer-section p {
-    margin: 5px 0;
-  }
-
+  /* 📌 Chỉnh lại phần bình luận */
   .modal-comments {
     margin-top: 15px;
   }
@@ -430,47 +407,38 @@ export const ListQuestionByDoctorStyled = styled.div`
     margin-bottom: 10px;
   }
 
+  /* ✅ Bác sĩ in đậm */
   .modal-comments .comment-item .doctor-name {
-    font-weight: bold;
-    font-size: 16px;
     color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 3px;
   }
 
   .modal-comments .comment-item .comment-content {
     font-size: 14px;
     color: #555;
-    margin-top: 5px;
+    line-height: 1.4;
   }
 
   .modal-comments .comment-item .comment-time {
     font-size: 12px;
     color: #888;
-    margin-top: 5px;
-    display: block;
-    margin-top: 10px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
   }
 
-  /* Đảm bảo phần bình luận dễ nhìn và căn chỉnh hợp lý */
-  .modal-comments .comment-item p {
-    font-size: 14px;
-    margin-top: 5px;
+  /* 📏 Giảm khoảng cách giữa các dòng */
+  .comment-item p {
+    margin-bottom: 4px;
   }
 
-  .modal-comments .comment-item .doctor-name {
-    color: #333;
-    font-size: 16px;
-    font-weight: bold;
-    margin-right: 5px;
-  }
-
-  .modal-comments .comment-item .comment-content {
-    font-size: 14px;
-    color: #555;
-  }
-
-  .modal-comments .comment-item .comment-time {
-    font-size: 12px;
-    color: #888;
-    margin-top: 5px;
+  /* 🛠 Cân chỉnh lại modal */
+  .modal-content {
+    max-width: 500px;
+    margin: auto;
+    padding: 10px;
   }
 `;
+

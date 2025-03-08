@@ -13,10 +13,10 @@ const AskQuestionForm = ({ onSuccess }) => {
 
   const { user } = useSelector((state) => state.auth); // Lấy user từ Redux
   const isPatient = user?.role === "patient";
-  const patientId = user?.id || null;
-  const patientName = user?.name || "Bệnh nhân";
 
-  console.log("Patient ID from localStorage:", patientId);
+  if (isPatient) {
+    return null; // Nếu là bệnh nhân, không hiển thị form
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ const AskQuestionForm = ({ onSuccess }) => {
       return;
     }
 
-    if (!isPatient && (!email || isNaN(age) || age < 1)) {
+    if (!email || isNaN(age) || age < 1) {
       alert("Vui lòng nhập email, tuổi và giới tính hợp lệ!");
       return;
     }
@@ -34,13 +34,8 @@ const AskQuestionForm = ({ onSuccess }) => {
     setLoading(true);
 
     try {
-      const payload = isPatient
-        ? { title, content, patientId } // Nếu là bệnh nhân, chỉ cần title & content & patientId
-        : { title, content, gender, age, email }; // Nếu là khách, cần đầy đủ thông tin
-
-      const response = isPatient
-        ? await QuestionService.createPatientQuestion(payload)
-        : await QuestionService.createGuestQuestion(payload);
+      const payload = { title, content, gender, age, email }; // Chỉ khách mới có thể gửi
+      const response = await QuestionService.createGuestQuestion(payload);
 
       if (response.success) {
         alert("Câu hỏi của bạn đã được gửi thành công!");
@@ -63,8 +58,6 @@ const AskQuestionForm = ({ onSuccess }) => {
   return (
     <AskQuestionFormContainer>
       <form className="ask-form" onSubmit={handleSubmit}>
-        {isPatient && <h3>Xin chào, {patientName}!</h3>} {/* Hiển thị tên bệnh nhân */}
-
         <input
           type="text"
           placeholder="Tiêu đề câu hỏi"
@@ -78,49 +71,41 @@ const AskQuestionForm = ({ onSuccess }) => {
           onChange={(e) => setContent(e.target.value)}
           required
         />
-
-        {!isPatient && ( // Nếu là khách, hiển thị thêm các field
-          <>
-            <div className="gender-age">
-              <label>
-                Tuổi:
-                <input
-                  type="number"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Giới tính:
-                <input
-                  type="radio"
-                  name="gender"
-                  value="Nam"
-                  checked={gender === "Nam"}
-                  onChange={() => setGender("Nam")}
-                />{" "}
-                Nam
-                <input
-                  type="radio"
-                  name="gender"
-                  value="Nữ"
-                  checked={gender === "Nữ"}
-                  onChange={() => setGender("Nữ")}
-                />{" "}
-                Nữ
-              </label>
-            </div>
+        <div className="gender-age">
+          <label>
+            Tuổi:
             <input
-              type="email"
-              placeholder="Email của bạn (Dành cho khách)"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="number"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
               required
             />
-          </>
-        )}
-
+          </label>
+          <label>
+            Giới tính:
+            <input
+              type="radio"
+              name="gender"
+              value="Nam"
+              checked={gender === "Nam"}
+              onChange={() => setGender("Nam")}
+            /> Nam
+            <input
+              type="radio"
+              name="gender"
+              value="Nữ"
+              checked={gender === "Nữ"}
+              onChange={() => setGender("Nữ")}
+            /> Nữ
+          </label>
+        </div>
+        <input
+          type="email"
+          placeholder="Email của bạn (Dành cho khách)"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
         <button type="submit" disabled={loading}>
           {loading ? "Đang gửi..." : "Gửi"}
         </button>

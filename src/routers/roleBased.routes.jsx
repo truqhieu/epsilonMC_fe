@@ -19,14 +19,35 @@ const MedicalRecords = React.lazy(() => import("../pages/Staffs/MedicalRecords/M
 const DashboardStaff = React.lazy(() => import("../pages/Staffs/DashboardStaff/DashboardStaff"));
 const GrantsAccount = React.lazy(() => import("../pages/Admins/AccountManager/GrantsAccount"));
 const ViewAccounts = React.lazy(() => import("../pages/Admins/AccountManager/ListAccount"));
-const DashboardDoctor = React.lazy(() => import("../pages/Doctors/DashboardDoctor/DashboardDoctor"));
-const listAppointmentDoctor = React.lazy(() => import("../pages/Doctors/AppointmentList/AppointmentListbyDoctor"));
-const MedicalRecordDoctor = React.lazy(() => import("../pages/Doctors/MedicalRecords/ListMedicalRecord"));
-const AppointmetnPatient = React.lazy(() => import("../pages/Patients/AppointmentList/AppointmentList"));
-const MedicalRecordPatient = React.lazy(() => import("../pages/Patients/MedicalRecords/MedicalRecord"));
+
 const ViewProduct = React.lazy(() => import("../pages/Patients/ViewProducts/ViewProducts"));
 const CartPage = React.lazy(() => import("../pages/Patients/Cart/CartPage"));
 const ProductDetail = React.lazy(() => import("../pages/Patients/ViewProducts/ProductDetails"));
+
+//Doctor routes
+const DashboardDoctor = React.lazy(() =>
+  import("../pages/Doctors/DashboardDoctor/DashboardDoctor")
+);
+const listAppointmentDoctor = React.lazy(() =>
+  import("../pages/Doctors/AppointmentList/AppointmentListbyDoctor")
+);
+const MedicalRecordDoctor = React.lazy(() =>
+  import("../pages/Doctors/MedicalRecords/ListMedicalRecord")
+);
+
+//Patient routes
+const AppointmetnPatient = React.lazy(() =>
+  import("../pages/Patients/AppointmentList/AppointmentList")
+);
+const MedicalRecordPatient = React.lazy(() =>
+  import("../pages/Patients/MedicalRecords/MedicalRecord")
+);
+const GuestQuestionsList = React.lazy(() => 
+  import("../pages/Doctors/GuestQuestionList/GuestQuestionList")
+);
+const ChatPatient = React.lazy(() => 
+  import("../pages/Doctors/ChatPatient/ChatPatient")
+);
 
 export const staffRoutes = [
   { path: ROUTERS.DASHBOARD_STAFF, element: wrapWithLazy(DashboardStaff) },
@@ -57,6 +78,18 @@ export const doctorRoutes = [
   { path: ROUTERS.DANH_SACH_LICH_HEN_TRUC_TIEP, element: wrapWithLazy(listAppointmentDoctor) },
   { path: ROUTERS.HO_SO_BENH_AN_BAC_SI, element: wrapWithLazy(MedicalRecordDoctor) },
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },
+  
+ 
+ 
+ 
+  {
+    path: ROUTERS.CAU_HOI_KHACH, 
+    element: wrapWithLazy(GuestQuestionsList),
+  },
+  {
+    path: ROUTERS.CHAT_BENH_NHAN, 
+    element: wrapWithLazy(ChatPatient),
+  },
 ];
 
 export const guestRoutes = [
