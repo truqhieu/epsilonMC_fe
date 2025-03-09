@@ -1,6 +1,9 @@
 import {
   BookOutlined,
+  FundOutlined,
   HomeOutlined,
+  SolutionOutlined,
+  TeamOutlined,
   UserAddOutlined,
   UserOutlined,
   VideoCameraOutlined,
@@ -56,13 +59,23 @@ export const menuItemsStaff = {
   manager: [
     {
       key: "1",
-      icon: <UserOutlined />,
-      label: "Quản lý công việc",
+      icon: <FundOutlined />,
+      label: "Dashboard",
     },
     {
       key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "Báo cáo",
+      icon: <SolutionOutlined />,
+      label: "Quản lý nhân viên",
+    },
+    {
+      key: "3",
+      icon: <UserOutlined />,
+      label: "Quản lý bác sĩ",
+    },
+    {
+      key: "4",
+      icon: <TeamOutlined />,
+      label: "Quản lý bệnh nhân",
     },
   ],
 };

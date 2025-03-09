@@ -11,7 +11,6 @@ const NewsDetail = React.lazy(() => import("../pages/Anonymous/News/NewsDetails"
 const Information = React.lazy(() => import("../pages/Anonymous/Information/Information"));
 const Contact = React.lazy(() => import("../pages/Anonymous/Contact/Contact"));
 const Booking = React.lazy(() => import("../components/BookingPage/BookingPage"));
-
 const DoctorDetails = React.lazy(() => import("../pages/Anonymous/Information/DoctorDetail"));
 const CommunityPage = React.lazy(() => import("../pages/Community/CommunityPage"));
 
@@ -42,8 +41,20 @@ const AppointmetnPatient = React.lazy(() =>
 const MedicalRecordPatient = React.lazy(() =>
   import("../pages/Patients/MedicalRecords/MedicalRecord")
 );
-const GuestQuestionsList = React.lazy(() => 
+const GuestQuestionsList = React.lazy(() =>
   import("../pages/Doctors/GuestQuestionList/GuestQuestionList")
+);
+
+//Manager routes
+const ManagerDashboard = React.lazy(() =>
+  import("../pages/Managers/ManagerDashboard/ManagerDashboard")
+);
+const ManageEmployees = React.lazy(() =>
+  import("../pages/Managers/EmployessManager/EmployessManager")
+);
+const ManageDoctors = React.lazy(() => import("../pages/Managers/DoctorsManager/DoctorManager"));
+const ManagePatients = React.lazy(() =>
+  import("../pages/Managers/PatientsManager/PatientsManager")
 );
 
 export const staffRoutes = [
@@ -98,7 +109,28 @@ export const patientRoutes = [
     element: wrapWithLazy(NotFound),
   },
 ];
-export const managerRoutes = [];
+export const managerRoutes = [
+  {
+    path: ROUTERS.DASHBOARD_MANAGER,
+    element: wrapWithLazy(ManagerDashboard),
+  },
+  {
+    path: ROUTERS.MANAGE_EMPLOYEES,
+    element: wrapWithLazy(ManageEmployees),
+  },
+  {
+    path: ROUTERS.MANAGE_DOCTORS,
+    element: wrapWithLazy(ManageDoctors),
+  },
+  {
+    path: ROUTERS.MANAGE_PATIENTS,
+    element: wrapWithLazy(ManagePatients),
+  },
+  {
+    path: ROUTERS.NOTFOUND,
+    element: wrapWithLazy(NotFound),
+  },
+];
 
 export const doctorRoutes = [
   {
@@ -118,7 +150,7 @@ export const doctorRoutes = [
     element: wrapWithLazy(NotFound),
   },
   {
-    path: ROUTERS.CAU_HOI_KHACH, 
+    path: ROUTERS.CAU_HOI_KHACH,
     element: wrapWithLazy(GuestQuestionsList),
   },
 ];

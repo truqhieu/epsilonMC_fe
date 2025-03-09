@@ -40,27 +40,22 @@ const StaffLayout = () => {
   // Tạo menu dựa trên userRole
 
   const routes = {
-    doctor: [
-      "patients",
-      ROUTERS.DANH_SACH_LICH_HEN_TRUC_TIEP,
-      ROUTERS.HO_SO_BENH_AN_BAC_SI,
-    ],
-    staff: [
-      ROUTERS.DASHBOARD_STAFF,
-      ROUTERS.DANH_SACH_LICH_KHAM,
-      ROUTERS.HO_SO_BENH_AN_NHAN_VIEN,
-    ],
+    doctor: ["patients", ROUTERS.DANH_SACH_LICH_HEN_TRUC_TIEP, ROUTERS.HO_SO_BENH_AN_BAC_SI],
+    staff: [ROUTERS.DASHBOARD_STAFF, ROUTERS.DANH_SACH_LICH_KHAM, ROUTERS.HO_SO_BENH_AN_NHAN_VIEN],
     admin: [ROUTERS.XEM_DANH_SACH_ACCOUNT, ROUTERS.TAO_ACCOUNT],
-    manager: ["work-management", "report"],
+    manager: [
+      ROUTERS.DASHBOARD_MANAGER,
+      ROUTERS.MANAGE_EMPLOYEES,
+      ROUTERS.MANAGE_DOCTORS,
+      ROUTERS.MANAGE_PATIENTS,
+    ],
   };
 
   // Tạo navigationPaths tự động
   const navigationPaths = Object.fromEntries(
     Object.entries(routes).map(([role, paths]) => [
       role,
-      Object.fromEntries(
-        paths.map((path, index) => [index + 1, `/${role}/${path}`])
-      ),
+      Object.fromEntries(paths.map((path, index) => [index + 1, `/${role}/${path}`])),
     ])
   );
 
@@ -69,13 +64,7 @@ const StaffLayout = () => {
   return (
     <StaffLayoutStyled>
       <Layout>
-        <Sider
-          trigger={null}
-          collapsible
-          collapsed={collapsed}
-          theme="light"
-          width={230}
-        >
+        <Sider trigger={null} collapsible collapsed={collapsed} theme="light" width={230}>
           <div className="demo-logo-vertical">
             <img src={assets.logo} className="logo" />
           </div>
