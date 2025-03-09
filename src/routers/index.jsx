@@ -16,7 +16,6 @@ const ROUTERS = {
   LICH_SU_KHAM: "lich-su-kham",
   SAN_PHAM: "san-pham",
   GIO_HANG: "gio-hang",
-  CHI_TIET_SAN_PHAM: "chi-tiet-san-pham/:productId", // ⚡ Cập nhật để truyền productId qua URL
   HO_SO_BENH_AN: "ho-so-benh-an",
   LICH_SU_MUA_HANG:"lich-su-mua-hang",
   // Bác sĩ

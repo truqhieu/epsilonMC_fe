@@ -26,7 +26,6 @@ const AppointmetnPatient = React.lazy(() => import("../pages/Patients/Appointmen
 const MedicalRecordPatient = React.lazy(() => import("../pages/Patients/MedicalRecords/MedicalRecord"));
 const ViewProduct = React.lazy(() => import("../pages/Patients/ViewProducts/ViewProducts"));
 const CartPage = React.lazy(() => import("../pages/Patients/Cart/CartPage"));
-const ProductDetail = React.lazy(() => import("../pages/Patients/ViewProducts/ProductDetails"));
 const HistoryCart = React.lazy(() => import("../pages/Patients/Cart/HistoryCart"));
 
 export const staffRoutes = [
@@ -47,7 +46,6 @@ export const patientRoutes = [
   { path: ROUTERS.HO_SO_BENH_AN, element: wrapWithLazy(MedicalRecordPatient) },
   { path: ROUTERS.SAN_PHAM, element: wrapWithLazy(ViewProduct) },
   { path: ROUTERS.GIO_HANG, element: wrapWithLazy(CartPage) },
-  { path: ROUTERS.CHI_TIET_SAN_PHAM, element: wrapWithLazy(ProductDetail) }, // ⚡ Đã cập nhật với productId
   { path: ROUTERS.LICH_SU_MUA_HANG, element: wrapWithLazy(HistoryCart) }, // ⚡ Đã cập nhật với productId
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },
 ];
