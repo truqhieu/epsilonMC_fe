@@ -6,9 +6,9 @@ import { assets } from "../../../assets/assets";
 const RoleLogin = ({ setRoleLogin }) => {
   return (
     <div className="login-model">
-      <div className="header">
+      <div className="header-login-role">
         <img src={assets.logo} alt="logo" className="logo"></img>
-        <div className="title">ĐĂNG NHẬP</div>
+        <div className="title-login-role">ĐĂNG NHẬP</div>
       </div>
       <div className="button">
         <div className="role-button" onClick={() => setRoleLogin("patient")}>

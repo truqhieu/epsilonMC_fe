@@ -11,14 +11,15 @@ import { useSelector } from "react-redux";
 import { Spin } from "antd";
 import PatientServices from "../services/PatientServices";
 import ChangeDoctor from "./modal/ChangeDoctor";
-
+import MessengerIcon from "../components/MessWithDoctorButton/MessengerIcon";
 const GuestLayout = ({ isDatLichPage }) => {
+  
   const [loading, setLoading] = useState(false);
   const [patient, setPatient] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
-
+  const isPatient = user?.role === "patient";
   const getPatient = useCallback(async () => {
     if (!user?.id) return;
 
@@ -53,6 +54,7 @@ const GuestLayout = ({ isDatLichPage }) => {
         {!isDatLichPage && <BookingButton />}
         {!isDatLichPage && <AppHeader />}
         {!isDatLichPage ? <Navbar /> : <NavbarUser />}
+        {isPatient && <MessengerIcon />}
         <div style={{ flex: 1 }}>
           <Outlet />
         </div>

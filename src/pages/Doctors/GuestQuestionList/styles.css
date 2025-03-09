@@ -1,0 +1,126 @@
+/* Container chung cho mỗi câu hỏi */
+.question-container {
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+/* ❌ Câu hỏi bị từ chối */
+.question-rejected {
+    background-color: #e0e0e0;
+    opacity: 0.6;
+    border-left: 5px solid #dc3545;
+    color: #6c757d;
+}
+
+/* ✅ Câu hỏi do chính bác sĩ đang đăng nhập tư vấn */
+.question-owned {
+    background-color: #e6ffe6;
+    border-left: 5px solid #28a745;
+    box-shadow: 0px 0px 10px rgba(40, 167, 69, 0.3);
+}
+/* Tiêu đề câu hỏi */
+.question-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+/* Nội dung câu hỏi */
+.question-content {
+    color: #333;
+    font-size: 14px;
+    line-height: 1.6;
+}
+/* Tag trạng thái */
+.doctor-tag {
+    font-weight: bold;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    background-color: #d0ebff; /* Xanh nhạt */
+    color: #0056b3;
+    display: inline-block; /* Chỉ chiếm đúng phần nội dung */
+    max-width: fit-content;
+}
+/* Tag từ chối */
+.reject-tag {
+    font-weight: bold;
+    background-color: #f8d7da;
+    color: #dc3545;
+    border-radius: 4px;
+    padding: 6px 12px;
+    max-width: fit-content;
+    display: inline-block;
+}
+
+/* Thời gian câu hỏi */
+.question-time {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.question-time svg {
+    margin-right: 6px;
+    color: #007bff;
+}
+/* Biểu tượng + văn bản */
+.time-icon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Bình luận */
+.comments-section {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+/* Hộp chứa từng bình luận */
+.comment-box {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+}
+
+/* Tên bác sĩ bình luận */
+.comment-doctor {
+    margin: 0;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Nội dung bình luận */
+.comment-content {
+    margin: 0;
+    color: #333;
+}
+
+/* Thời gian bình luận */
+.comment-time {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.comment-time svg {
+    color: #007bff;
+}
+
+/* Khi không có bình luận */
+.no-comments {
+    color: #888;
+    font-style: italic;
+}

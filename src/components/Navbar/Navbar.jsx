@@ -90,7 +90,7 @@ const Navbar = () => {
                 <UserOutlined />
                 <p style={{ width: "max-content" }}>Thông tin cá nhân</p>
               </li>
-              <hr />
+              <hr/>
               {user?.role === "patient" && (
                 <>
                   <li>
@@ -119,12 +119,20 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <hr />
+                  <li>
+                    <QuestionCircleOutlined />
+                    <Link to="/san-pham" style={{ textDecoration: "none", color: "inherit" }}>
+                      <p style={{ width: "max-content" }}>Hiệu thuốc</p>
+                    </Link>
+                  </li>
+                  <hr/>
                 </>
               )}
               <li onClick={() => handleLogout()}>
                 <LogoutOutlined />
                 <p style={{ width: "max-content" }}>Đăng xuất</p>
               </li>
+              
             </ul>
           </div>
         )}
