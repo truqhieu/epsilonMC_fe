@@ -44,6 +44,7 @@ const AuthLoader = () => {
     } else if (!hasTriedRefresh && document.cookie.includes("refreshToken")) {
       refreshAccessToken();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return null;
