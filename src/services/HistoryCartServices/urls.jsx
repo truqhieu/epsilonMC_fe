@@ -1,0 +1,1 @@
+export const apiGetHistoryCart = `/historycart/lich-su-mua-hang`;

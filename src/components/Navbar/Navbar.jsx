@@ -126,6 +126,13 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <hr/>
+                  <li>
+                    <QuestionCircleOutlined />
+                    <Link to="/lich-su-mua-hang" style={{ textDecoration: "none", color: "inherit" }}>
+                      <p style={{ width: "max-content" }}>Lịch sử mua hàng</p>
+                    </Link>
+                  </li>
+                  <hr/>
                 </>
               )}
               <li onClick={() => handleLogout()}>
