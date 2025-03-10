@@ -1,149 +1,202 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { format } from "date-fns";  // 🕒 Import thư viện format ngày
+import { format } from "date-fns";
 import ConversationService from "../../services/ConversationServices/";
 import CustomModal from "../CustomModal";
 import "./ChatPopup.css";
 
 const ChatPopup = ({ open, onCancel }) => {
   const { user } = useSelector((state) => state.auth);
+  const patientId = user?.id;
+  const messagesEndRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [conversationId, setConversationId] = useState(null);
-  const patientId = user?.id;
-  const messagesEndRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const hasFetched = useRef(false); 
 
-  // 🛠 Lấy tin nhắn khi mở popup
   useEffect(() => {
     if (open && patientId) {
-      console.log("🔄 Lấy dữ liệu cuộc trò chuyện...");
-      
+      setLoading(true);
+      checkAndStartConversation();
       const fetchConversations = async () => {
         try {
-          const res = await ConversationService.getPatientConversations(patientId);
-          let conversations = res.data.data || res.data;
-  
-          if (Array.isArray(conversations) && conversations.length > 0) {
+          const res = await ConversationService.getPatientConversations(
+            patientId
+          );
+          let conversations = res?.data?.data || [];
+
+          if (conversations.length > 0) {
             const conversation = conversations[0];
             setConversationId(conversation._id);
-  
-            if (conversation.messages && Array.isArray(conversation.messages)) {
-              setMessages(conversation.messages);
-            } else {
-              const msgRes = await ConversationService.getMessagesByConversationId(conversation._id);
-              if (msgRes.data.success && Array.isArray(msgRes.data.messages)) {
-                setMessages(msgRes.data.messages);
-              } else {
-                setMessages([]);
-              }
-            }
+            await fetchMessages(conversation._id);
           } else {
-            setMessages([]);
+            const newConv = await ConversationService.checkAndStartConversation(
+              patientId
+            );
+            if (newConv?.success && newConv?.data) {
+              setConversationId(newConv.data._id);
+              setMessages([]);
+            }
           }
         } catch (error) {
           console.error("❌ Lỗi lấy cuộc trò chuyện:", error);
+        } finally {
+          setLoading(false);
         }
       };
-  
+
       fetchConversations();
-  
-      return () => {}; // Cleanup nếu cần
     }
   }, [open, patientId]);
+  const checkAndStartConversation = async () => {
+    console.log("📡 [CHECK] Kiểm tra cuộc trò chuyện");
 
-  // 🛠 Cuộn xuống cuối tin nhắn mới nhất
+    try {
+      const res = await ConversationService.getPatientConversations(patientId);
+      console.log("📥 [API RESPONSE] Conversations:", res?.data);
+
+      let conversations = res?.data?.data || res?.data;
+      if (Array.isArray(conversations) && conversations.length > 0) {
+        const conversation = conversations[0];
+        setConversationId(conversation._id);
+        console.log("✅ [CONVERSATION FOUND] ID:", conversation._id);
+        fetchMessages(conversation._id);
+      } else {
+        console.warn(
+          "⚠️ [NO CONVERSATION] Không có cuộc trò chuyện nào, tạo mới..."
+        );
+        startNewConversation();
+      }
+    } catch (error) {
+      console.error("❌ [ERROR] Lỗi lấy cuộc trò chuyện:", error);
+    }
+  };
+
+  const startNewConversation = async () => {
+    try {
+      const res = await ConversationService.createConversation({ patientId });
+      console.log("📥 [API RESPONSE] Create conversation:", res?.data);
+
+      if (res?.data?.success) {
+        const newConvId = res.data.conversationId;
+        console.log("✅ [NEW CONVERSATION] Created ID:", newConvId);
+        setConversationId(newConvId);
+        fetchMessages(newConvId); // 🔥 GỌI NGAY SAU KHI TẠO
+      } else {
+        console.error("❌ [ERROR] Không thể tạo cuộc trò chuyện mới");
+      }
+    } catch (error) {
+      console.error("❌ [ERROR] Lỗi khi tạo cuộc trò chuyện:", error);
+    }
+  };
+
+  const fetchConversations = async () => {
+    try {
+      const res = await ConversationService.getPatientConversations(patientId);
+      console.log("🔥 API response - Conversations:", res.data);
+
+      const conversations = Array.isArray(res.data?.data)
+        ? res.data.data
+        : Array.isArray(res.data)
+        ? res.data
+        : [];
+
+      if (conversations.length > 0) {
+        const conversation = conversations[0];
+        setConversationId(conversation._id);
+        await new Promise((resolve) => setTimeout(resolve, 100)); 
+
+        if (Array.isArray(conversation.messages)) {
+          setMessages(conversation.messages);
+        } else {
+          const msgRes = await ConversationService.getMessagesByConversationId(
+            conversation._id
+          );
+          console.log("🔥 API response - Messages:", msgRes.data);
+
+          const fetchedMessages =
+            msgRes?.data?.messages || msgRes?.data?.data?.messages || [];
+          setMessages(Array.isArray(fetchedMessages) ? fetchedMessages : []);
+        }
+      } else {
+        setMessages([]);
+      }
+    } catch (error) {
+      console.error("❌ Lỗi lấy cuộc trò chuyện:", error);
+    }
+  };
+
+  fetchConversations();
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 🛠 Hàm đồng bộ tin nhắn với server sau khi gửi
-  const syncMessagesWithServer = useCallback(() => {
-    if (conversationId) {
-      ConversationService.getMessagesByConversationId(conversationId)
-        .then((msgRes) => {
-          if (msgRes.data.success && Array.isArray(msgRes.data.messages)) {
-            setMessages(msgRes.data.messages);
-          }
-        })
-        .catch((err) => console.error("❌ Lỗi cập nhật tin nhắn từ API:", err));
-    }
-  }, [conversationId]);
-
-  // 🛠 Xử lý gửi tin nhắn
   const handleSendMessage = useCallback(async () => {
-    if (!newMessage.trim() || !conversationId) {
-      console.warn("⚠ Tin nhắn rỗng hoặc chưa có cuộc trò chuyện");
-      return;
-    }
+    if (!newMessage.trim() || !conversationId) return;
 
     const messageData = {
       conversationId,
-      senderId: user?.id,
+      senderId: patientId,
       senderType: "Patient",
       content: newMessage,
-      createdAt: new Date().toISOString(), // Thêm thời gian gửi
+      createdAt: new Date().toISOString(),
     };
 
-    // 🛠 Thêm tin nhắn tạm thời vào UI
     const tempMessage = {
       ...messageData,
-      _id: `temp_${Math.random().toString(36).substr(2, 9)}`,
-      isPending: true, // Đánh dấu tin nhắn tạm thời
+      _id: `temp_${Date.now()}`,
+      isPending: true,
     };
-
-    setMessages((prevMessages) => [...prevMessages, tempMessage]);
+    setMessages((prev) => [...prev, tempMessage]);
     setNewMessage("");
 
     try {
-      console.log("📤 Đang gửi tin nhắn:", messageData);
       const res = await ConversationService.sendMessage(messageData);
-
-      if (res.data.success) {
-        console.log("✅ Gửi tin nhắn thành công:", res.data);
-
-        // Cập nhật ID thật từ API và bỏ trạng thái pending
-        setMessages((prevMessages) =>
-          prevMessages.map((msg) =>
+      if (res?.data?.success) {
+        setMessages((prev) =>
+          prev.map((msg) =>
             msg._id === tempMessage._id
               ? { ...msg, _id: res.data.messageId, isPending: false }
               : msg
           )
         );
-
-        // 🔄 Đồng bộ tin nhắn với server
-        setTimeout(syncMessagesWithServer, 1500);
+        fetchMessages(conversationId);
       } else {
-        console.error("❌ Gửi tin nhắn thất bại:", res.data);
-
-        // Không xóa tin nhắn ngay lập tức, chỉ đặt trạng thái lỗi
-        setMessages((prevMessages) =>
-          prevMessages.map((msg) =>
-            msg._id === tempMessage._id ? { ...msg, isPending: false, isError: true } : msg
-          )
-        );
+        console.error("❌ Gửi tin nhắn thất bại");
       }
     } catch (error) {
       console.error("❌ Lỗi gửi tin nhắn:", error);
-
-      // Không xóa tin nhắn ngay lập tức, chỉ đặt trạng thái lỗi
-      setMessages((prevMessages) =>
-        prevMessages.map((msg) =>
-          msg._id === tempMessage._id ? { ...msg, isPending: false, isError: true } : msg
-        )
-      );
     }
-  }, [newMessage, conversationId, user, syncMessagesWithServer]);
+  }, [newMessage, conversationId, patientId]);
 
   return (
-    <CustomModal open={open} footer={null} onCancel={onCancel} title="Trò chuyện cùng bác sĩ" width={800} style={{ top: 20 }}>
+    <CustomModal
+      open={open}
+      footer={null}
+      onCancel={onCancel}
+      title="Trò chuyện cùng bác sĩ"
+      width={800}
+      style={{ top: 20 }}
+    >
       <div className="chat-body">
-        {messages.length > 0 ? (
-          messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.senderType === "Patient" ? "patient" : "doctor"}`}>
+        {loading ? (
+          <p>⏳ Đang tải tin nhắn...</p>
+        ) : messages.length > 0 ? (
+          messages.map((msg) => (
+            <div
+              key={msg._id}
+              className={`message ${
+                msg.senderType === "Patient" ? "patient" : "doctor"
+              }`}
+            >
               <p>{msg.content}</p>
               <small className="message-time">
-                {msg.createdAt ? format(new Date(msg.createdAt), "HH:mm - dd/MM/yyyy") : "Đang gửi..."}
+                {msg.createdAt
+                  ? format(new Date(msg.createdAt), "HH:mm - dd/MM/yyyy")
+                  : "Đang gửi..."}
               </small>
             </div>
           ))
@@ -152,18 +205,13 @@ const ChatPopup = ({ open, onCancel }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
-
       <div className="chat-footer">
         <input
           type="text"
           placeholder="Nhập tin nhắn..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSendMessage();
-            }
-          }}
+          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
         />
         <button onClick={handleSendMessage}>Gửi</button>
       </div>
