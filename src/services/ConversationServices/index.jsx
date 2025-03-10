@@ -5,7 +5,8 @@ import {
   apiGetPatientConversations,
   apiGetDoctorConversations,
   apiGetMessagesByConversationId,
-  apiLockConversation
+  apiLockConversation,
+  apiCheckAndStartConversation
 } from "./urls";
 
 // Bắt đầu cuộc trò chuyện giữa bệnh nhân và bác sĩ
@@ -26,13 +27,15 @@ const getMessagesByConversationId = (conversationId) => http.get(apiGetMessagesB
 // Khóa cuộc trò chuyện khi bác sĩ nghỉ việc hoặc không hoạt động
 const lockConversation = (body) => http.put(apiLockConversation, body);
 
+const checkAndStartConversation = (patientId) => http.get(`${apiCheckAndStartConversation}/${patientId}`);
 const ConversationService = {
   startConversation,
   sendMessage,
   getPatientConversations,
   getDoctorConversations,
   getMessagesByConversationId,
-  lockConversation
+  lockConversation,
+  checkAndStartConversation,
 };
 
 export default ConversationService;
