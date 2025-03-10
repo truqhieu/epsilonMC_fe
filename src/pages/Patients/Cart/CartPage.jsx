@@ -2,32 +2,38 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import CartServices from "../../../services/CartServices";
-import { Table, Button, message, Typography, Row, Tag, Input, Spin } from "antd";
+import { Table, Button, message, Typography, Row, Input, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
+import PaymentPage from "./components/PaymentPage";
+import { CartContainer } from "./style";
+import InvoiceServices from "../../../services/InvoiceServices";
+import ConfirmBooking from "./components/ConfirmBooking";
 
 const { Title, Text } = Typography;
 
 const CartPage = () => {
-  const [cart, setCart] = useState(null); // State lưu thông tin giỏ hàng
-  const [loading, setLoading] = useState(false); // State để hiển thị loading khi fetch dữ liệu
-  const [updating, setUpdating] = useState(false); // State để hiển thị loading khi cập nhật số lượng
-  const { user } = useSelector((state) => state.auth); // Lấy thông tin người dùng từ Redux store
-  const accountId = user?.accountId; // Lấy accountId của người dùng
-  const navigate = useNavigate(); // Hook để điều hướng
+  const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [openModalPayment, setOpenModalPayment] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-  // Fetch giỏ hàng khi component được mount hoặc accountId thay đổi
+  const { user } = useSelector((state) => state.auth);
+  const accountId = user?.accountId;
+  const navigate = useNavigate();
+  const invoiceId = localStorage.getItem("invoiceId");
+
   useEffect(() => {
     if (accountId) fetchCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountId]);
 
-  // Hàm fetch giỏ hàng từ backend
   const fetchCart = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await CartServices.getCart({ accountId });
-      if (response.success) {
-        const pendingCart = response.data.find((cart) => cart.status === "Pending"); // Tìm giỏ hàng có trạng thái "Pending"
-        setCart(pendingCart || null); // Set giỏ hàng vào state
+      const { success, data } = await CartServices.getCart({ accountId });
+      if (success) {
+        setCart(data.find((cart) => cart.status === "Pending") || null);
       }
     } catch (error) {
       message.error("Lỗi khi lấy giỏ hàng", error);
@@ -36,30 +42,18 @@ const CartPage = () => {
     }
   };
 
-  // Hàm xử lý thay đổi số lượng sản phẩm
-  const handleQuantityChange = (value, productId, stock) => {
-    if (value > stock) {
-      message.warning(`Chỉ còn ${stock} sản phẩm trong kho`);
-      value = stock;
-    }
-    setCart((prevCart) => ({
-      ...prevCart,
-      items: prevCart.items.map((item) =>
-        item.productId._id === productId ? { ...item, quantity: value } : item
-      ),
-    }));
-  };
+  const updateCartItem = async (cartId, productId, quantity) => {
+    if (quantity <= 0) return message.error("Số lượng không hợp lệ!");
 
-  // Hàm xử lý khi người dùng nhập xong số lượng
-  const handleQuantityBlur = async (productId, quantity, stock) => {
-    if (quantity <= 0 || quantity > stock) {
-      message.error(`Số lượng không hợp lệ!`);
-      return;
-    }
     setUpdating(true);
     try {
-      await CartServices.updateCart({ cartId: cart._id, productId, quantity }); // Gọi API cập nhật số lượng
-      fetchCart(); // Fetch lại giỏ hàng sau khi cập nhật
+      await CartServices.updateCart({ cartId, productId, quantity });
+      setCart((prevCart) => ({
+        ...prevCart,
+        items: prevCart.items.map((item) =>
+          item.productId._id === productId ? { ...item, quantity } : item
+        ),
+      }));
     } catch (error) {
       message.error("Lỗi khi cập nhật số lượng", error);
     } finally {
@@ -67,56 +61,101 @@ const CartPage = () => {
     }
   };
 
-  // Hàm xóa sản phẩm khỏi giỏ hàng
+  const handleQuantityChange = (value, productId, stock) => {
+    setCart((prevCart) => ({
+      ...prevCart,
+      items: prevCart.items.map((item) =>
+        item.productId._id === productId ? { ...item, quantity: Math.min(value, stock) } : item
+      ),
+    }));
+  };
+
   const handleRemoveItem = async (productId) => {
     try {
-      await CartServices.removeFromCart({ accountId, productId }); // Gọi API xóa sản phẩm
-      fetchCart(); // Fetch lại giỏ hàng sau khi xóa
+      await CartServices.removeFromCart({ accountId, productId });
+      setCart((prevCart) => ({
+        ...prevCart,
+        items: prevCart.items.filter((item) => item.productId._id !== productId),
+      }));
     } catch (error) {
-      message.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng", error);
+      message.error("Lỗi khi xóa sản phẩm", error);
     }
   };
 
-  // Hàm xử lý thanh toán
-  const handleCheckout = async () => {
-    if (!cart || cart.items.length === 0) {
-      message.warning("Giỏ hàng trống!");
-      return;
+  const getInvoiceById = async (id, intervalId) => {
+    try {
+      const res = await InvoiceServices.getInvoiceById(id);
+      console.log(res?.invoice?.status);
+      if (res?.invoice?.status === "Paid") {
+        clearInterval(intervalId);
+        setOpenModalPayment(true);
+        setOpenModal(false);
+        handleCheckout();
+        localStorage.removeItem("invoiceId");
+      }
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getInvoiceById(invoiceId, intervalId);
+    }, 5000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [invoiceId]);
+
+  const handleCheckout = async () => {
+    if (!cart?.items.length) return message.warning("Giỏ hàng trống!");
 
     try {
-      // Cập nhật số lượng sản phẩm trong giỏ hàng trước khi thanh toán
-      for (const item of cart.items) {
-        await CartServices.updateCart({
-          cartId: cart._id,
-          productId: item.productId._id,
-          quantity: item.quantity,
-        });
-      }
-
-      // Thanh toán giỏ hàng
+      await Promise.all(
+        cart.items.map((item) =>
+          CartServices.updateCart({
+            cartId: cart._id,
+            productId: item.productId._id,
+            quantity: item.quantity,
+          })
+        )
+      );
       await CartServices.updateCart({ cartId: cart._id, status: "Paid" });
       message.success("Thanh toán thành công!");
-      setCart(null); // Xóa giỏ hàng khỏi state
-      setTimeout(() => navigate("/san-pham"), 1000); // Chuyển hướng về trang sản phẩm sau 1 giây
+      setCart(null);
+      setTimeout(() => navigate("/san-pham"), 1000);
     } catch (error) {
       message.error("Lỗi khi thanh toán", error);
     }
   };
 
-  // Tính tổng tiền giỏ hàng
+  const handlePayment = async () => {
+    if (!cart?.items.length) return message.warning("Giỏ hàng trống!");
+    try {
+      const res = await InvoiceServices.createInvoice({
+        cartId: cart._id,
+        patient: accountId,
+        amount: totalPrice,
+      });
+      if (res.success) {
+        localStorage.setItem("invoiceId", res.invoiceId);
+        setOpenModal(true);
+      }
+    } catch (error) {
+      console.error("Lỗi khi thanh toán", error);
+    }
+  };
+
   const totalPrice = useMemo(
     () => cart?.items.reduce((sum, item) => sum + item.quantity * item.productId.price, 0) || 0,
     [cart]
   );
 
-  // Cấu hình các cột của bảng
   const columns = [
     {
       title: "Sản phẩm",
       dataIndex: "product",
       key: "product",
-      render: (_, record) => record.productId.name, // Hiển thị tên sản phẩm
+      render: (_, record) => record.productId.name,
     },
     {
       title: "Số lượng",
@@ -135,19 +174,17 @@ const CartPage = () => {
               record.productId.stock
             )
           }
-          onBlur={() =>
-            handleQuantityBlur(record.productId._id, record.quantity, record.productId.stock)
-          }
+          onBlur={() => updateCartItem(cart._id, record.productId._id, record.quantity)}
           disabled={updating}
           style={{ width: "80px" }}
         />
-      ), // Input để thay đổi số lượng
+      ),
     },
     {
       title: "Giá",
       dataIndex: "price",
       key: "price",
-      render: (_, record) => `${(record.productId.price * record.quantity).toLocaleString()} VND`, // Hiển thị giá
+      render: (_, record) => `${(record.productId.price * record.quantity).toLocaleString()} VND`,
     },
     {
       title: "Thao tác",
@@ -156,42 +193,51 @@ const CartPage = () => {
         <Button danger onClick={() => handleRemoveItem(record.productId._id)}>
           Xóa
         </Button>
-      ), // Nút xóa sản phẩm
+      ),
     },
   ];
 
+  if (loading) return <Spin size="large" />;
+
   return (
-    <div style={{ padding: "24px" }}>
-      <Title level={2}>Giỏ hàng của bạn</Title>
-      {loading ? (
-        <Spin size="large" /> // Hiển thị loading khi đang fetch dữ liệu
-      ) : cart ? (
-        <>
-          <Tag color={cart.status === "Paid" ? "green" : "orange"}>{cart.status}</Tag>{" "}
-          {/* Hiển thị trạng thái giỏ hàng */}
-          <Table
-            columns={columns}
-            dataSource={cart.items}
-            rowKey={(record) => record.productId._id}
-            pagination={false}
-          />
-          <Row justify="end" style={{ marginTop: "16px" }}>
-            <Title level={4}>Tổng tiền: {totalPrice.toLocaleString()} VND</Title>{" "}
-            {/* Hiển thị tổng tiền */}
-          </Row>
-          {cart.status === "Pending" && (
+    <CartContainer>
+      <div className="container-cart">
+        <div className="title-cart">Giỏ hàng</div>
+        {cart ? (
+          <>
+            <Table
+              columns={columns}
+              dataSource={cart.items}
+              rowKey={(record) => record.productId._id}
+              pagination={false}
+            />
             <Row justify="end" style={{ marginTop: "16px" }}>
-              <Button type="primary" onClick={handleCheckout} loading={loading}>
-                Thanh Toán
-              </Button>{" "}
-              {/* Nút thanh toán */}
+              <Title level={4}>Tổng tiền: {totalPrice.toLocaleString()} VND</Title>
             </Row>
-          )}
-        </>
-      ) : (
-        <Text>Giỏ hàng trống</Text> // Hiển thị thông báo nếu giỏ hàng trống
-      )}
-    </div>
+            {cart.status === "Pending" && (
+              <Row justify="end" style={{ marginTop: "16px" }}>
+                <Button type="primary" onClick={handlePayment} loading={updating}>
+                  Thanh Toán
+                </Button>
+              </Row>
+            )}
+          </>
+        ) : (
+          <Text>Giỏ hàng trống</Text>
+        )}
+        {openModal && (
+          <PaymentPage
+            open={openModal}
+            onCancel={() => setOpenModal(false)}
+            amount={totalPrice}
+            invoiceId={invoiceId}
+          />
+        )}
+        {openModalPayment && (
+          <ConfirmBooking open={openModalPayment} onCancel={() => setOpenModalPayment(false)} />
+        )}
+      </div>
+    </CartContainer>
   );
 };
 

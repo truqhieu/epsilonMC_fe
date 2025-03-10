@@ -1,10 +1,12 @@
-import { TableCustom } from "../../Staffs/AppointmentList/styles";
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
+import { TableCustom } from "../../Staffs/AppointmentList/styles";
 import { useSelector } from "react-redux";
 import HistoryCartServices from "../../../services/HistoryCartServices";
 import { Typography, Tag, Spin, Empty, Card } from "antd";
+import { CartContainer } from "./style";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 function HistoryCart() {
   const [history, setHistory] = useState([]);
@@ -18,6 +20,7 @@ function HistoryCart() {
     if (accountId) {
       fetchHistory();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountId]);
 
   const fetchHistory = async () => {
@@ -67,7 +70,8 @@ function HistoryCart() {
         <ul>
           {items.map((item, index) => (
             <li key={index}>
-              <Text strong>{item.productId?.name || "Không có tên"}</Text> - {item.quantity} sản phẩm
+              <Text strong>{item.productId?.name || "Không có tên"}</Text> - {item.quantity} sản
+              phẩm
             </li>
           ))}
         </ul>
@@ -88,25 +92,27 @@ function HistoryCart() {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <Title level={2} className="text-center">Lịch sử mua hàng</Title>
-      {loading ? (
-        <div className="text-center py-5">
-          <Spin size="large" />
-        </div>
-      ) : history.length === 0 ? (
-        <Card className="text-center p-6">
-          <Empty description="Không có đơn hàng nào" />
-        </Card>
-      ) : (
-        <TableCustom
-          columns={columns}
-          dataSource={history}
-          rowKey={(record) => record._id}
-          pagination={{ pageSize: 5 }}
-        />
-      )}
-    </div>
+    <CartContainer>
+      <div className="container-cart">
+        <div className="title-cart">Lịch sử mua hàng</div>
+        {loading ? (
+          <div className="text-center py-5">
+            <Spin size="large" />
+          </div>
+        ) : history.length === 0 ? (
+          <Card className="text-center p-6">
+            <Empty description="Không có đơn hàng nào" />
+          </Card>
+        ) : (
+          <TableCustom
+            columns={columns}
+            dataSource={history}
+            rowKey={(record) => record._id}
+            pagination={{ pageSize: 5 }}
+          />
+        )}
+      </div>
+    </CartContainer>
   );
 }
 
