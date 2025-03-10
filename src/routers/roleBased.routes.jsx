@@ -20,10 +20,6 @@ const DashboardStaff = React.lazy(() => import("../pages/Staffs/DashboardStaff/D
 const GrantsAccount = React.lazy(() => import("../pages/Admins/AccountManager/GrantsAccount"));
 const ViewAccounts = React.lazy(() => import("../pages/Admins/AccountManager/ListAccount"));
 
-const ViewProduct = React.lazy(() => import("../pages/Patients/ViewProducts/ViewProducts"));
-const CartPage = React.lazy(() => import("../pages/Patients/Cart/CartPage"));
-const HistoryCart = React.lazy(() => import("../pages/Patients/Cart/HistoryCart"));
-
 //Doctor routes
 const DashboardDoctor = React.lazy(() =>
   import("../pages/Doctors/DashboardDoctor/DashboardDoctor")
@@ -58,6 +54,11 @@ const ManageDoctors = React.lazy(() => import("../pages/Managers/DoctorsManager/
 const ManagePatients = React.lazy(() =>
   import("../pages/Managers/PatientsManager/PatientsManager")
 );
+const ProductDetail = React.lazy(() => import("../pages/Patients/ViewProducts/ProductDetails"));
+
+const ViewProduct = React.lazy(() => import("../pages/Patients/ViewProducts/ViewProducts"));
+const CartPage = React.lazy(() => import("../pages/Patients/Cart/CartPage"));
+const HistoryCart = React.lazy(() => import("../pages/Patients/Cart/HistoryCart"));
 
 export const staffRoutes = [
   { path: ROUTERS.DASHBOARD_STAFF, element: wrapWithLazy(DashboardStaff) },
@@ -76,6 +77,7 @@ export const patientRoutes = [
   { path: ROUTERS.LICH_SU_KHAM, element: wrapWithLazy(AppointmetnPatient) },
   { path: ROUTERS.HO_SO_BENH_AN, element: wrapWithLazy(MedicalRecordPatient) },
   { path: ROUTERS.SAN_PHAM, element: wrapWithLazy(ViewProduct) },
+  { path: `${ROUTERS.CHI_TIET_SAN_PHAM}/:productId`, element: wrapWithLazy(ProductDetail) }, // ✅ Đã sửa
   { path: ROUTERS.GIO_HANG, element: wrapWithLazy(CartPage) },
   { path: ROUTERS.LICH_SU_MUA_HANG, element: wrapWithLazy(HistoryCart) },
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },

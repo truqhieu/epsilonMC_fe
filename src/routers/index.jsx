@@ -17,6 +17,7 @@ const ROUTERS = {
   SAN_PHAM: "san-pham",
   GIO_HANG: "gio-hang",
   HO_SO_BENH_AN: "ho-so-benh-an",
+  CHI_TIET_SAN_PHAM: "chi-tiet-san-pham",
   LICH_SU_MUA_HANG:"lich-su-mua-hang",
   // Bác sĩ
   DASHBOARD_DOCTOR: "",

@@ -1,0 +1,128 @@
+.product-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.cart-icon-container {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.cart-icon {
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.cart-icon:hover {
+  color: #1890ff;
+}
+
+.product-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-image-section {
+  text-align: center;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product-info-section {
+  padding-left: 20px;
+}
+
+.product-title {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.prescription-tag {
+  background-color: #28a745;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.product-details-table {
+  margin-bottom: 20px;
+}
+
+.consultation-button {
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.consultation-button:hover {
+  background-color: #40a9ff;
+}
+
+.consultation-button:disabled {
+  background-color: #d9d9d9;
+  cursor: not-allowed;
+}
+
+.pharmacy-card {
+  background-color: #f8f9fa;
+  border: none;
+  box-shadow: none;
+}
+
+.pharmacy-info {
+  display: flex;
+  align-items: center;
+}
+
+.pharmacy-icon {
+  font-size: 24px;
+  color: #1890ff;
+  margin-right: 10px;
+}
+
+.pharmacy-text {
+  flex: 1;
+}
+
+.pharmacy-name {
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.pharmacy-location {
+  color: #666;
+}
+
+.chat-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+  left:500px
+}
+
+.chat-button:hover {
+  background-color: #218838;
+}
