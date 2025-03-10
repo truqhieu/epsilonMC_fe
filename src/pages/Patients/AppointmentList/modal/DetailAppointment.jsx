@@ -4,9 +4,9 @@ import CustomModal from "../../../../components/CustomModal";
 import PropTypes from "prop-types";
 import { DetailAppointmentStyles } from "../styles";
 import { InfoRow } from "../../../../components/InfoRow";
-import { convertToVietnamTime } from "../../../utils/timeConfig";
-import InvoiceServices from "../../../services/InvoiceServices";
-import { formatCurrencyVND } from "../../../utils/moneyConfig";
+import { convertToVietnamTime } from "../../../../utils/timeConfig";
+import InvoiceServices from "../../../../services/InvoiceServices";
+import { formatCurrencyVND } from "../../../../utils/moneyConfig";
 
 const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
   const [loading, setLoading] = useState(false);

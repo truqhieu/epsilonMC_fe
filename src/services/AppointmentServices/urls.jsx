@@ -7,3 +7,4 @@ export const apiSendMailApproved = `/appointment/sendMailApproved`;
 export const apiSendMailReminder = `/appointment/sendReminderEmail`;
 export const apiAppointmentListDoctor = "/appointment/listAppointmentsDoctor";
 export const apiAppointmentListPatient = "/appointment/listAppointmentsPatient";
+export const apiCheckAppointmentStatus = "/appointment/checkAppointmentStatus";

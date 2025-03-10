@@ -9,7 +9,7 @@ import Navbar from "../components/Navbar/Navbar";
 import NavbarUser from "../components/NavbarUser/NavbarUer";
 import { useSelector } from "react-redux";
 import { Spin } from "antd";
-import PatientServices from "../services/PatientServices";
+import checkAppointmentStatus from "../services/AppointmentServices/";
 import ChangeDoctor from "./modal/ChangeDoctor";
 import MessengerIcon from "../components/MessWithDoctorButton/MessengerIcon";
 const GuestLayout = ({ isDatLichPage }) => {
@@ -19,7 +19,27 @@ const GuestLayout = ({ isDatLichPage }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
+  const [canChat, setCanChat] = useState(false);
   const isPatient = user?.role === "patient";
+
+  const checkChatPermission = useCallback(async () => {
+    try {
+      const res = await checkAppointmentStatus.checkAppointmentStatus(user?.id);
+      if (res.success && res.status === "Completed") {
+        setCanChat(true);
+      }
+    } catch (error) {
+      console.error("Lỗi kiểm tra quyền nhắn tin:", error);
+    }
+  }, [user?.id]);
+  
+  useEffect(() => {
+    if (user?.role === "patient") {
+      checkChatPermission();
+    }
+  }, [user, checkChatPermission]);
+
+  
   const getPatient = useCallback(async () => {
     if (!user?.id) return;
 
@@ -54,7 +74,8 @@ const GuestLayout = ({ isDatLichPage }) => {
         {!isDatLichPage && <BookingButton />}
         {!isDatLichPage && <AppHeader />}
         {!isDatLichPage ? <Navbar /> : <NavbarUser />}
-        {isPatient && <MessengerIcon />}
+        {isPatient && canChat && <MessengerIcon />}
+
         <div style={{ flex: 1 }}>
           <Outlet />
         </div>
