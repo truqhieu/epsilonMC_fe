@@ -59,11 +59,15 @@ const ProductDetail = React.lazy(() => import("../pages/Patients/ViewProducts/Pr
 const ViewProduct = React.lazy(() => import("../pages/Patients/ViewProducts/ViewProducts"));
 const CartPage = React.lazy(() => import("../pages/Patients/Cart/CartPage"));
 const HistoryCart = React.lazy(() => import("../pages/Patients/Cart/HistoryCart"));
+//StaffRoute 
+const CartStaff = React.lazy(() => import("../pages/Staffs/CartStaff/CartPageStaff"));
+
 
 export const staffRoutes = [
   { path: ROUTERS.DASHBOARD_STAFF, element: wrapWithLazy(DashboardStaff) },
   { path: ROUTERS.DANH_SACH_LICH_KHAM, element: wrapWithLazy(AppointmentList) },
   { path: ROUTERS.HO_SO_BENH_AN_NHAN_VIEN, element: wrapWithLazy(MedicalRecords) },
+  { path: ROUTERS.TRANG_THAI_DON_HANG, element: wrapWithLazy(CartStaff) },
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },
 ];
 

@@ -4,23 +4,27 @@ import {
   apiGetCart,
   apiUpdateCart,
   apiRemoveCart,
-  apiClearCart
+  apiClearCart,
+  apiViewCartStaff
 } from "./urls";
 
 const CartServices = {
-  // Lấy giỏ hàng (sử dụng POST thay vì GET, truyền accountId trong body)
-  getCart: (data) => http.post(apiGetCart, data),  
+  // Lấy giỏ hàng của tài khoản
+  getCart: (data) => http.post(apiGetCart, data),
 
   // Thêm sản phẩm vào giỏ hàng
   addToCart: (data) => http.post(apiAddToCart, data),
 
-  // Cập nhật số lượng sản phẩm trong giỏ hàng (sử dụng PATCH thay vì PUT)
+  // Cập nhật giỏ hàng (sử dụng PATCH thay vì PUT)
   updateCart: (data) => http.patch(apiUpdateCart, data),
 
-  // Xóa sản phẩm khỏi giỏ hàng (DELETE, truyền productId trong body)
+  // Xóa sản phẩm khỏi giỏ hàng
   removeFromCart: (data) => http.delete(apiRemoveCart, { data }),
-  clearCart: (data) => http.post(apiClearCart, data), // Thêm API clearCart
 
+  // Xóa toàn bộ giỏ hàng sau khi thanh toán
+  clearCart: (data) => http.post(apiClearCart, data),
+
+  viewAllCart: (data) => http.post(apiViewCartStaff, data),
 };
 
 export default CartServices;

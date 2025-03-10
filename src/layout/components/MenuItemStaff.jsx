@@ -55,6 +55,11 @@ export const menuItemsStaff = {
       icon: <VideoCameraOutlined />,
       label: "Chẩn đoán",
     },
+    {
+      key: "4",
+      icon: <VideoCameraOutlined />,
+      label: "Trạng Thái Đơn Hàng",
+    },
   ],
   admin: [
     {
