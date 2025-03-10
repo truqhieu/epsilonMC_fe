@@ -1,7 +1,8 @@
+import { TableCustom } from "../../Staffs/AppointmentList/styles";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import HistoryCartServices from "../../../services/HistoryCartServices";
-import { Table, Typography, Tag, Spin, Empty, Card } from "antd";
+import { Typography, Tag, Spin, Empty, Card } from "antd";
 
 const { Title, Text } = Typography;
 
@@ -37,10 +38,9 @@ function HistoryCart() {
 
   const columns = [
     {
-      title: "Mã đơn hàng",
-      dataIndex: "_id",
-      key: "id",
-      render: (id) => <Text strong>{id}</Text>,
+      title: "STT",
+      key: "index",
+      render: (_, __, index) => <Text strong>{index + 1}</Text>,
     },
     {
       title: "Ngày mua",
@@ -99,7 +99,7 @@ function HistoryCart() {
           <Empty description="Không có đơn hàng nào" />
         </Card>
       ) : (
-        <Table
+        <TableCustom
           columns={columns}
           dataSource={history}
           rowKey={(record) => record._id}
