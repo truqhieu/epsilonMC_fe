@@ -3,6 +3,7 @@ import { Modal, Spin } from "antd";
 import { MessageOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
 import QuestionService from "../../services/QuestionServices";
 import { QuestionListContainer } from "./styles";
+import { useSelector } from "react-redux";
 const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,8 +11,8 @@ const QuestionList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [comments, setComments] = useState([]);
   const [loadingComments, setLoadingComments] = useState(false);
-
-  const patientId = localStorage.getItem("patientId");
+  const { user } = useSelector((state) => state.auth);
+  const patientId = user?.id;
 
   useEffect(() => {
     fetchQuestions();
@@ -21,7 +22,12 @@ const QuestionList = () => {
     setLoading(true);
     try {
       const response = await QuestionService.getPublicApprovedQuestions();
-      setQuestions(response.data || []);
+      const formattedQuestions = response.data?.map(q => ({
+        ...q,
+        likedBy: Array.isArray(q.likedBy) ? q.likedBy : [], // Đảm bảo `likedBy` luôn là mảng
+      })) || [];
+      
+      setQuestions(formattedQuestions);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách câu hỏi:", error);
       setQuestions([]);
@@ -29,6 +35,7 @@ const QuestionList = () => {
       setLoading(false);
     }
   };
+  
 
   const fetchComments = async (questionId) => {
     setLoadingComments(true);
@@ -57,22 +64,27 @@ const QuestionList = () => {
     setComments([]);
   };
 
+  // Frontend - QuestionList Component
   const handleToggleLike = async (questionId) => {
     if (!patientId) {
-      console.error("Không thể like vì patientId chưa được tải");
+      console.error("Không thể like vì patientId chưa được tải từ Redux");
       return;
     }
-
+  
     try {
       const response = await QuestionService.toggleLikeQuestion({
         questionId,
         patientId,
       });
-
+  
       setQuestions((prevQuestions) =>
         prevQuestions.map((q) =>
           q._id === questionId
-            ? { ...q, likedBy: response.data.likedBy || [] }
+            ? { 
+                ...q, 
+                likedBy: Array.isArray(response.data.likedBy) ? response.data.likedBy : [], 
+                likes: Array.isArray(response.data.likedBy) ? response.data.likedBy.length : 0 
+              }
             : q
         )
       );
@@ -80,7 +92,8 @@ const QuestionList = () => {
       console.error("Lỗi khi like/unlike:", error);
     }
   };
-
+  
+  
   return (
     <QuestionListContainer>
     <div className="question-list-container">
@@ -91,7 +104,9 @@ const QuestionList = () => {
         <p className="no-question-text">Chưa có câu hỏi nào.</p>
       ) : (
         questions.map((q) => {
-          const isLiked = q.likedBy?.some((id) => id.toString() === patientId);
+          const isLiked = Array.isArray(q?.likedBy) && q.likedBy.some((id) => id.toString() === patientId);
+
+
           return (
             <div key={q._id} className="question-item">
               <h4 className="question-title">{q.title}</h4>
@@ -104,9 +119,9 @@ const QuestionList = () => {
               </p>
               <div className="question-footer">
                 <span className="question-reply" onClick={() => openModal(q)}>
-                  <MessageOutlined className="reply-icon" /> {q.commentCount || 0} Bình luận
+                  <MessageOutlined className="reply-icon" />  Bình luận
                 </span>
-                <span
+                {/* <span
                   className="question-thanks"
                   onClick={() => handleToggleLike(q._id)}
                 >
@@ -116,7 +131,7 @@ const QuestionList = () => {
                     <HeartOutlined />
                   )}
                   {q.likedBy?.length || 0} Cảm ơn
-                </span>
+                </span> */}
               </div>
             </div>
           );
@@ -144,7 +159,7 @@ const QuestionList = () => {
                 <MessageOutlined className="reply-icon" /> {comments.length} Bình luận
               </span>
               <span className="question-thanks">
-                ❤️ {selectedQuestion.likedBy?.length || 0} Cảm ơn
+                {/* ❤️ {selectedQuestion.likedBy?.length || 0} Cảm ơn */}
               </span>
             </div>
 

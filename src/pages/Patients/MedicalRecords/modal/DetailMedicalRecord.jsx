@@ -33,7 +33,7 @@ const DetailMedicalRecord = ({ open, onCancel, selectedMedicalRecord }) => {
             <InfoRow
               label="Dịch vụ"
               value={`Tư vấn ${
-                selectedMedicalRecord?.exam_id?.examinationType === 1 ? "Trực tiếp" : "Online"
+                selectedMedicalRecord?.appointmentId?.examinationType === 1 ? "Trực tiếp" : "Online"
               } với BS ${selectedMedicalRecord?.doctorId?.name} `}
             />
           </div>
