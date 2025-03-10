@@ -1,6 +1,6 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Input, Spin, Tag, message } from "antd";
-import { MessageOutlined } from "@ant-design/icons";
 import QuestionService from "../../../services/QuestionServices";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -32,10 +32,9 @@ const DoctorGuestQuestions = () => {
         setQuestions([]);
         return;
       }
-      setQuestions(
-        Array.isArray(response.data) ? response.data : response.data.data
-      );
+      setQuestions(Array.isArray(response.data) ? response.data : response.data.data);
     } catch (error) {
+      console.error("Error fetching questions:", error);
       message.error("Không thể tải danh sách câu hỏi!");
     } finally {
       setLoading(false);
@@ -71,10 +70,12 @@ const DoctorGuestQuestions = () => {
       return;
     }
 
-    if (selectedQuestion.doctorId && selectedQuestion.doctorId._id && selectedQuestion.doctorId._id !== doctorId) {
-      message.error(
-        "Câu hỏi này đã được bác sĩ khác tư vấn! Bạn không thể trả lời."
-      );
+    if (
+      selectedQuestion.doctorId &&
+      selectedQuestion.doctorId._id &&
+      selectedQuestion.doctorId._id !== doctorId
+    ) {
+      message.error("Câu hỏi này đã được bác sĩ khác tư vấn! Bạn không thể trả lời.");
       return;
     }
 
@@ -90,6 +91,7 @@ const DoctorGuestQuestions = () => {
       fetchAllQuestions();
       fetchComments(selectedQuestion._id);
     } catch (error) {
+      console.error("Error answering question:", error);
       message.error("Lỗi khi trả lời câu hỏi!");
     }
   };
@@ -105,14 +107,13 @@ const DoctorGuestQuestions = () => {
 
       setQuestions((prev) =>
         prev.map((q) =>
-          q._id === selectedQuestion._id
-            ? { ...q, status: "rejected", doctorId: user }
-            : q
+          q._id === selectedQuestion._id ? { ...q, status: "rejected", doctorId: user } : q
         )
       );
 
       closeModal();
     } catch (error) {
+      console.error("Error rejecting question:", error);
       message.error("Lỗi khi từ chối câu hỏi!");
     }
   };
@@ -120,16 +121,11 @@ const DoctorGuestQuestions = () => {
   const fetchComments = async (questionId) => {
     setLoadingComments(true);
     try {
-      const response = await QuestionService.getCommentsByQuestionId(
-        questionId
-      );
+      const response = await QuestionService.getCommentsByQuestionId(questionId);
       if (response?.data) {
         let commentsData = response.data;
         if (!Array.isArray(commentsData)) {
-          if (
-            commentsData.doctorComments &&
-            Array.isArray(commentsData.doctorComments)
-          ) {
+          if (commentsData.doctorComments && Array.isArray(commentsData.doctorComments)) {
             commentsData = commentsData.doctorComments;
           } else {
             setComments([]);
@@ -144,6 +140,7 @@ const DoctorGuestQuestions = () => {
         setComments([]);
       }
     } catch (error) {
+      console.error("Error fetching comments:", error);
       setComments([]);
     } finally {
       setLoadingComments(false);
@@ -160,8 +157,7 @@ const DoctorGuestQuestions = () => {
           const isRejected = q.status === "rejected";
           const isOwnedByCurrentDoctor = q.doctorId?._id === doctorId || q.doctorId === doctorId;
           const isAnswered = q.doctorId && q.status !== "rejected";
-          
-          
+
           return (
             <div
               key={q._id}
@@ -195,8 +191,7 @@ const DoctorGuestQuestions = () => {
               </p>
               {isRejected ? (
                 <Tag color="red" className="reject-tag">
-                  Câu hỏi bị từ chối bởi bác sĩ:{" "}
-                  {q.doctorId?.name || "Không rõ"}
+                  Câu hỏi bị từ chối bởi bác sĩ: {q.doctorId?.name || "Không rõ"}
                 </Tag>
               ) : isOwnedByCurrentDoctor ? (
                 <Tag color="green" className="doctor-tag">
@@ -227,8 +222,7 @@ const DoctorGuestQuestions = () => {
           <>
             <h4>{selectedQuestion.title}</h4>
             <p>
-              <strong>{selectedQuestion.gender}</strong>, {selectedQuestion.age}{" "}
-              tuổi
+              <strong>{selectedQuestion.gender}</strong>, {selectedQuestion.age} tuổi
             </p>
             <p>{selectedQuestion.content}</p>
             <div className="comments-section">
@@ -242,9 +236,7 @@ const DoctorGuestQuestions = () => {
                       <strong>{c.doctorId?.name || "Bác sĩ ẩn danh"}</strong>
                     </p>
                     <p className="comment-content">{c.content}</p>
-                    <p className="comment-time">
-                      {moment(c.createdAt).format("DD/MM/YYYY HH:mm")}
-                    </p>
+                    <p className="comment-time">{moment(c.createdAt).format("DD/MM/YYYY HH:mm")}</p>
                   </div>
                 ))
               ) : (
@@ -258,19 +250,11 @@ const DoctorGuestQuestions = () => {
               onChange={(e) => setDoctorReply(e.target.value)}
               placeholder="Nhập câu trả lời..."
             />
-            <Button
-              type="primary"
-              onClick={handleAnswerQuestion}
-              style={{ marginTop: 8 }}
-            >
+            <Button type="primary" onClick={handleAnswerQuestion} style={{ marginTop: 8 }}>
               Gửi trả lời
             </Button>
             {selectedQuestion.status === "pending" && (
-              <Button
-                type="danger"
-                onClick={handleRejectQuestion}
-                style={{ marginLeft: 8 }}
-              >
+              <Button type="danger" onClick={handleRejectQuestion} style={{ marginLeft: 8 }}>
                 Từ chối
               </Button>
             )}

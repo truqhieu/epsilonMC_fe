@@ -55,7 +55,7 @@ const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
             <InfoRow
               label="Dịch vụ"
               value={`Tư vấn ${
-                selectedAppointment?.exam_id?.examinationType === 1 ? "Trực tiếp" : "Online"
+                selectedAppointment?.examinationType === 1 ? "Trực tiếp" : "Online"
               } với BS ${selectedAppointment?.doctor?.name} `}
             />
             <div className="examination-date">
@@ -74,7 +74,7 @@ const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
           <div className="detail-content">
             <InfoRow
               label="Trạng thái thanh toán"
-              value={invoice?.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
+              value={invoice?.status === "Paid" ? "Đã thanh toán" : "Chưa thanh toán"}
             />
             <InfoRow label="Giá dịch vụ" value={formatCurrencyVND(invoice?.amount)} />
             <InfoRow

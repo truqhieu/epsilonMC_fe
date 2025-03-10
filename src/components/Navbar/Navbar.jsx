@@ -11,6 +11,7 @@ import {
   LogoutOutlined,
   QuestionCircleOutlined,
   ScheduleOutlined,
+  ShopOutlined,
   ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -90,7 +91,7 @@ const Navbar = () => {
                 <UserOutlined />
                 <p style={{ width: "max-content" }}>Thông tin cá nhân</p>
               </li>
-              <hr/>
+              <hr />
               {user?.role === "patient" && (
                 <>
                   <li>
@@ -107,11 +108,6 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <hr />
-                  <li onClick={() => setMenu("profile")}>
-                    <ShoppingCartOutlined />
-                    <p style={{ width: "max-content" }}>Đơn hàng</p>
-                  </li>
-                  <hr />
                   <li>
                     <QuestionCircleOutlined />
                     <Link to="/hoi-dap" style={{ textDecoration: "none", color: "inherit" }}>
@@ -120,26 +116,28 @@ const Navbar = () => {
                   </li>
                   <hr />
                   <li>
-                    <QuestionCircleOutlined />
+                    <ShopOutlined />
                     <Link to="/san-pham" style={{ textDecoration: "none", color: "inherit" }}>
                       <p style={{ width: "max-content" }}>Hiệu thuốc</p>
                     </Link>
                   </li>
-                  <hr/>
+                  <hr />
                   <li>
-                    <QuestionCircleOutlined />
-                    <Link to="/lich-su-mua-hang" style={{ textDecoration: "none", color: "inherit" }}>
+                    <ShoppingCartOutlined />
+                    <Link
+                      to="/lich-su-mua-hang"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
                       <p style={{ width: "max-content" }}>Lịch sử mua hàng</p>
                     </Link>
                   </li>
-                  <hr/>
+                  <hr />
                 </>
               )}
               <li onClick={() => handleLogout()}>
                 <LogoutOutlined />
                 <p style={{ width: "max-content" }}>Đăng xuất</p>
               </li>
-              
             </ul>
           </div>
         )}

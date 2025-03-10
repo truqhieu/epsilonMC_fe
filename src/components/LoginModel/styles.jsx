@@ -5,16 +5,16 @@ export const LoginModel = styled(Modal)`
   .ant-modal-content {
     top: 100px !important;
   }
-  .header {
+  .header-login-role {
     display: flex;
     flex-direction: row;
     align-items: center;
   }
-  .title {
+  .title-login-role {
     font-size: 30px;
     font-weight: bold;
     margin: 20px 0;
-    padding-left: 80px;
+    padding-left: 50px;
     color: #3e70a7;
   }
 

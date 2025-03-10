@@ -38,11 +38,21 @@ const AppointmetnPatient = React.lazy(() =>
 const MedicalRecordPatient = React.lazy(() =>
   import("../pages/Patients/MedicalRecords/MedicalRecord")
 );
-const GuestQuestionsList = React.lazy(() => 
+const GuestQuestionsList = React.lazy(() =>
   import("../pages/Doctors/GuestQuestionList/GuestQuestionList")
 );
-const ChatPatient = React.lazy(() => 
-  import("../pages/Doctors/ChatPatient/ChatPatient")
+const ChatPatient = React.lazy(() => import("../pages/Doctors/ChatPatient/ChatPatient"));
+
+//Manager routes
+const ManagerDashboard = React.lazy(() =>
+  import("../pages/Managers/ManagerDashboard/ManagerDashboard")
+);
+const ManageEmployees = React.lazy(() =>
+  import("../pages/Managers/EmployessManager/EmployessManager")
+);
+const ManageDoctors = React.lazy(() => import("../pages/Managers/DoctorsManager/DoctorManager"));
+const ManagePatients = React.lazy(() =>
+  import("../pages/Managers/PatientsManager/PatientsManager")
 );
 const ProductDetail = React.lazy(() => import("../pages/Patients/ViewProducts/ProductDetails"));
 
@@ -67,29 +77,47 @@ export const patientRoutes = [
   { path: ROUTERS.LICH_SU_KHAM, element: wrapWithLazy(AppointmetnPatient) },
   { path: ROUTERS.HO_SO_BENH_AN, element: wrapWithLazy(MedicalRecordPatient) },
   { path: ROUTERS.SAN_PHAM, element: wrapWithLazy(ViewProduct) },
-  { path: `${ROUTERS.CHI_TIET_SAN_PHAM}/:productId`, element: wrapWithLazy(ProductDetail) }, 
+  { path: `${ROUTERS.CHI_TIET_SAN_PHAM}/:productId`, element: wrapWithLazy(ProductDetail) },
   { path: ROUTERS.GIO_HANG, element: wrapWithLazy(CartPage) },
   { path: ROUTERS.LICH_SU_MUA_HANG, element: wrapWithLazy(HistoryCart) },
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },
 ];
 
-export const managerRoutes = [];
+export const managerRoutes = [
+  {
+    path: ROUTERS.DASHBOARD_MANAGER,
+    element: wrapWithLazy(ManagerDashboard),
+  },
+  {
+    path: ROUTERS.MANAGE_EMPLOYEES,
+    element: wrapWithLazy(ManageEmployees),
+  },
+  {
+    path: ROUTERS.MANAGE_DOCTORS,
+    element: wrapWithLazy(ManageDoctors),
+  },
+  {
+    path: ROUTERS.MANAGE_PATIENTS,
+    element: wrapWithLazy(ManagePatients),
+  },
+  {
+    path: ROUTERS.NOTFOUND,
+    element: wrapWithLazy(NotFound),
+  },
+];
 
 export const doctorRoutes = [
   { path: ROUTERS.DASHBOARD_DOCTOR, element: wrapWithLazy(DashboardDoctor) },
   { path: ROUTERS.DANH_SACH_LICH_HEN_TRUC_TIEP, element: wrapWithLazy(listAppointmentDoctor) },
   { path: ROUTERS.HO_SO_BENH_AN_BAC_SI, element: wrapWithLazy(MedicalRecordDoctor) },
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },
-  
- 
- 
- 
+
   {
-    path: ROUTERS.CAU_HOI_KHACH, 
+    path: ROUTERS.CAU_HOI_KHACH,
     element: wrapWithLazy(GuestQuestionsList),
   },
   {
-    path: ROUTERS.CHAT_BENH_NHAN, 
+    path: ROUTERS.CHAT_BENH_NHAN,
     element: wrapWithLazy(ChatPatient),
   },
 ];
@@ -107,4 +135,4 @@ export const guestRoutes = [
   { path: ROUTERS.SAN_PHAM, element: wrapWithLazy(ViewProducts) },
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },
 ];
-``
+``;

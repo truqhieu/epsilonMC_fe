@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -5,8 +6,8 @@ import { message, Card, Button, Input } from "antd";
 import { ShoppingCartOutlined, SearchOutlined } from "@ant-design/icons";
 import ProductServices from "../../../services/ProductServices";
 import CartServices from "../../../services/CartServices";
-import "./styles.css";
 import { formatCurrencyVND } from "../../../utils/moneyConfig";
+import { ViewProductsContainer } from "./styles";
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
@@ -14,7 +15,7 @@ const ViewProducts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [showSearchInput, setShowSearchInput] = useState(false); 
+  const [showSearchInput, setShowSearchInput] = useState(false);
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const accountId = user?.accountId;
@@ -29,7 +30,7 @@ const ViewProducts = () => {
         setProducts(response);
         setFilteredProducts(response);
       } catch (error) {
-        setError("Không thể tải danh sách sản phẩm.");
+        setError("Không thể tải danh sách sản phẩm.", error);
       } finally {
         setLoading(false);
       }
@@ -78,78 +79,73 @@ const ViewProducts = () => {
         message.error(response.message || "Lỗi khi thêm vào giỏ hàng");
       }
     } catch (error) {
-      message.error("Sản phẩm đã hết hàng!");
+      message.error("Sản phẩm đã hết hàng!", error);
     }
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <h2 className="title">SẢN PHẨM</h2>
-        <div className="search-container">
-          {showSearchInput ? (
-            <Input
-              placeholder="Tìm kiếm sản phẩm..."
-              prefix={<SearchOutlined />}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              allowClear
-              autoFocus
-              className="search-input"
-            />
-          ) : (
-            <SearchOutlined
-              className="search-icon"
-              onClick={() => setShowSearchInput(true)}
-            />
-          )}
-          <ShoppingCartOutlined
-            className="cart-icon"
-            onClick={() => navigate("/gio-hang")}
-          />
+    <ViewProductsContainer>
+      <div className="container">
+        <div className="header">
+          <h2 className="title">SẢN PHẨM</h2>
+          <div className="search-container">
+            {showSearchInput ? (
+              <Input
+                placeholder="Tìm kiếm sản phẩm..."
+                prefix={<SearchOutlined />}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                allowClear
+                autoFocus
+                className="search-input"
+              />
+            ) : (
+              <SearchOutlined className="search-icon" onClick={() => setShowSearchInput(true)} />
+            )}
+            <ShoppingCartOutlined className="cart-icon" onClick={() => navigate("/gio-hang")} />
+          </div>
         </div>
-      </div>
 
-      {loading && <p>Đang tải dữ liệu...</p>}
-      {error && <p className="error-message">{error}</p>}
+        {loading && <p>Đang tải dữ liệu...</p>}
+        {error && <p className="error-message">{error}</p>}
 
-      {!loading && !error && filteredProducts.length > 0 ? (
-        <div className="product-grid">
-          {filteredProducts.map((product) => (
-            <Card
-              key={product._id}
-              hoverable
-              cover={
-                <img
-                  src={product.image_urls?.[0] || "https://via.placeholder.com/150"}
-                  alt={product.name || "Sản phẩm"}
-                  className="product-image"
-                />
-              }
-              onClick={() => handleProductClick(product._id)}
-            >
-              <div className="certification-label">{product.certification}</div>
-              <Card.Meta title={product.name || "Không có tên"} />
-              <p className="product-price">
-                {product.price ? formatCurrencyVND(product.price) : "Liên hệ"}
-              </p>
-              <Button
-                type="link"
-                icon={<ShoppingCartOutlined />}
-                onClick={(e) => addToCart(product._id, e)}
-                className="add-to-cart-btn"
-                disabled={product.stock === 0}
+        {!loading && !error && filteredProducts.length > 0 ? (
+          <div className="product-grid">
+            {filteredProducts.map((product) => (
+              <Card
+                key={product._id}
+                hoverable
+                cover={
+                  <img
+                    src={product.image_urls?.[0] || "https://via.placeholder.com/150"}
+                    alt={product.name || "Sản phẩm"}
+                    className="product-image"
+                  />
+                }
+                onClick={() => handleProductClick(product._id)}
               >
-                {product.stock === 0 ? "Hết hàng" : "Thêm vào giỏ"}
-              </Button>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        !loading &&
-        !error && <p>Không có sản phẩm nào phù hợp.</p>
-      )}
-    </div>
+                <div className="certification-label">{product.certification}</div>
+                <Card.Meta title={product.name || "Không có tên"} />
+                <p className="product-price">
+                  {product.price ? formatCurrencyVND(product.price) : "Liên hệ"}
+                </p>
+                <Button
+                  type="link"
+                  icon={<ShoppingCartOutlined />}
+                  onClick={(e) => addToCart(product._id, e)}
+                  className="add-to-cart-btn"
+                  disabled={product.stock === 0}
+                >
+                  {product.stock === 0 ? "Hết hàng" : "Thêm vào giỏ"}
+                </Button>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          !loading && !error && <p>Không có sản phẩm nào phù hợp.</p>
+        )}
+      </div>
+    </ViewProductsContainer>
   );
 };
 

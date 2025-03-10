@@ -67,7 +67,7 @@ const AppointmentList = () => {
                 <div className="content-appointment">
                   <div className="appointment-name">{user?.name}</div>
                   <div className="appointment-doctor">
-                    Tư vấn {item?.exam_id?.examinationType === 1 ? "Trực tiếp" : "Online"} với BS{" "}
+                    Tư vấn {item?.examinationType === 1 ? "Trực tiếp" : "Online"} với BS{" "}
                     {item?.doctor?.name}
                   </div>
                   <div className="appointment-exam">{item?.exam_id?.examination}</div>

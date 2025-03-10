@@ -18,13 +18,15 @@ const ROUTERS = {
   GIO_HANG: "gio-hang",
   HO_SO_BENH_AN: "ho-so-benh-an",
   CHI_TIET_SAN_PHAM: "chi-tiet-san-pham",
-  LICH_SU_MUA_HANG:"lich-su-mua-hang",
+  LICH_SU_MUA_HANG: "lich-su-mua-hang",
+
   // Bác sĩ
   DASHBOARD_DOCTOR: "",
   DANH_SACH_LICH_HEN_TRUC_TIEP: "lich-hen-truc-tiep",
-  HO_SO_BENH_AN_BAC_SI: "ho-so-benh-an", 
+  HO_SO_BENH_AN_BAC_SI: "ho-so-benh-an",
   CAU_HOI_KHACH: `cau-hoi-khach`,
   CHAT_BENH_NHAN: `chat-benh-nhan`,
+
   // Nhân viên
   DASHBOARD_STAFF: "",
   DANH_SACH_LICH_KHAM: "danh-sach-lich-kham",
