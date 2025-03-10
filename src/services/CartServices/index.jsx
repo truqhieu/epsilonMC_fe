@@ -5,7 +5,8 @@ import {
   apiUpdateCart,
   apiRemoveCart,
   apiClearCart,
-  apiViewCartStaff
+  apiViewCartStaff,
+  apiUpdateOrderStatus, // ✅ Thêm API cập nhật trạng thái đơn hàng
 } from "./urls";
 
 const CartServices = {
@@ -24,7 +25,11 @@ const CartServices = {
   // Xóa toàn bộ giỏ hàng sau khi thanh toán
   clearCart: (data) => http.post(apiClearCart, data),
 
+  // Lấy toàn bộ đơn hàng có trạng thái "Paid" (chỉ Staff mới xem được)
   viewAllCart: (data) => http.post(apiViewCartStaff, data),
+
+  // ✅ Cập nhật trạng thái đơn hàng từ "Paid" → "Shipped"
+  updateOrderStatus: (data) => http.patch(apiUpdateOrderStatus, data),
 };
 
 export default CartServices;
