@@ -58,7 +58,7 @@ const AddEmployees = ({ open, onCancel }) => {
       <AddEmployessStyled>
         <Form form={form} layout="vertical" onFinish={handleFinish}>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item
                 name="name"
                 label="Họ và tên"
@@ -67,13 +67,25 @@ const AddEmployees = ({ open, onCancel }) => {
                 <Input placeholder="Nhập họ và tên" />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item
                 name="birthDay"
                 label="Ngày sinh"
                 rules={[{ required: true, message: "Vui lòng chọn ngày sinh" }]}
               >
                 <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                name="gender"
+                label="Giới tính"
+                rules={[{ required: true, message: "Vui lòng chọn Giới tính" }]}
+              >
+                <Select placeholder="Chọn Giới tính" allowClear>
+                  <Option value="male">Nam</Option>
+                  <Option value="female">Nữ</Option>
+                </Select>
               </Form.Item>
             </Col>
           </Row>
@@ -112,9 +124,9 @@ const AddEmployees = ({ open, onCancel }) => {
           {/* Role */}
           <Form.Item name="role" label="Vai trò">
             <Select placeholder="Chọn vai trò" allowClear>
-              <Option value="Admin">Admin</Option>
-              <Option value="Manager">Manager</Option>
-              <Option value="Staff">Staff</Option>
+              <Option value="admin">Admin</Option>
+              <Option value="manager">Manager</Option>
+              <Option value="staff">Staff</Option>
             </Select>
           </Form.Item>
 
@@ -142,7 +154,6 @@ const AddEmployees = ({ open, onCancel }) => {
 AddEmployees.propTypes = {
   open: PropTypes.bool,
   onCancel: PropTypes.func,
-  onSubmit: PropTypes.func,
 };
 
 export default AddEmployees;

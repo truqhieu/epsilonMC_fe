@@ -7,3 +7,5 @@ export const apiVerifyOTP = `/account/verifyOTP`;
 export const apiRegister = `/account/register`;
 export const apiGetAllAccount = `/account/listAccount`;
 export const apigetCurrentAccount = `/account/getCurrentAccount`;
+export const apiRegisterEmployess = `/account/registerEmployess`;
+export const apiUpdateAccount = `/account/updateAccount`;

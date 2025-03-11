@@ -2,20 +2,20 @@
 import React, { useState } from "react";
 import CustomModal from "../../../../components/CustomModal";
 import PropTypes from "prop-types";
-import { DetailEmployessStyled } from "../styles";
 import { InfoRow } from "../../../../components/InfoRow";
 import { convertToVietnamTime } from "../../../../utils/timeConfig";
+import { DetailEmployessStyled } from "../../EmployessManager/styles";
 import { formatCurrencyVND } from "../../../../utils/moneyConfig";
-import UserServices from "../../../../services/UserServices";
+import DoctorServices from "../../../../services/DoctorServices";
 
-const DetailEmployess = ({ open, onCancel, selectedEmployess }) => {
+const DetailDoctor = ({ open, onCancel, selectedDoctor }) => {
   const [openSalary, setOpenSalary] = useState(false);
-  const [salary, setSalary] = useState(selectedEmployess?.salary);
+  const [salary, setSalary] = useState(selectedDoctor?.salary);
 
-  const updateUserForDeActive = async (userId) => {
+  const updateUserForDeActive = async (doctorId) => {
     try {
-      const res = await UserServices.updateUser({
-        _id: userId,
+      const res = await DoctorServices.updateDoctor({
+        _id: doctorId,
         isActive: false,
       });
       if (res?.success) {
@@ -26,10 +26,10 @@ const DetailEmployess = ({ open, onCancel, selectedEmployess }) => {
     }
   };
 
-  const updateSalary = async (userId) => {
+  const updateSalary = async (doctorId) => {
     try {
-      const res = await UserServices.updateUser({
-        _id: userId,
+      const res = await DoctorServices.updateDoctor({
+        _id: doctorId,
         salary: salary,
       });
       if (res?.success) {
@@ -39,18 +39,19 @@ const DetailEmployess = ({ open, onCancel, selectedEmployess }) => {
       console.log(error);
     }
   };
+
   const handleConfirm = () => {
-    updateUserForDeActive(selectedEmployess?._id);
+    updateUserForDeActive(selectedDoctor?._id);
   };
 
   const handleUpdateSalary = () => {
-    updateSalary(selectedEmployess?._id);
+    updateSalary(selectedDoctor?._id);
     setOpenSalary(false);
   };
 
   return (
     <CustomModal
-      title="Chi tiết nhân viên"
+      title="Chi tiết bác sĩ"
       open={open}
       onCancel={onCancel}
       width={800}
@@ -60,37 +61,32 @@ const DetailEmployess = ({ open, onCancel, selectedEmployess }) => {
       <DetailEmployessStyled>
         <div className="detail-container">
           <div className="detail-content">
-            <InfoRow label="Họ và tên" value={selectedEmployess?.name} />
-            <InfoRow
-              label="Giới tính"
-              value={selectedEmployess?.gender === "male" ? "Nam" : "Nữ"}
-            />
-            <InfoRow label="Chức vụ" value={selectedEmployess?.role.toUpperCase()} />
-            <InfoRow label="Email" value={selectedEmployess?.email} />
+            <InfoRow label="Họ và tên" value={selectedDoctor?.name} />
+            <InfoRow label="Giới tính" value={selectedDoctor?.gender === "male" ? "Nam" : "Nữ"} />
+            <InfoRow label="Email" value={selectedDoctor?.email} />
+            <InfoRow label="Chuyên khoa" value={selectedDoctor?.specialization} />
+            <InfoRow label="Kinh nghiệm" value={selectedDoctor?.exp} />
           </div>
           <div className="detail-content">
-            <InfoRow label="Ngày sinh" value={convertToVietnamTime(selectedEmployess?.birthDay)} />
-            <InfoRow label="Số điện thoại" value={selectedEmployess?.phone} />
-            <InfoRow label="Địa chỉ" value={selectedEmployess?.address} />
+            <InfoRow label="Ngày sinh" value={convertToVietnamTime(selectedDoctor?.birthDay)} />
+            <InfoRow label="Số điện thoại" value={selectedDoctor?.phone} />
+            <InfoRow label="Địa chỉ" value={selectedDoctor?.address} />
           </div>
           <div className="detail-content">
             <InfoRow
               label="Trạng thái"
-              value={selectedEmployess?.isActive === true ? "Hoạt động" : "Khóa"}
+              value={selectedDoctor?.isActive === true ? "Hoạt động" : "Khóa"}
             />
-            <InfoRow label="Lương" value={formatCurrencyVND(selectedEmployess?.salary)} />
-            <InfoRow
-              label="Ngày vào làm"
-              value={convertToVietnamTime(selectedEmployess?.createdAt)}
-            />
-            {selectedEmployess?.isActive === false && (
+            <InfoRow label="Lương" value={formatCurrencyVND(selectedDoctor?.salary)} />
+            <InfoRow label="Ngày vào làm" value={convertToVietnamTime(selectedDoctor?.createdAt)} />
+            {selectedDoctor?.isActive === false && (
               <InfoRow
                 label="Ngày nghỉ việc"
-                value={convertToVietnamTime(selectedEmployess?.updatedAt)}
+                value={convertToVietnamTime(selectedDoctor?.updatedAt)}
               />
             )}
           </div>
-          {selectedEmployess?.isActive === true && (
+          {selectedDoctor?.isActive === true && (
             <div className="button-detail">
               <button className="button-confirm" onClick={handleConfirm}>
                 Xác nhận nghỉ việc
@@ -161,10 +157,10 @@ const DetailEmployess = ({ open, onCancel, selectedEmployess }) => {
   );
 };
 
-DetailEmployess.propTypes = {
-  open: PropTypes.bool,
-  onCancel: PropTypes.func,
-  selectedEmployess: PropTypes.object,
+DetailDoctor.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  selectedDoctor: PropTypes.object,
 };
 
-export default DetailEmployess;
+export default DetailDoctor;

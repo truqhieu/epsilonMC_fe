@@ -12,8 +12,8 @@ import { Spin } from "antd";
 import checkAppointmentStatus from "../services/AppointmentServices/";
 import ChangeDoctor from "./modal/ChangeDoctor";
 import MessengerIcon from "../components/MessWithDoctorButton/MessengerIcon";
+import PatientServices from "../services/PatientServices";
 const GuestLayout = ({ isDatLichPage }) => {
-  
   const [loading, setLoading] = useState(false);
   const [patient, setPatient] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -32,14 +32,13 @@ const GuestLayout = ({ isDatLichPage }) => {
       console.error("Lỗi kiểm tra quyền nhắn tin:", error);
     }
   }, [user?.id]);
-  
+
   useEffect(() => {
     if (user?.role === "patient") {
       checkChatPermission();
     }
   }, [user, checkChatPermission]);
 
-  
   const getPatient = useCallback(async () => {
     if (!user?.id) return;
 

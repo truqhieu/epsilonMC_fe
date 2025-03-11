@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { TableCustom } from "../../Staffs/AppointmentList/styles";
 import AuthServices from "../../../services/AuthServices";
-import { Button, Tag } from "antd";
+import { convertToVietnamTime } from "../../../utils/timeConfig";
+import { Tag } from "antd";
 
 const ViewListAccount = () => {
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,20 @@ const ViewListAccount = () => {
       if (res?.success) {
         setListAccount(res?.data);
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDisableAccount = async (id) => {
+    try {
+      setLoading(true);
+      await AuthServices.updateAccount({
+        _id: id,
+        isDisable: true,
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -56,11 +71,6 @@ const ViewListAccount = () => {
       render: (record) => record.role.toUpperCase(),
     },
     {
-      title: "Số điện thoại",
-      key: "phone",
-      render: (record) => record.phone,
-    },
-    {
       title: "Trạng thái tài khoản",
       key: "isDisable",
       render: (record) => {
@@ -72,9 +82,30 @@ const ViewListAccount = () => {
       },
     },
     {
+      title: "Ngày cấp",
+      key: "phone",
+      render: (record) => convertToVietnamTime(record.createdAt),
+    },
+    {
       title: "Chức năng",
       key: "action",
-      render: () => <Button>Vô hiệu hóa</Button>,
+      render: (record) => {
+        return (
+          <button
+            style={{
+              backgroundColor: "#4b8dca",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              padding: "6px 12px",
+              cursor: "pointer",
+            }}
+            onClick={() => handleDisableAccount(record._id)}
+          >
+            Vô hiệu hóa
+          </button>
+        );
+      },
     },
   ];
   return (
@@ -85,23 +116,8 @@ const ViewListAccount = () => {
         loading={loading}
         bordered={true}
         rowKey={(record) => record._id}
-        // onRow={(record) => {
-        //   return {
-        //     onClick: () => {
-        //       setIsOpenModal(true);
-        //       setSelectedAppointment(record?._id);
-        //     },
-        //   };
-        // }}
         pagination={{ pageSize: 10 }}
       />
-      {/* {!!setIsOpenModal && (
-        <AppointmentDetailModal
-          open={isOpenModal}
-          selectedAppointment={selectedAppointment}
-          onCancel={() => setIsOpenModal(false)}
-        />
-      )} */}
     </>
   );
 };

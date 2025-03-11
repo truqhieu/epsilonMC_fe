@@ -8,10 +8,10 @@ export const InfoRowStyled = styled.div`
   }
 
   .info-row-label {
-    width: 100px;
+    width: 110px;
   }
 
   .info-row strong {
-    max-width: 300px;
+    max-width: 330px;
   }
 `;

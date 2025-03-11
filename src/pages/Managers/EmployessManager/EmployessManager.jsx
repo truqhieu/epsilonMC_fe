@@ -6,6 +6,7 @@ import moment from "moment/moment";
 import DetailEmployess from "./modal/DetailEmployess";
 import { ListEmployessStyled } from "./styles";
 import AddEmployess from "./modal/AddEmployess";
+import { toast } from "react-toastify";
 
 const EmployessManager = () => {
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,21 @@ const EmployessManager = () => {
       console.log(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateUserForDeActive = async (userId) => {
+    try {
+      const res = await UserServices.updateUser({
+        _id: userId,
+        isActive: true,
+      });
+      if (res?.success) {
+        getListStaff();
+        toast.success("Gửi yêu cầu thành công cấp tài khoản thành công");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -78,7 +94,13 @@ const EmployessManager = () => {
       title: "Trạng thái",
       key: "status",
       render: (record) => {
-        return record.isActive === true ? "Còn làm việc" : "Đã nghỉ việc";
+        if (record.isActive === true && record.isAccount === true) {
+          return "Còn làm việc";
+        } else if (record.isActive === false && record.isAccount === true) {
+          return "Đã nghỉ việc";
+        } else {
+          return "Chưa cấp tài khoản";
+        }
       },
     },
     {
@@ -94,15 +116,16 @@ const EmployessManager = () => {
     {
       title: "",
       key: "action",
+
       render: (record) => {
         return (
-          record?.isAccount === false && (
+          record?.isAccount === false &&
+          record?.isActive === false && (
             <div className="button-action">
               <button
                 className="button-action-detail"
                 onClick={() => {
-                  setSelectedEmployess(record);
-                  setOpen(true);
+                  updateUserForDeActive(record?._id);
                 }}
               >
                 Cấp tài khoản
@@ -111,6 +134,9 @@ const EmployessManager = () => {
           )
         );
       },
+      onCell: () => ({
+        onClick: (event) => event.stopPropagation(),
+      }),
     },
   ];
   return (
