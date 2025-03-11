@@ -9,6 +9,7 @@ import {
   apiAppointmentListDoctor,
   apiAppointmentListPatient,
   apiSendMailReminder,
+  apiCheckAppointmentStatus,
 } from "./urls";
 
 const addAppointment = (body) => http.post(apiAddAppointment, body);
@@ -20,7 +21,8 @@ const sendMailApproved = (body) => http.post(apiSendMailApproved, body);
 const sendMailReminder = (body) => http.post(apiSendMailReminder, body);
 const listAppointmentDoctor = (body) => http.post(apiAppointmentListDoctor, body);
 const listAppointmentPatient = (body) => http.post(apiAppointmentListPatient, body);
-
+// stauts apointment
+const checkAppointmentStatus = (patientId) => http.get(`${apiCheckAppointmentStatus}/${patientId}`);
 const AppointmentServices = {
   addAppointment,
   listAppointment,
@@ -31,6 +33,7 @@ const AppointmentServices = {
   listAppointmentDoctor,
   listAppointmentPatient,
   sendMailReminder,
+  checkAppointmentStatus
 };
 
 export default AppointmentServices;
