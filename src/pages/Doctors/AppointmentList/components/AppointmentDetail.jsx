@@ -40,7 +40,6 @@ const AppointmentDetail = ({ open, onCancel, selectedAppointment }) => {
         patientId: appointment.patient._id,
         appointmentId: appointment._id,
         doctorId: appointment.doctor._id,
-        createdBy: appointment.doctor._id,
         typeAppointment: appointment?.typeAppointment,
       });
       if (res.success) {

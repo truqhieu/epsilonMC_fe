@@ -1,6 +1,9 @@
 import http from "../../utils/axiosConfigs";
-import { apiListUserNotAccount } from "./urls";
+import { apiCreateUser, apiListUser, apiListUserNotAccount, apiUpdateUser } from "./urls";
 
 const listUserNotAccount = () => http.get(apiListUserNotAccount);
+const listUser = (body) => http.post(apiListUser, body);
+const updateUser = (body) => http.post(apiUpdateUser, body);
+const createUser = (body) => http.post(apiCreateUser, body);
 
-export default { listUserNotAccount };
+export default { listUserNotAccount, listUser, updateUser, createUser };
