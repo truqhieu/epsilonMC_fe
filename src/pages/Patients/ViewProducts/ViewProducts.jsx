@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -30,7 +29,7 @@ const ViewProducts = () => {
         setProducts(response);
         setFilteredProducts(response);
       } catch (error) {
-        setError("Không thể tải danh sách sản phẩm.", error);
+        setError("Không thể tải danh sách sản phẩm.");
       } finally {
         setLoading(false);
       }
@@ -55,33 +54,44 @@ const ViewProducts = () => {
 
   const addToCart = async (productId, event) => {
     event.stopPropagation();
-    try {
-      if (!accountId) {
+    message.destroy(); // Xóa thông báo cũ trước khi hiển thị thông báo mới
+
+    const product = products.find((p) => p._id === productId);
+    if (!product) {
+        message.error("Không tìm thấy sản phẩm!");
+        return;
+    }
+
+    console.log("Product info:", product); // Kiểm tra giá trị product trước khi xử lý
+
+    if (!accountId) {
         message.warning("Bạn cần đăng nhập để thêm vào giỏ hàng!");
         return;
-      }
-
-      const product = products.find((p) => p._id === productId);
-      if (product.stock === 0) {
-        message.warning("Sản phẩm đã hết hàng!");
-        return;
-      }
-
-      const response = await CartServices.addToCart({
-        accountId,
-        productId,
-        quantity: 1,
-      });
-
-      if (response.success) {
-        message.success("Đã thêm vào giỏ hàng");
-      } else {
-        message.error(response.message || "Lỗi khi thêm vào giỏ hàng");
-      }
-    } catch (error) {
-      message.error("Sản phẩm đã hết hàng!", error);
     }
-  };
+
+    try {
+        const response = await CartServices.addToCart({
+            accountId,
+            productId,
+            quantity: 1,
+        });
+
+        console.log("API response:", response);
+
+        if (response.success) {
+            message.success("Đã thêm vào giỏ hàng");
+        } else if (response.message === "Sản phẩm đã hết hàng") {
+            message.warning("Sản phẩm đã hết hàng!"); // Hiển thị đúng thông báo từ API
+        } else {
+            message.error(response.message || "Lỗi khi thêm vào giỏ hàng");
+        }
+    } catch (error) {
+        console.error("Lỗi hệ thống:", error);
+        message.error(error.response?.data?.message || "Lỗi hệ thống!");
+    }
+};
+
+
 
   return (
     <ViewProductsContainer>

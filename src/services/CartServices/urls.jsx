@@ -20,3 +20,6 @@ export const apiViewCartStaff = `${apiCart}/trang-thai-don-hang`;  // POST
 
 // API cập nhật trạng thái đơn hàng từ "Paid" → "Shipped"
 export const apiUpdateOrderStatus = `${apiCart}/update-status`;  // PATCH
+
+// API lấy lịch sử mua hàng (chỉ hiển thị đơn "Paid" cho bệnh nhân)
+export const apiGetPurchaseHistory = `${apiCart}/lich-su-mua-hang`;  // POST

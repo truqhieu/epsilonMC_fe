@@ -10,7 +10,7 @@ const CartPageStaff = () => {
   const [loading, setLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [tempStatus, setTempStatus] = useState(""); // 🔹 Trạng thái tạm thời
+  const [tempStatus, setTempStatus] = useState("");
 
   const { user } = useSelector((state) => state.auth);
   const accountId = user?.accountId;
@@ -94,50 +94,22 @@ const CartPageStaff = () => {
   // 🟢 Cấu hình cột bảng
   const columns = [
     {
-      title: "Sản phẩm",
-      dataIndex: "product",
-      key: "product",
-      render: (_, record) => (
-        <Space direction="vertical">
-          {record?.items?.map((item, index) => (
-            <Text key={index}>{item?.productId?.name || "Không xác định"}</Text>
-          ))}
-        </Space>
-      ),
+      title: "Mã đơn hàng",
+      dataIndex: "orderCode",
+      key: "orderCode",
+      render: (orderCode) => <Text strong>{orderCode}</Text>,
     },
     {
-      title: "Số lượng",
-      dataIndex: "quantity",
-      key: "quantity",
-      render: (_, record) => (
-        <Space direction="vertical">
-          {record?.items?.map((item, index) => (
-            <Text key={index}>{item.quantity}</Text>
-          ))}
-        </Space>
-      ),
-    },
-    {
-      title: "Tổng tiền",
-      dataIndex: "orderTotal",
-      key: "orderTotal",
-      render: (_, record) => {
-        const total = record.items.reduce(
-          (sum, item) => sum + item.quantity * (item.productId?.price || 0),
-          0
-        );
-        return (
-          <Text strong style={{ color: "#52c41a" }}>
-            {`${total.toLocaleString()} VND`}
-          </Text>
-        );
-      },
+      title: "Ngày tạo",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (createdAt) => <Text>{new Date(createdAt).toLocaleDateString()}</Text>,
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status, record) => renderStatusTag(status, record._id, false), // ❌ Không hiển thị dropdown
+      render: (status, record) => renderStatusTag(status, record._id, false), 
     },
   ];
 
@@ -179,15 +151,21 @@ const CartPageStaff = () => {
         onCancel={() => setModalVisible(false)}
         onOk={() => {
           if (tempStatus !== selectedOrder.status) {
-            handleUpdateStatus(selectedOrder._id, tempStatus); // 🔹 Cập nhật trạng thái khi ấn OK
+            handleUpdateStatus(selectedOrder._id, tempStatus);
           }
           setModalVisible(false);
         }}
       >
         {selectedOrder && (
           <>
+            <Text strong>Mã đơn hàng:</Text>{" "}
+            <Text>{selectedOrder.orderCode}</Text>
+            <br />
+            <Text strong>Tên bệnh nhân:</Text>{" "}
+            <Text>{selectedOrder.accountId?.patientId?.name || "Không xác định"}</Text>
+            <br />
             <Text strong>Trạng thái:</Text>{" "}
-            {renderStatusTag(tempStatus, selectedOrder._id, true)} {/* 🟢 Dropdown chỉ hiển thị trong modal */}
+            {renderStatusTag(tempStatus, selectedOrder._id, true)}
             <br />
             <Text strong>Sản phẩm:</Text>
             <Space direction="vertical" style={{ display: "block", marginTop: 5 }}>

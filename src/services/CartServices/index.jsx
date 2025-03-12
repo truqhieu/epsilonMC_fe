@@ -6,7 +6,8 @@ import {
   apiRemoveCart,
   apiClearCart,
   apiViewCartStaff,
-  apiUpdateOrderStatus, // ✅ Thêm API cập nhật trạng thái đơn hàng
+  apiUpdateOrderStatus,
+  apiGetPurchaseHistory, // ✅ Thêm API cập nhật trạng thái đơn hàng
 } from "./urls";
 
 const CartServices = {
@@ -30,6 +31,9 @@ const CartServices = {
 
   // ✅ Cập nhật trạng thái đơn hàng từ "Paid" → "Shipped"
   updateOrderStatus: (data) => http.patch(apiUpdateOrderStatus, data),
+  
+  // ✅ Lấy lịch sử mua hàng (chỉ hiển thị đơn "Paid" cho bệnh nhân)
+  getPurchaseHistory: (data) => http.post(apiGetPurchaseHistory, data),
 };
 
 export default CartServices;
