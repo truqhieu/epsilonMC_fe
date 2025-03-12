@@ -73,8 +73,12 @@ const AppointmentList = () => {
     {
       title: "Bác sĩ",
       key: "doctor",
-      render: (record) =>
-        record.doctor ? record.doctor.name : "Chưa có bác sĩ",
+      render: (record) => (record.doctor ? record.doctor.name : "Chưa có bác sĩ"),
+    },
+    {
+      title: "Viện phí",
+      key: "amount",
+      render: (record) => record.amount,
     },
     {
       title: "Trạng thái",
