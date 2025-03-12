@@ -2,16 +2,18 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CartServices from "../../../services/CartServices";
-import { Table, Spin, Typography, Card, Tag, Space, message, Dropdown, Menu, Modal } from "antd";
+import { Spin, Typography, Card, Tag, Space, message, Dropdown, Menu, Button } from "antd";
+import { TableCustom } from "../AppointmentList/styles";
+import CustomModal from "../../../components/CustomModal";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const CartPageStaff = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [tempStatus, setTempStatus] = useState(""); // 🔹 Trạng thái tạm thời
+  const [tempStatus, setTempStatus] = useState("");
 
   const { user } = useSelector((state) => state.auth);
   const accountId = user?.accountId;
@@ -58,11 +60,12 @@ const CartPageStaff = () => {
         if (selectedOrder && selectedOrder._id === orderId) {
           setSelectedOrder((prev) => ({ ...prev, status: newStatus }));
         }
+        setModalVisible(false);
       } else {
         message.error("Cập nhật thất bại.");
       }
     } catch (error) {
-      message.error("Lỗi khi cập nhật trạng thái đơn hàng.");
+      message.error("Lỗi khi cập nhật trạng thái đơn hàng.", error);
     }
   };
 
@@ -97,60 +100,36 @@ const CartPageStaff = () => {
   // 🟢 Cấu hình cột bảng
   const columns = [
     {
-      title: "Sản phẩm",
-      dataIndex: "product",
-      key: "product",
-      render: (_, record) => (
-        <Space direction="vertical">
-          {record?.items?.map((item, index) => (
-            <Text key={index}>{item?.productId?.name || "Không xác định"}</Text>
-          ))}
-        </Space>
-      ),
+      title: "Mã đơn hàng",
+      dataIndex: "orderCode",
+      key: "orderCode",
+      render: (orderCode) => <Text strong>{orderCode}</Text>,
     },
     {
-      title: "Số lượng",
-      dataIndex: "quantity",
-      key: "quantity",
-      render: (_, record) => (
-        <Space direction="vertical">
-          {record?.items?.map((item, index) => (
-            <Text key={index}>{item.quantity}</Text>
-          ))}
-        </Space>
-      ),
+      title: "Ngày tạo",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (createdAt) => <Text>{new Date(createdAt).toLocaleDateString()}</Text>,
     },
     {
       title: "Tổng tiền",
-      dataIndex: "orderTotal",
-      key: "orderTotal",
-      render: (_, record) => {
-        const total = record.items.reduce(
-          (sum, item) => sum + item.quantity * (item.productId?.price || 0),
-          0
-        );
-        return (
-          <Text strong style={{ color: "#52c41a" }}>
-            {`${total.toLocaleString()} VND`}
-          </Text>
-        );
-      },
+      dataIndex: "totalPrice",
+      key: "totalPrice",
+      render: (totalPrice) => (
+        <Text style={{ color: "#52c41a" }}>{`${totalPrice.toLocaleString()} VND`}</Text>
+      ),
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status, record) => renderStatusTag(status, record._id, false), // ❌ Không hiển thị dropdown
+      render: (status, record) => renderStatusTag(status, record._id, false),
     },
   ];
 
   return (
     <div className="cart-container">
       <Card className="cart-card">
-        <Title level={2} className="cart-title">
-          Trạng Thái Đơn Hàng
-        </Title>
-
         {loading ? (
           <div className="cart-loading">
             <Spin size="large" />
@@ -158,7 +137,7 @@ const CartPageStaff = () => {
         ) : orders.length === 0 ? (
           <Text className="cart-empty">Không có đơn hàng nào.</Text>
         ) : (
-          <Table
+          <TableCustom
             columns={columns}
             dataSource={orders}
             rowKey={(record) => record._id}
@@ -167,7 +146,7 @@ const CartPageStaff = () => {
             onRow={(record) => ({
               onClick: () => {
                 setSelectedOrder(record);
-                setTempStatus(record.status); // 🔹 Lưu trạng thái hiện tại vào tempStatus
+                setTempStatus(record.status);
                 setModalVisible(true);
               },
             })}
@@ -176,16 +155,12 @@ const CartPageStaff = () => {
       </Card>
 
       {/* 🟢 Modal chi tiết đơn hàng */}
-      <Modal
+      <CustomModal
         title="Chi tiết đơn hàng"
-        visible={modalVisible}
+        width={400}
+        open={modalVisible}
+        footer={null}
         onCancel={() => setModalVisible(false)}
-        onOk={() => {
-          if (tempStatus !== selectedOrder.status) {
-            handleUpdateStatus(selectedOrder._id, tempStatus); // 🔹 Cập nhật trạng thái khi ấn OK
-          }
-          setModalVisible(false);
-        }}
       >
         {selectedOrder && (
           <>
@@ -205,9 +180,18 @@ const CartPageStaff = () => {
             <Text style={{ color: "#52c41a" }}>
               {`${selectedOrder.totalPrice.toLocaleString()} VND`}
             </Text>
+            <br />
+            {tempStatus !== selectedOrder.status && (
+              <Button
+                onClick={() => handleUpdateStatus(selectedOrder._id, tempStatus)}
+                style={{ marginTop: "10px" }}
+              >
+                Cập nhật
+              </Button>
+            )}
           </>
         )}
-      </Modal>
+      </CustomModal>
     </div>
   );
 };
