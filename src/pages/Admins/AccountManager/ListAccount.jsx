@@ -33,6 +33,7 @@ const ViewListAccount = () => {
         _id: id,
         isDisable: true,
       });
+      getListAccount();
     } catch (error) {
       console.log(error);
     } finally {

@@ -111,6 +111,7 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
         typeAppointment: 2,
         emailSent: false,
         amount: 5000,
+        reAppointmentByDoctor: true,
       });
       if (res?.success) {
         updateAppointment();

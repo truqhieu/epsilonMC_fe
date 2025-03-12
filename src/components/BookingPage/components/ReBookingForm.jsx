@@ -90,6 +90,7 @@ const ReBookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
         amount: 5000,
         emailSent: false,
         typeAppointment: 2,
+        reAppointmentByDoctor: false,
       });
       if (res?.success) {
         localStorage.setItem("invoiceId", res.invoiceId);
