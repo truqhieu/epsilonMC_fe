@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CartServices from "../../../services/CartServices";
@@ -82,7 +83,9 @@ const CartPageStaff = () => {
           }
           trigger={["click"]}
         >
-          <Tag color={color} style={{ cursor: "pointer" }}>{status} ▼</Tag>
+          <Tag color={color} style={{ cursor: "pointer" }}>
+            {status} ▼
+          </Tag>
         </Dropdown>
       );
     }
@@ -186,8 +189,8 @@ const CartPageStaff = () => {
       >
         {selectedOrder && (
           <>
-            <Text strong>Trạng thái:</Text>{" "}
-            {renderStatusTag(tempStatus, selectedOrder._id, true)} {/* 🟢 Dropdown chỉ hiển thị trong modal */}
+            <Text strong>Trạng thái:</Text> {renderStatusTag(tempStatus, selectedOrder._id, true)}{" "}
+            {/* 🟢 Dropdown chỉ hiển thị trong modal */}
             <br />
             <Text strong>Sản phẩm:</Text>
             <Space direction="vertical" style={{ display: "block", marginTop: 5 }}>

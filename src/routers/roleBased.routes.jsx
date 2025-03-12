@@ -17,6 +17,9 @@ const CommunityPage = React.lazy(() => import("../pages/Community/CommunityPage"
 const AppointmentList = React.lazy(() => import("../pages/Staffs/AppointmentList/AppointmentList"));
 const MedicalRecords = React.lazy(() => import("../pages/Staffs/MedicalRecords/MedicalRecords"));
 const DashboardStaff = React.lazy(() => import("../pages/Staffs/DashboardStaff/DashboardStaff"));
+
+//Admin routes
+const DashboardAdmin = React.lazy(() => import("../pages/Admins/AdminDashboard/AdminDashboard"));
 const GrantsAccount = React.lazy(() => import("../pages/Admins/AccountManager/GrantsAccount"));
 const ViewAccounts = React.lazy(() => import("../pages/Admins/AccountManager/ListAccount"));
 
@@ -55,13 +58,12 @@ const ManagePatients = React.lazy(() =>
   import("../pages/Managers/PatientsManager/PatientsManager")
 );
 const ProductDetail = React.lazy(() => import("../pages/Patients/ViewProducts/ProductDetails"));
-
 const ViewProduct = React.lazy(() => import("../pages/Patients/ViewProducts/ViewProducts"));
 const CartPage = React.lazy(() => import("../pages/Patients/Cart/CartPage"));
 const HistoryCart = React.lazy(() => import("../pages/Patients/Cart/HistoryCart"));
-//StaffRoute 
-const CartStaff = React.lazy(() => import("../pages/Staffs/CartStaff/CartPageStaff"));
 
+//StaffRoute
+const CartStaff = React.lazy(() => import("../pages/Staffs/CartStaff/CartPageStaff"));
 
 export const staffRoutes = [
   { path: ROUTERS.DASHBOARD_STAFF, element: wrapWithLazy(DashboardStaff) },
@@ -72,6 +74,7 @@ export const staffRoutes = [
 ];
 
 export const adminRoutes = [
+  { path: ROUTERS.DASHBOARD_ADMIN, element: wrapWithLazy(DashboardAdmin) },
   { path: ROUTERS.TAO_ACCOUNT, element: wrapWithLazy(GrantsAccount) },
   { path: ROUTERS.XEM_DANH_SACH_ACCOUNT, element: wrapWithLazy(ViewAccounts) },
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },

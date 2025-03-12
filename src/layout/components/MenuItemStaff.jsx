@@ -2,7 +2,6 @@ import {
   BookOutlined,
   CommentOutlined,
   FundOutlined,
-  HomeOutlined,
   QuestionCircleOutlined,
   SolutionOutlined,
   TeamOutlined,
@@ -15,26 +14,21 @@ export const menuItemsStaff = {
   doctor: [
     {
       key: "1",
-      icon: <UserOutlined />,
-      label: "Bệnh nhân",
-    },
-    {
-      key: "2",
       icon: <VideoCameraOutlined />,
       label: "Lịch khám trực tiếp",
     },
     {
-      key: "3",
+      key: "2",
       icon: <BookOutlined />,
       label: "Hồ sơ bệnh án",
     },
     {
-      key: "4",
+      key: "3",
       icon: <CommentOutlined />,
       label: "Trò chuyện với bệnh nhân",
     },
     {
-      key: "5",
+      key: "4",
       icon: <QuestionCircleOutlined />,
       label: "Câu hỏi của khách",
     },
@@ -42,21 +36,11 @@ export const menuItemsStaff = {
   staff: [
     {
       key: "1",
-      icon: <HomeOutlined />,
-      label: "Dashborad",
-    },
-    {
-      key: "2",
       icon: <UserOutlined />,
       label: "Quản lý lịch khám",
     },
     {
-      key: "3",
-      icon: <VideoCameraOutlined />,
-      label: "Chẩn đoán",
-    },
-    {
-      key: "4",
+      key: "2",
       icon: <VideoCameraOutlined />,
       label: "Trạng Thái Đơn Hàng",
     },
