@@ -16,62 +16,63 @@ const ChatPopup = ({ open, onCancel }) => {
   const [conversationId, setConversationId] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const loadConversation = useCallback(async () => {
+  const fetchMessages = useCallback(async (convId) => {
+    if (!convId) return;
+
+    try {
+      const msgRes = await ConversationService.getMessagesByConversationId(convId);
+      setMessages(msgRes?.data || []);
+    } catch (error) {
+      console.error("❌ Lỗi lấy tin nhắn:", error);
+    }
+  }, []);
+
+  const fetchConversations = useCallback(async () => {
     if (!patientId) return;
 
     try {
-      setLoading(true);
-      const res = await ConversationService.getPatientConversations(patientId);
-      const conversations = res?.data?.data || res?.data || [];
-
-      if (conversations.length > 0) {
-        const conversation = conversations[0];
-        setConversationId(conversation._id);
-        if (Array.isArray(conversation.messages)) {
-          setMessages(conversation.messages);
-        } else {
-          const msgRes = await ConversationService.getMessagesByConversationId(conversation._id);
-          const fetchedMessages = msgRes?.data?.messages || msgRes?.data?.data?.messages || [];
-          setMessages(Array.isArray(fetchedMessages) ? fetchedMessages : []);
-        }
-      } else {
-        // Create a new conversation if none exists
-        const newConv = await ConversationService.createConversation({ patientId });
-        if (newConv?.data?.success && newConv?.data?.conversationId) {
-          setConversationId(newConv.data.conversationId);
-          setMessages([]);
-        } else {
-          console.error("Unable to create a new conversation.");
-        }
+      const newConv = await ConversationService.checkAndStartConversation(patientId);
+      if (newConv?.success && newConv?.data) {
+        setConversationId(newConv.data._id);
+        setMessages([]);
       }
     } catch (error) {
-      console.error("Error loading conversation:", error);
-    } finally {
-      setLoading(false);
+      console.log("❌ Lỗi lấy cuộc trò chuyện:", error);
     }
   }, [patientId]);
 
   useEffect(() => {
-    if (open) {
-      loadConversation();
-    }
-  }, [open, loadConversation]);
-
-  useEffect(() => {
     if (open && patientId) {
-      const interval = setInterval(() => loadConversation(), 15000); // 15 seconds
-      return () => clearInterval(interval);
+      setLoading(true);
+      fetchConversations();
+      setLoading(false);
     }
-  }, [open, patientId, loadConversation]);
+  }, [open, patientId, fetchConversations]);
 
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    if (conversationId) {
+      fetchMessages(conversationId);
     }
+  }, [conversationId, fetchMessages]);
+
+  useEffect(() => {
+    if (conversationId) {
+      const intervalId = setInterval(() => {
+        fetchMessages(conversationId); // Gọi lại API để cập nhật tin nhắn
+      }, 5000); // 5 giây
+
+      // Dọn dẹp interval khi component bị unmount hoặc conversationId thay đổi
+      return () => clearInterval(intervalId);
+    }
+  }, [conversationId, fetchMessages]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSendMessage = useCallback(async () => {
     if (!newMessage.trim() || !conversationId) return;
+
     const messageData = {
       conversationId,
       senderId: patientId,
@@ -80,11 +81,7 @@ const ChatPopup = ({ open, onCancel }) => {
       createdAt: new Date().toISOString(),
     };
 
-    const tempMessage = {
-      ...messageData,
-      _id: `temp_${Date.now()}`,
-      isPending: true,
-    };
+    const tempMessage = { ...messageData, _id: `temp_${Date.now()}`, isPending: true };
     setMessages((prev) => [...prev, tempMessage]);
     setNewMessage("");
 
@@ -98,13 +95,12 @@ const ChatPopup = ({ open, onCancel }) => {
               : msg
           )
         );
-      } else {
-        console.error("Message sending failed");
+        fetchMessages(conversationId);
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("❌ Lỗi gửi tin nhắn:", error);
     }
-  }, [newMessage, conversationId, patientId]);
+  }, [newMessage, conversationId, patientId, fetchMessages]);
 
   return (
     <CustomModal
@@ -115,10 +111,11 @@ const ChatPopup = ({ open, onCancel }) => {
       width={800}
       style={{ top: 20 }}
     >
-      <div className="chat-container-wrapper">
-        <div className="chat-body">
-          {loading === true && <div className="loading">Đang tải...</div>}
-          {messages.map((msg) => (
+      <div className="chat-body">
+        {loading ? (
+          <p>⏳ Đang tải tin nhắn...</p>
+        ) : messages.length > 0 ? (
+          messages.map((msg) => (
             <div
               key={msg._id}
               className={`message ${msg.senderType === "Patient" ? "patient" : "doctor"}`}
@@ -130,19 +127,21 @@ const ChatPopup = ({ open, onCancel }) => {
                   : "Đang gửi..."}
               </small>
             </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-        <div className="chat-footer">
-          <input
-            type="text"
-            placeholder="Nhập tin nhắn..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-          />
-          <button onClick={handleSendMessage}>Gửi</button>
-        </div>
+          ))
+        ) : (
+          <p className="empty-chat">Chưa có tin nhắn nào</p>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+      <div className="chat-footer">
+        <input
+          type="text"
+          placeholder="Nhập tin nhắn..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+        />
+        <button onClick={handleSendMessage}>Gửi</button>
       </div>
     </CustomModal>
   );

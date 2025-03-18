@@ -7,6 +7,7 @@ import { InfoRow } from "../../../../components/InfoRow";
 import { convertToVietnamTime } from "../../../../utils/timeConfig";
 import InvoiceServices from "../../../../services/InvoiceServices";
 import { formatCurrencyVND } from "../../../../utils/moneyConfig";
+import { Button } from "antd";
 
 const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
   const [loading, setLoading] = useState(false);
@@ -83,6 +84,16 @@ const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
               color="red"
             />
           </div>
+          {selectedAppointment.status === "Approved" && (
+            <Button
+              type="primary"
+              danger
+              // onClick={handleRejectAppointment}
+              style={{ width: "30%", margin: "0 auto" }}
+            >
+              Hủy lịch hẹn
+            </Button>
+          )}
         </div>
       </DetailAppointmentStyles>
     </CustomModal>

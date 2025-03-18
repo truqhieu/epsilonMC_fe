@@ -112,7 +112,7 @@ const AppointmentList = () => {
         }}
         pagination={{ pageSize: 10 }}
       />
-      {!!setIsOpenModal && (
+      {setIsOpenModal && (
         <AppointmentDetailModal
           open={isOpenModal}
           selectedAppointment={selectedAppointment}

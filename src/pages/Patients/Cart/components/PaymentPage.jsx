@@ -7,15 +7,7 @@ import CustomModal from "../../../../components/CustomModal";
 const PaymentPage = ({ amount, invoiceId, open, onCancel }) => {
   const qr_url = `https://qr.sepay.vn/img?acc=67808082002&bank=TPBank&amount=${amount}&des=TKPEH ${invoiceId}`;
   return (
-    <CustomModal
-      title="Thanh toán"
-      open={open}
-      onCancel={onCancel}
-      width={840}
-      footer={false}
-      closeIcon={false}
-      maskClosable={false}
-    >
+    <CustomModal title="Thanh toán" open={open} onCancel={onCancel} width={840} footer={false}>
       <PaymentContainer>
         <div className="payment-page">
           <img src={qr_url} alt="qr" />

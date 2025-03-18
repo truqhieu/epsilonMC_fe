@@ -8,6 +8,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import DoctorServices from "../../../services/DoctorServices";
 import { convertToVietnamTime } from "../../../utils/timeConfig";
+import { toast } from "react-toastify";
 
 const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -138,9 +139,11 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
         localStorage.setItem("invoiceId", res.invoiceId);
         setIsBooking(true);
         setCurrent(1);
+        toast.success(res?.message);
       }
     } catch (error) {
       console.log(error);
+      toast.error("Đặt lịch khám không thành công");
     } finally {
       setLoading(false);
     }

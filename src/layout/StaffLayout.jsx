@@ -42,6 +42,7 @@ const StaffLayout = () => {
   const routes = {
     doctor: [
       ROUTERS.DANH_SACH_LICH_HEN_TRUC_TIEP,
+      "online",
       ROUTERS.HO_SO_BENH_AN_BAC_SI,
       ROUTERS.CHAT_BENH_NHAN,
       ROUTERS.CAU_HOI_KHACH,

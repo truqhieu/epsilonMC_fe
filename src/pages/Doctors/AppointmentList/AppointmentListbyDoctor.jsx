@@ -130,7 +130,7 @@ const AppointmentListbyDoctor = () => {
               if (record.status === "Approved") {
                 setIsOpenModal(true);
                 setSelectedAppointment(record);
-              } else if (record.status === "Completed") {
+              } else if (record.status === "Completed" || record.status === "PendingPayment") {
                 setIsOpenReBookingForm(true);
                 setSelectedAppointment(record);
               }

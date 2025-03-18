@@ -132,6 +132,12 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
     sendEmail("rejected");
   };
 
+  const handleCancelAppointment = () => {
+    if (!appointment?._id) return;
+    updateAppointment(appointment._id, "Cancelled");
+    sendEmail("cancelled");
+  };
+
   const InfoRow = ({ label, value, isTag }) => (
     <div className="info-row">
       <strong>{label}</strong>
@@ -209,6 +215,25 @@ const AppointmentDetailModal = ({ open, onCancel, selectedAppointment }) => {
                 Từ chối lịch hẹn
               </Button>
             </div>
+          )}
+          {appointment.status === "Approved" && (
+            <Button
+              type="primary"
+              danger
+              onClick={handleCancelAppointment}
+              style={{ width: "30%", margin: "20px auto 5px" }}
+            >
+              Hủy lịch hẹn
+            </Button>
+          )}
+          {appointment.status === "PendingPayment" && (
+            <Button
+              type="primary"
+              className="button-action"
+              style={{ backgroundColor: "#389E0D", width: "30%", margin: "20px auto 5px" }}
+            >
+              Xác nhận thanh toán
+            </Button>
           )}
         </div>
       </DetailAppointment>
