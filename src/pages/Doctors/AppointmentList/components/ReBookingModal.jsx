@@ -18,20 +18,13 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [exam, setExam] = useState();
   const [listExam, setListExam] = useState([]);
-
   const [formBooking] = Form.useForm();
 
   const validateDate = (_, value) => {
-    if (!value) {
-      return Promise.reject("Vui lòng chọn ngày!");
-    }
-
+    if (!value) return Promise.reject("Vui lòng chọn ngày!");
     const minDate = dayjs().add(1, "day").startOf("day");
-
-    if (value.isBefore(minDate)) {
-      return Promise.reject("Ngày khám phải từ ngày " + minDate.format("DD/MM/YYYY") + " trở đi!");
-    }
-
+    if (value.isBefore(minDate))
+      return Promise.reject(`Ngày khám phải từ ngày ${minDate.format("DD/MM/YYYY")} trở đi!`);
     return Promise.resolve();
   };
 
@@ -39,11 +32,9 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
     try {
       setLoading(true);
       const res = await ExamServices.listExam(examinationType);
-      if (res.success) {
-        setListExam(res.exams);
-      }
+      if (res.success) setListExam(res.exams);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -51,37 +42,32 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
 
   useEffect(() => {
     getListExam();
-    if (examinationType === 1) {
-      getListExam();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [examinationType]);
 
-  const getMedicalRecord = async (appointmentId) => {
+  const getMedicalRecord = async () => {
+    if (!selectedAppointment) return;
     try {
       setLoading(true);
-      const res = await MedicalRecordServices.getListMedicalRecordByAppointment(appointmentId);
-      if (res.success) {
-        setMedicalRecord(res?.data);
-      }
-      console.log(medicalRecord);
+      const res = await MedicalRecordServices.getListMedicalRecordByAppointment(
+        selectedAppointment._id
+      );
+      if (res.success) setMedicalRecord(res?.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (selectedAppointment) {
-      getMedicalRecord(selectedAppointment._id);
-    }
+    getMedicalRecord();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedAppointment]);
 
+  // Update appointment logic
   const updateAppointment = async () => {
     try {
-      setLoading(true);
       const res = await AppointmentServices.updateAppointment(selectedAppointment._id, {
         doctor: selectedAppointment?.doctor,
         status: "Approved",
@@ -90,13 +76,9 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
         patientId: selectedAppointment?.patient?._id,
         typeAppointment: 2,
       });
-      if (res.success) {
-        sendEmailReminder();
-      }
+      if (res.success) sendEmailReminder();
     } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+      console.error(error);
     }
   };
 
@@ -113,29 +95,22 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
         amount: 5000,
         reAppointmentByDoctor: true,
       });
-      if (res?.success) {
-        updateAppointment();
-      }
+      if (res?.success) updateAppointment();
     } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+      console.error(error);
     }
   };
 
   const sendEmailReminder = async () => {
     try {
-      setLoading(true);
       const res = await AppointmentServices.sendMailReminder({
         email: selectedAppointment?.patient?.email,
         date: selectedDate,
         exam: exam?.examination,
       });
-      if (res.success) {
-        onCancel();
-      }
+      if (res.success) onCancel();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -144,12 +119,8 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
   const onSubmit = () => {
     formBooking
       .validateFields()
-      .then((values) => {
-        addAppointment(values);
-      })
-      .catch((errorInfo) => {
-        console.log("Validation Failed:", errorInfo);
-      });
+      .then((values) => addAppointment(values))
+      .catch((errorInfo) => console.log("Validation Failed:", errorInfo));
   };
 
   return (
@@ -196,7 +167,7 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
                   >
                     <Select
                       value={examinationType}
-                      onChange={(value) => setExaminationType(value)}
+                      onChange={setExaminationType}
                       placeholder="Chọn hình thức khám"
                       options={[
                         { value: 2, label: "Online" },
@@ -210,11 +181,10 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
                     name="examinationDate"
                     label="Ngày khám"
                     rules={[{ validator: validateDate }]}
-                    required
                   >
                     <DatePicker
                       value={selectedDate}
-                      onChange={(date) => setSelectedDate(date)}
+                      onChange={setSelectedDate}
                       format="DD/MM/YYYY"
                       placeholder="Chọn ngày khám"
                     />
@@ -243,11 +213,7 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
               </Row>
             </Form>
             <div className="button-action">
-              <Button
-                type="primary"
-                style={{ backgroundColor: "#0794DB" }}
-                onClick={() => onSubmit()}
-              >
+              <Button type="primary" style={{ backgroundColor: "#0794DB" }} onClick={onSubmit}>
                 Hẹn tái khám
               </Button>
             </div>

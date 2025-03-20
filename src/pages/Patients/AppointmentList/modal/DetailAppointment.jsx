@@ -8,10 +8,12 @@ import { convertToVietnamTime } from "../../../../utils/timeConfig";
 import InvoiceServices from "../../../../services/InvoiceServices";
 import { formatCurrencyVND } from "../../../../utils/moneyConfig";
 import { Button } from "antd";
+import AppointmentServices from "../../../../services/AppointmentServices";
 
 const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
   const [loading, setLoading] = useState(false);
   const [invoice, setInvoice] = useState({});
+  console.log("selectedAppointment", selectedAppointment);
 
   const getInvoice = async (id) => {
     try {
@@ -25,6 +27,51 @@ const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const sendEmail = async () => {
+    try {
+      setLoading(true);
+      const res = await AppointmentServices.sendMailRejected({
+        id: selectedAppointment._id,
+        email: selectedAppointment.patient.email,
+        date: selectedAppointment.examinationDate,
+        exam: selectedAppointment.exam_id.examination,
+      });
+      if (res.success) {
+        onCancel();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateAppointment = async (id, status) => {
+    try {
+      const res = await AppointmentServices.updateAppointment(id, {
+        doctor: selectedAppointment?.doctor?._id,
+        status: status,
+        date: selectedAppointment.examinationDate,
+        exam_id: selectedAppointment.exam_id._id,
+        patientId: selectedAppointment.patient._id,
+        typeAppointment: selectedAppointment?.typeAppointment,
+      });
+      if (res.success) {
+        onCancel();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRejectAppointment = () => {
+    if (!selectedAppointment?._id) return;
+    updateAppointment(selectedAppointment._id, "Cancelled");
+    sendEmail();
   };
 
   useEffect(() => {
@@ -84,16 +131,17 @@ const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
               color="red"
             />
           </div>
-          {selectedAppointment.status === "Approved" && (
-            <Button
-              type="primary"
-              danger
-              // onClick={handleRejectAppointment}
-              style={{ width: "30%", margin: "0 auto" }}
-            >
-              Hủy lịch hẹn
-            </Button>
-          )}
+          {selectedAppointment.status === "Approved" ||
+            (selectedAppointment.status === "PendingPayment" && (
+              <Button
+                type="primary"
+                danger
+                onClick={handleRejectAppointment}
+                style={{ width: "30%", margin: "0 auto" }}
+              >
+                Hủy lịch hẹn
+              </Button>
+            ))}
         </div>
       </DetailAppointmentStyles>
     </CustomModal>

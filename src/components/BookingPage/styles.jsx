@@ -60,6 +60,12 @@ export const BookingPageContainer = styled.div`
   .patient-icon {
     margin-right: 10px;
   }
+
+  @media (max-width: 1550px) {
+    .booking-page {
+      margin: 0vh 10vh;
+    }
+  }
 `;
 
 export const PaymentContainer = styled.div`

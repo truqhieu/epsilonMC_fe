@@ -53,6 +53,8 @@ const ViewProducts = () => {
     navigate(`/chi-tiet-san-pham/${productId}`);
   };
 
+  console.log(products);
+
   const addToCart = async (productId, event) => {
     event.stopPropagation();
     message.destroy(); // Xóa thông báo cũ trước khi hiển thị thông báo mới

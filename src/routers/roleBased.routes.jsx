@@ -71,6 +71,7 @@ export const staffRoutes = [
   { path: ROUTERS.HO_SO_BENH_AN_NHAN_VIEN, element: wrapWithLazy(MedicalRecords) },
   { path: ROUTERS.TRANG_THAI_DON_HANG, element: wrapWithLazy(CartStaff) },
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },
+  { path: ROUTERS.BOOKING, element: wrapWithLazy(Booking) },
 ];
 
 export const adminRoutes = [
@@ -142,4 +143,3 @@ export const guestRoutes = [
   { path: ROUTERS.SAN_PHAM, element: wrapWithLazy(ViewProducts) },
   { path: ROUTERS.NOTFOUND, element: wrapWithLazy(NotFound) },
 ];
-``;

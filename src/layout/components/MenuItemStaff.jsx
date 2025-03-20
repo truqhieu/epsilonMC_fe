@@ -4,6 +4,7 @@ import {
   FundOutlined,
   QuestionCircleOutlined,
   ShoppingCartOutlined,
+  SignatureOutlined,
   SolutionOutlined,
   TeamOutlined,
   UserAddOutlined,
@@ -49,6 +50,11 @@ export const menuItemsStaff = {
       key: "2",
       icon: <ShoppingCartOutlined />,
       label: "Trạng Thái Đơn Hàng",
+    },
+    {
+      key: "3",
+      icon: <SignatureOutlined />,
+      label: "Đặt lịch khám",
     },
   ],
   admin: [

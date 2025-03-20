@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { Col, DatePicker, Form, Input, Row, Select, Spin } from "antd";
-import { convertToVietnamTime } from "../../../utils/timeConfig";
 import dayjs from "dayjs";
 import ExamServices from "../../../services/ExamServices";
 import { useSelector } from "react-redux";
@@ -10,6 +9,7 @@ import PatientDetail from "../modal/PatientDetail";
 import DoctorDetail from "../modal/DoctorDetail";
 import PropTypes from "prop-types";
 import AppointmentServices from "../../../services/AppointmentServices";
+import { toast } from "react-toastify";
 
 const ReBookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
   const [loading, setLoading] = useState(true);
@@ -96,6 +96,34 @@ const ReBookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
         localStorage.setItem("invoiceId", res.invoiceId);
         setIsBooking(true);
         setCurrent(1);
+        updateReBooking({
+          appointmentId: res?.appointmentId,
+          doctorId: patient?.doctor?._id,
+          exam_id: exam,
+          examinationDate: selectedDate,
+        });
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+      const errorMessage = error?.response?.data?.message || "Đã có lỗi xảy ra. Vui lòng thử lại.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateReBooking = async (values) => {
+    try {
+      setLoading(true);
+      const res = await AppointmentServices.updateReBooking({
+        ...values,
+      });
+      if (res?.success) {
+        toast.success("Cập nhật lịch tái khám thành công");
+      } else {
+        toast.error(res.message);
       }
     } catch (error) {
       console.log(error);
@@ -171,8 +199,8 @@ const ReBookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                 required
               >
                 <DatePicker
-                  value={selectedDate ? convertToVietnamTime(selectedDate) : null}
-                  onChange={(date) => setSelectedDate(date ? convertToVietnamTime(date) : null)}
+                  value={selectedDate ? selectedDate : null}
+                  onChange={(date) => setSelectedDate(date ? date : null)}
                   format="DD/MM/YYYY"
                   placeholder="Chọn ngày khám"
                 />

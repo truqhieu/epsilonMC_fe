@@ -9,8 +9,7 @@ import {
 
 const getMedicalRecordById = (id) => http.get(apiGetMedicalRecordsById.replace(":id", id));
 const addMedicalRecord = (body) => http.post(apiAddMedicalRecord, body);
-const listMedicalRecordbyDoctorId = (param) =>
-  http.get(apiGetListMedicalRecordbyDoctorId.replace(":doctorId", param));
+const listMedicalRecordbyDoctorId = (body) => http.post(apiGetListMedicalRecordbyDoctorId, body);
 const listMedicalRecordbyPatientId = (param) =>
   http.get(apiGetListMedicalRecordbyPatientId.replace(":patientId", param));
 const getListMedicalRecordByAppointment = (param) =>

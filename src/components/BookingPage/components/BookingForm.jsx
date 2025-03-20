@@ -139,7 +139,8 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
         localStorage.setItem("invoiceId", res.invoiceId);
         setIsBooking(true);
         setCurrent(1);
-        toast.success(res?.message);
+      } else {
+        toast.error(res?.message);
       }
     } catch (error) {
       console.log(error);
