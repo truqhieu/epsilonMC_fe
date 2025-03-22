@@ -1,8 +1,12 @@
-// eslint-disable-next-line no-unused-vars
-import React from "react";
+import React from 'react';
+import StatisticsDashboard from '../../../components/ManagerDashboard/StatisticsDashboard';
 
 const ManagerDashboard = () => {
-  return <div>ManagerDashboard</div>;
+  return (
+    <div>
+      <StatisticsDashboard />
+    </div>
+  );
 };
 
 export default ManagerDashboard;
