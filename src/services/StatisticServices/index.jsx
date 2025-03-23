@@ -12,16 +12,8 @@ const getAppointmentStatistics = async () => {
     }
 };
 
-const getMonthlyAppointmentsByDoctor = async (year) => {
-    try {
-        const response = await http.get(`${apiGetMonthlyAppointmentsByDoctor}?year=${year}`);
-        console.log("📥 Dữ liệu trả về từ API getMonthlyAppointmentsByDoctor:", response);
-        return response;  
-    } catch (error) {
-        console.error("Error in getMonthlyAppointmentsByDoctor:", error);
-        throw error;
-    }
-};
+const getMonthlyAppointmentsByDoctor = async (year) => http.get(`${apiGetMonthlyAppointmentsByDoctor}?year=${year}`);
+
 
 const StatisticService = {
     getAppointmentStatistics,
