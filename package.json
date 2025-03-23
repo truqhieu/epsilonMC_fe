@@ -32,6 +32,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.1",
     "react-toastify": "^11.0.3",
+    "recharts": "^2.15.1",
     "sass": "^1.83.4",
     "styled-components": "^6.1.14",
     "timezone-support": "^3.1.0"
