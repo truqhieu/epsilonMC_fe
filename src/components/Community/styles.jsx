@@ -228,4 +228,16 @@ export const QuestionListContainer = styled.div`
     align-items: center;
     gap: 5px;
   }
+
+  .ant-card-hoverable:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .ant-list-item-meta-title {
+    margin-bottom: 8px !important;
+  }
+
+  .ant-comment-content-author {
+    margin-bottom: 8px;
+  }
 `;
