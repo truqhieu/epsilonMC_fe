@@ -58,7 +58,13 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
           className="login-form"
           style={{ width: "70%", margin: "auto" }}
         >
-          <Form.Item name="email" rules={[{ required: true, message: "Vui lòng nhập Email!" }]}>
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng nhập Email!" },
+              { type: "email", message: "Email không hợp lệ!" },
+            ]}
+          >
             <Input
               prefix={
                 <UserOutlined className="site-form-item-icon" style={{ paddingRight: "10px" }} />

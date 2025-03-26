@@ -15,7 +15,10 @@ const ConfirmBooking = ({ role }) => {
         <div className="note">
           Tài khoản hệ thống của bạn sẽ sớm được cấp. Hẹn gặp bạn tại buổi hẹn
         </div>
-        <button className="button-confirm" onClick={() => navigate(role ? `/${role}` : "/")}>
+        <button
+          className="button-confirm"
+          onClick={() => navigate(role === "staff" ? `/${role}` : "/")}
+        >
           Trở lại trang chủ
         </button>
       </div>

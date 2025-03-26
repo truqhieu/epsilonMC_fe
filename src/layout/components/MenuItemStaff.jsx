@@ -1,6 +1,7 @@
 import {
   BookOutlined,
   CommentOutlined,
+  FormOutlined,
   FundOutlined,
   QuestionCircleOutlined,
   ShoppingCartOutlined,
@@ -38,6 +39,11 @@ export const menuItemsStaff = {
       key: "5",
       icon: <QuestionCircleOutlined />,
       label: "Câu hỏi của khách",
+    },
+    {
+      key: "6",
+      icon: <FormOutlined />,
+      label: "Blog của tôi",
     },
   ],
   staff: [
