@@ -7,7 +7,8 @@ import {
   apiToggleLikeQuestion,
   apiGetDoctorAnsweredQuestions,
   apiGetCommentsByQuestionId,
-  apiGetAllGuestQuestionsForDoctors
+  apiGetAllGuestQuestionsForDoctors,
+  apiEditDoctorComment
 } from "./urls";
 
 
@@ -23,6 +24,7 @@ const toggleLikeQuestion = (body) => {
 const getDoctorAnsweredQuestions = (doctorId) => http.get(`${apiGetDoctorAnsweredQuestions}/${doctorId}`);
 const getCommentsByQuestionId = (questionId) => http.get(apiGetCommentsByQuestionId.replace(':questionId', questionId));
 const getAllGuestQuestionsForDoctors = (body) => http.get(apiGetAllGuestQuestionsForDoctors);
+const editDoctorComment = (body) => http.put(apiEditDoctorComment, body);
 
 
 const QuestionService = {
@@ -34,6 +36,7 @@ const QuestionService = {
   getDoctorAnsweredQuestions,
   getCommentsByQuestionId,
   getAllGuestQuestionsForDoctors,
+  editDoctorComment,
 };
 
 export default QuestionService;

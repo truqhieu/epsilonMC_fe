@@ -150,56 +150,85 @@ const QuestionList = () => {
  
   return (
     <QuestionListContainer>
-      <div style={{ maxWidth: 1000, margin: '0 auto', padding: '20px' }}>
+      <div style={{ 
+        maxWidth: 1200, 
+        margin: '0 auto', 
+        padding: '40px 20px',
+        background: '#f5f7fa' 
+      }}>
         <Typography.Title 
           level={2} 
           style={{ 
-            marginBottom: 32,
+            marginBottom: 40,
             textAlign: 'center',
-            color: '#1890ff'
+            color: '#1890ff',
+            fontSize: '2.5rem',
+            fontWeight: 600
           }}
         >
           Các câu hỏi đã được trả lời
         </Typography.Title>
         
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px' }}>
+          <div style={{ 
+            textAlign: 'center', 
+            padding: '80px',
+            background: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+          }}>
             <Spin size="large" />
           </div>
         ) : (
           <List
-            itemLayout="vertical"
+            grid={{
+              gutter: 24,
+              xs: 1,
+              sm: 1,
+              md: 1,
+              lg: 1,
+              xl: 1,
+              xxl: 1,
+            }}
             dataSource={questions}
             renderItem={(q) => (
               <Card 
                 style={{ 
                   marginBottom: 24,
-                  borderRadius: 12,
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+                  borderRadius: 16,
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                  background: 'white'
                 }}
                 hoverable
+                bodyStyle={{ padding: '24px 32px' }}
               >
                 <List.Item
                   actions={[
-                    <span 
-                      onClick={() => handleToggleLike(q._id)}
-                      style={{ 
-                        cursor: patientId ? 'pointer' : 'not-allowed',
-                        color: q.likedBy?.includes(patientId) ? '#ff4d4f' : 'inherit'
-                      }}
-                    >
-                      {q.likedBy?.includes(patientId) ? (
-                        <HeartFilled style={{ color: '#ff4d4f' }} />
-                      ) : (
-                        <HeartOutlined />
-                      )}{' '}
-                      {q.likes || 0} Thích
-                    </span>,
+                    <Tooltip title={patientId ? "Thích câu hỏi này" : "Đăng nhập để thích"}>
+                      <span 
+                        onClick={() => handleToggleLike(q._id)}
+                        style={{ 
+                          cursor: patientId ? 'pointer' : 'not-allowed',
+                          color: q.likedBy?.includes(patientId) ? '#ff4d4f' : 'inherit',
+                          fontSize: '16px'
+                        }}
+                      >
+                        {q.likedBy?.includes(patientId) ? (
+                          <HeartFilled style={{ color: '#ff4d4f', fontSize: '18px' }} />
+                        ) : (
+                          <HeartOutlined style={{ fontSize: '18px' }} />
+                        )}{' '}
+                        {q.likes || 0} Thích
+                      </span>
+                    </Tooltip>,
                     <span 
                       onClick={() => openModal(q)}
-                      style={{ cursor: 'pointer' }}
+                      style={{ 
+                        cursor: 'pointer',
+                        fontSize: '16px'
+                      }}
                     >
-                      <MessageOutlined /> {questionsWithComments[q._id] || 0} Bình luận
+                      <MessageOutlined style={{ fontSize: '18px' }} /> {questionsWithComments[q._id] || 0} Bình luận
                     </span>
                   ]}
                 >
@@ -208,8 +237,10 @@ const QuestionList = () => {
                       <Typography.Title 
                         level={4}
                         style={{ 
-                          marginBottom: 12,
-                          color: '#2c3e50'
+                          marginBottom: 16,
+                          color: '#2c3e50',
+                          fontSize: '22px',
+                          fontWeight: 600
                         }}
                       >
                         {q.title}
@@ -219,21 +250,33 @@ const QuestionList = () => {
                       <Typography.Text 
                         type="secondary"
                         style={{
-                          fontSize: '14px',
+                          fontSize: '15px',
                           display: 'block',
-                          marginBottom: 16
+                          marginBottom: 16,
+                          color: '#666'
                         }}
                       >
-                        {q.gender}, {q.age} tuổi • {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "Không xác định"}
+                        <span style={{ 
+                          background: '#e6f7ff', 
+                          padding: '4px 12px', 
+                          borderRadius: '12px',
+                          marginRight: '12px'
+                        }}>
+                          {q.gender}, {q.age} tuổi
+                        </span>
+                        {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "Không xác định"}
                       </Typography.Text>
                     }
                   />
                   <Typography.Paragraph
                     style={{
-                      fontSize: '15px',
+                      fontSize: '16px',
                       lineHeight: '1.8',
                       color: '#34495e',
-                      margin: '16px 0'
+                      margin: '20px 0',
+                      background: '#f8f9fa',
+                      padding: '16px',
+                      borderRadius: '12px'
                     }}
                   >
                     {q.content}
@@ -248,7 +291,12 @@ const QuestionList = () => {
           title={
             <Typography.Title 
               level={4}
-              style={{ margin: 0, color: '#1890ff' }}
+              style={{ 
+                margin: 0, 
+                color: '#1890ff',
+                fontSize: '24px',
+                fontWeight: 600 
+              }}
             >
               Chi tiết câu hỏi
             </Typography.Title>
@@ -256,9 +304,9 @@ const QuestionList = () => {
           open={isModalOpen}
           onCancel={closeModal}
           footer={null}
-          width={800}
+          width={900}
           style={{ top: 20 }}
-          bodyStyle={{ padding: '24px' }}
+          bodyStyle={{ padding: '32px' }}
         >
           {selectedQuestion && (
             <div>

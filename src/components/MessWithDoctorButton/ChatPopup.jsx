@@ -113,19 +113,19 @@ const ChatPopup = ({ open, onCancel }) => {
       width={800}
       style={{ top: 20 }}
     >
-      <div className="chat-body">
+      <div className="chat-body_pt">
         {loading ? (
-          <div className="loading-container">
+          <div className="loading-container_pt">
             <Spin size="large" tip="Đang tải tin nhắn..." />
           </div>
         ) : messages.length > 0 ? (
           messages.map((msg) => (
             <div
               key={msg._id}
-              className={`message ${msg.senderType === "Patient" ? "patient" : "doctor"}`}
+              className={`message_pt ${msg.senderType === "Patient" ? "patient_pt" : "doctor_pt"}`}
             >
-              <div className="message-content">{msg.content}</div>
-              <small className="message-time">
+              <div className="message-content_pt">{msg.content}</div>
+              <small className="message-time_pt">
                 {msg.createdAt
                   ? format(new Date(msg.createdAt), "HH:mm - dd/MM/yyyy")
                   : "Đang gửi..."}
@@ -135,12 +135,12 @@ const ChatPopup = ({ open, onCancel }) => {
         ) : (
           <Empty
             description="Chưa có tin nhắn nào"
-            className="empty-chat"
+            className="empty-chat_pt"
           />
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="chat-footer">
+      <div className="chat-footer_pt">
         <Input
           placeholder="Nhập tin nhắn..."
           value={newMessage}
@@ -151,7 +151,7 @@ const ChatPopup = ({ open, onCancel }) => {
               type="primary"
               icon={<SendOutlined />}
               onClick={handleSendMessage}
-              className="send-button"
+              className="send-button_pt"
             />
           }
         />
