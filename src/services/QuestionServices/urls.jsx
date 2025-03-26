@@ -8,3 +8,4 @@ export const apiGetDoctorAnsweredQuestions = "/question/doctor";
 export const apiToggleLikeQuestion = "/question/guest/toggle-like";
 export const apiGetCommentsByQuestionId = "question/:questionId/comments";
 export const apiGetAllGuestQuestionsForDoctors = "question/guest/all";
+export const apiEditDoctorComment = "/question/comment/edit";

@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import ConversationService from "../../services/ConversationServices/";
 import CustomModal from "../CustomModal";
 import "./ChatPopup.css";
+import { Input, Button, Spin, Empty } from 'antd';
+import { SendOutlined } from '@ant-design/icons';
 
 const ChatPopup = ({ open, onCancel }) => {
   const { user } = useSelector((state) => state.auth);
@@ -111,17 +113,19 @@ const ChatPopup = ({ open, onCancel }) => {
       width={800}
       style={{ top: 20 }}
     >
-      <div className="chat-body">
+      <div className="chat-body_pt">
         {loading ? (
-          <p>⏳ Đang tải tin nhắn...</p>
+          <div className="loading-container_pt">
+            <Spin size="large" tip="Đang tải tin nhắn..." />
+          </div>
         ) : messages.length > 0 ? (
           messages.map((msg) => (
             <div
               key={msg._id}
-              className={`message ${msg.senderType === "Patient" ? "patient" : "doctor"}`}
+              className={`message_pt ${msg.senderType === "Patient" ? "patient_pt" : "doctor_pt"}`}
             >
-              <p>{msg.content}</p>
-              <small className="message-time">
+              <div className="message-content_pt">{msg.content}</div>
+              <small className="message-time_pt">
                 {msg.createdAt
                   ? format(new Date(msg.createdAt), "HH:mm - dd/MM/yyyy")
                   : "Đang gửi..."}
@@ -129,19 +133,28 @@ const ChatPopup = ({ open, onCancel }) => {
             </div>
           ))
         ) : (
-          <p className="empty-chat">Chưa có tin nhắn nào</p>
+          <Empty
+            description="Chưa có tin nhắn nào"
+            className="empty-chat_pt"
+          />
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="chat-footer">
-        <input
-          type="text"
+      <div className="chat-footer_pt">
+        <Input
           placeholder="Nhập tin nhắn..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+          onPressEnter={handleSendMessage}
+          suffix={
+            <Button
+              type="primary"
+              icon={<SendOutlined />}
+              onClick={handleSendMessage}
+              className="send-button_pt"
+            />
+          }
         />
-        <button onClick={handleSendMessage}>Gửi</button>
       </div>
     </CustomModal>
   );

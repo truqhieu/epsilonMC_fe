@@ -19,6 +19,9 @@ const DoctorGuestQuestions = () => {
   const [doctorReply, setDoctorReply] = useState("");
   const [comments, setComments] = useState([]);
   const [loadingComments, setLoadingComments] = useState(false);
+  const [filter, setFilter] = useState('all'); // 'all', 'mine', 'pending', 'rejected'
+  const [editingComment, setEditingComment] = useState(null);
+  const [editContent, setEditContent] = useState('');
 
   useEffect(() => {
     fetchAllQuestions();
@@ -147,13 +150,81 @@ const DoctorGuestQuestions = () => {
     }
   };
 
+  const getFilteredQuestions = () => {
+    switch (filter) {
+      case 'mine':
+        return questions.filter(q => q.doctorId?._id === doctorId);
+      case 'pending':
+        return questions.filter(q => q.status === 'pending');
+      case 'rejected':
+        return questions.filter(q => q.status === 'rejected');
+      default:
+        return questions;
+    }
+  };
+
+  const handleEditComment = async (commentId) => {
+    if (!editContent.trim()) {
+      message.warning("Vui lòng nhập nội dung chỉnh sửa!");
+      return;
+    }
+
+    try {
+      await QuestionService.editDoctorComment({
+        questionId: selectedQuestion._id,
+        commentId,
+        doctorId,
+        content: editContent
+      });
+
+      message.success("Đã cập nhật bình luận!");
+      setEditingComment(null);
+      setEditContent('');
+      await fetchComments(selectedQuestion._id);
+    } catch (error) {
+      console.error("Error editing comment:", error);
+      message.error("Lỗi khi cập nhật bình luận!");
+    }
+  };
+
   return (
     <div className="container">
       <h2>Danh sách câu hỏi Guest</h2>
+      
+      <div className="filter-buttons" style={{ marginBottom: '20px' }}>
+        <Button 
+          type={filter === 'all' ? 'primary' : 'default'}
+          onClick={() => setFilter('all')}
+        >
+          Tất cả
+        </Button>
+        <Button 
+          type={filter === 'mine' ? 'primary' : 'default'}
+          onClick={() => setFilter('mine')}
+          style={{ marginLeft: '8px' }}
+        >
+          Câu hỏi của tôi
+        </Button>
+        <Button 
+          type={filter === 'pending' ? 'primary' : 'default'}
+          onClick={() => setFilter('pending')}
+          style={{ marginLeft: '8px' }}
+        >
+          Chờ tư vấn
+        </Button>
+        <Button 
+          type={filter === 'rejected' ? 'primary' : 'default'}
+          onClick={() => setFilter('rejected')}
+          style={{ marginLeft: '8px' }}
+        >
+          Đã từ chối
+        </Button>
+      </div>
+
       {loading ? (
         <Spin />
       ) : (
-        questions.map((q) => {
+        getFilteredQuestions().map((q) => {
           const isRejected = q.status === "rejected";
           const isOwnedByCurrentDoctor = q.doctorId?._id === doctorId || q.doctorId === doctorId;
           const isAnswered = q.doctorId && q.status !== "rejected";
@@ -235,8 +306,51 @@ const DoctorGuestQuestions = () => {
                     <p className="comment-doctor">
                       <strong>{c.doctorId?.name || "Bác sĩ ẩn danh"}</strong>
                     </p>
-                    <p className="comment-content">{c.content}</p>
-                    <p className="comment-time">{moment(c.createdAt).format("DD/MM/YYYY HH:mm")}</p>
+                    {editingComment === c._id ? (
+                      <>
+                        <TextArea
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                          autoSize
+                        />
+                        <Button 
+                          type="primary" 
+                          size="small" 
+                          onClick={() => handleEditComment(c._id)}
+                          style={{ marginTop: 8, marginRight: 8 }}
+                        >
+                          Lưu
+                        </Button>
+                        <Button 
+                          size="small" 
+                          onClick={() => {
+                            setEditingComment(null);
+                            setEditContent('');
+                          }}
+                        >
+                          Hủy
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <p className="comment-content">{c.content}</p>
+                        {c.doctorId?._id === doctorId && selectedQuestion.status !== 'rejected' && (
+                          <Button 
+                            type="link" 
+                            size="small"
+                            onClick={() => {
+                              setEditingComment(c._id);
+                              setEditContent(c.content);
+                            }}
+                          >
+                            Chỉnh sửa
+                          </Button>
+                        )}
+                      </>
+                    )}
+                    <p className="comment-time">
+                      {moment(c.createdAt).format("DD/MM/YYYY HH:mm")}
+                    </p>
                   </div>
                 ))
               ) : (
@@ -244,16 +358,21 @@ const DoctorGuestQuestions = () => {
               )}
             </div>
 
-            <TextArea
-              rows={4}
-              value={doctorReply}
-              onChange={(e) => setDoctorReply(e.target.value)}
-              placeholder="Nhập câu trả lời..."
-            />
-            <Button type="primary" onClick={handleAnswerQuestion} style={{ marginTop: 8 }}>
-              Gửi trả lời
-            </Button>
-            {selectedQuestion.status === "pending" && (
+            {selectedQuestion.status !== 'rejected' && (
+              <>
+                <TextArea
+                  rows={4}
+                  value={doctorReply}
+                  onChange={(e) => setDoctorReply(e.target.value)}
+                  placeholder="Nhập câu trả lời..."
+                />
+                <Button type="primary" onClick={handleAnswerQuestion} style={{ marginTop: 8 }}>
+                  Gửi trả lời
+                </Button>
+              </>
+            )}
+            
+            {selectedQuestion.status === 'pending' && (
               <Button type="danger" onClick={handleRejectQuestion} style={{ marginLeft: 8 }}>
                 Từ chối
               </Button>

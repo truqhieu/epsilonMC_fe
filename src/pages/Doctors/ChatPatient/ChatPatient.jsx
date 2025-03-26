@@ -19,6 +19,7 @@ const ChatPatient = () => {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const messagesEndRef = useRef(null);
 
@@ -116,14 +117,25 @@ const ChatPatient = () => {
     }
   }, [newMessage, selectedConversation, doctorId]);
 
+  // Thêm hàm lọc cuộc trò chuyện theo tên
+  const filteredConversations = conversations.filter((conv) =>
+    conv.patientName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="chat-container">
       <div className="chat-sidebar">
         <h3>Cuộc trò chuyện</h3>
+        <Input
+          placeholder="Tìm kiếm bệnh nhân..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ marginBottom: '10px' }}
+        />
         {loading ? (
           <Spin />
         ) : conversations.length > 0 ? (
-          conversations.map((conv) => (
+          filteredConversations.map((conv) => (
             <div
               key={conv._id}
               className={`chat-item ${selectedConversation?._id === conv._id ? "active" : ""}`}
