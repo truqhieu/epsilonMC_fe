@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { Form, Input, Radio, InputNumber, Button, Card } from "antd";
 import QuestionService from "../../services/QuestionServices";
-import { AskQuestionFormContainer } from "./styles";
 import { useSelector } from "react-redux"; // Lấy user từ Redux
 
 const AskQuestionForm = ({ onSuccess }) => {
@@ -18,24 +18,11 @@ const AskQuestionForm = ({ onSuccess }) => {
     return null; // Nếu là bệnh nhân, không hiển thị form
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!title || !content) {
-      alert("Vui lòng nhập đầy đủ thông tin!");
-      return;
-    }
-
-    if (!email || isNaN(age) || age < 1) {
-      alert("Vui lòng nhập email, tuổi và giới tính hợp lệ!");
-      return;
-    }
-
+  const handleSubmit = async (values) => {
     setLoading(true);
 
     try {
-      const payload = { title, content, gender, age, email }; // Chỉ khách mới có thể gửi
-      const response = await QuestionService.createGuestQuestion(payload);
+      const response = await QuestionService.createGuestQuestion(values);
 
       if (response.success) {
         alert("Câu hỏi của bạn đã được gửi thành công!");
@@ -56,61 +43,76 @@ const AskQuestionForm = ({ onSuccess }) => {
   };
 
   return (
-    <AskQuestionFormContainer>
-      <form className="ask-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Tiêu đề câu hỏi"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="Nội dung câu hỏi"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-        />
-        <div className="gender-age">
-          <label>
-            Tuổi:
-            <input
-              type="number"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Giới tính:
-            <input
-              type="radio"
-              name="gender"
-              value="Nam"
-              checked={gender === "Nam"}
-              onChange={() => setGender("Nam")}
-            /> Nam
-            <input
-              type="radio"
-              name="gender"
-              value="Nữ"
-              checked={gender === "Nữ"}
-              onChange={() => setGender("Nữ")}
-            /> Nữ
-          </label>
+    <Card title="Đặt câu hỏi" style={{ maxWidth: 600, margin: '0 auto', borderRadius: 8 }}>
+      <Form
+        layout="vertical"
+        onFinish={handleSubmit}
+        initialValues={{ gender: "Nam" }}
+      >
+        <Form.Item
+          name="title"
+          label="Tiêu đề câu hỏi"
+          rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}
+        >
+          <Input placeholder="Nhập tiêu đề câu hỏi của bạn" />
+        </Form.Item>
+
+        <Form.Item
+          name="content"
+          label="Nội dung câu hỏi"
+          rules={[{ required: true, message: 'Vui lòng nhập nội dung!' }]}
+        >
+          <Input.TextArea 
+            rows={4}
+            placeholder="Mô tả chi tiết câu hỏi của bạn"
+          />
+        </Form.Item>
+
+        <div style={{ display: 'flex', gap: 16 }}>
+          <Form.Item
+            name="age"
+            label="Tuổi"
+            rules={[{ required: true, message: 'Vui lòng nhập tuổi!' }]}
+            style={{ flex: 1 }}
+          >
+            <InputNumber min={1} style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Form.Item
+            name="gender"
+            label="Giới tính"
+            style={{ flex: 1 }}
+          >
+            <Radio.Group>
+              <Radio value="Nam">Nam</Radio>
+              <Radio value="Nữ">Nữ</Radio>
+            </Radio.Group>
+          </Form.Item>
         </div>
-        <input
-          type="email"
-          placeholder="Email của bạn (Dành cho khách)"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Đang gửi..." : "Gửi"}
-        </button>
-      </form>
-    </AskQuestionFormContainer>
+
+        <Form.Item
+          name="email"
+          label="Email"
+          rules={[
+            { required: true, message: 'Vui lòng nhập email!' },
+            { type: 'email', message: 'Email không hợp lệ!' }
+          ]}
+        >
+          <Input placeholder="Nhập email của bạn" />
+        </Form.Item>
+
+        <Form.Item>
+          <Button 
+            type="primary" 
+            htmlType="submit" 
+            loading={loading}
+            block
+          >
+            {loading ? "Đang gửi..." : "Gửi câu hỏi"}
+          </Button>
+        </Form.Item>
+      </Form>
+    </Card>
   );
 };
 

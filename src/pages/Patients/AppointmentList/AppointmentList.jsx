@@ -43,7 +43,7 @@ const AppointmentList = () => {
   useEffect(() => {
     getListAppointment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [showModal]);
 
   return (
     <AppointmentListPatient>

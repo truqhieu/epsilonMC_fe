@@ -10,6 +10,7 @@ import { Button, Col, DatePicker, Form, Row, Select } from "antd";
 import dayjs from "dayjs";
 import ExamServices from "../../../../services/ExamServices";
 import AppointmentServices from "../../../../services/AppointmentServices";
+import { toast } from "react-toastify";
 
 const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
   const [loading, setLoading] = useState(false);
@@ -70,7 +71,7 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
     try {
       const res = await AppointmentServices.updateAppointment(selectedAppointment._id, {
         doctor: selectedAppointment?.doctor,
-        status: "Approved",
+        status: "Completed",
         date: selectedDate,
         exam: exam?._id,
         patientId: selectedAppointment?.patient?._id,
@@ -95,9 +96,16 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
         amount: 5000,
         reAppointmentByDoctor: true,
       });
-      if (res?.success) updateAppointment();
+      if (res?.success === true) {
+        updateAppointment();
+      } else {
+        setLoading(false);
+        toast.error(res?.message || "Đặt lịch khám thất bại!");
+      }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 

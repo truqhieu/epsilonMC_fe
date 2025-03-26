@@ -131,17 +131,17 @@ const DetailAppointment = ({ open, onCancel, selectedAppointment }) => {
               color="red"
             />
           </div>
-          {selectedAppointment.status === "Approved" ||
-            (selectedAppointment.status === "PendingPayment" && (
-              <Button
-                type="primary"
-                danger
-                onClick={handleRejectAppointment}
-                style={{ width: "30%", margin: "0 auto" }}
-              >
-                Hủy lịch hẹn
-              </Button>
-            ))}
+          {(selectedAppointment.status === "Approved" ||
+            selectedAppointment.status === "PendingPayment") && (
+            <Button
+              type="primary"
+              danger
+              onClick={handleRejectAppointment}
+              style={{ width: "30%", margin: "0 auto" }}
+            >
+              Hủy lịch hẹn
+            </Button>
+          )}
         </div>
       </DetailAppointmentStyles>
     </CustomModal>

@@ -1,9 +1,12 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { Modal, Spin } from "antd";
+import { Modal, Spin, Card, List, Tooltip, Typography } from "antd";
 import { MessageOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { Comment } from "@ant-design/compatible";
 import QuestionService from "../../services/QuestionServices";
 import { QuestionListContainer } from "./styles";
 import { useSelector } from "react-redux";
+
 const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,6 +16,7 @@ const QuestionList = () => {
   const [loadingComments, setLoadingComments] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const patientId = user?.id;
+  const [questionsWithComments, setQuestionsWithComments] = useState({});
 
   useEffect(() => {
     fetchQuestions();
@@ -22,12 +26,22 @@ const QuestionList = () => {
     setLoading(true);
     try {
       const response = await QuestionService.getPublicApprovedQuestions();
-      const formattedQuestions = response.data?.map(q => ({
-        ...q,
-        likedBy: Array.isArray(q.likedBy) ? q.likedBy : [], // Đảm bảo `likedBy` luôn là mảng
-      })) || [];
-      
+      const formattedQuestions =
+        response.data?.map((q) => ({
+          ...q,
+          likedBy: Array.isArray(q.likedBy) ? q.likedBy : [],
+        })) || [];
+
       setQuestions(formattedQuestions);
+
+      // Fetch số lượng comment cho mỗi câu hỏi
+      const commentsCount = {};
+      await Promise.all(
+        formattedQuestions.map(async (q) => {
+          commentsCount[q._id] = await fetchQuestionComments(q._id);
+        })
+      );
+      setQuestionsWithComments(commentsCount);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách câu hỏi:", error);
       setQuestions([]);
@@ -35,7 +49,16 @@ const QuestionList = () => {
       setLoading(false);
     }
   };
-  
+
+  const fetchQuestionComments = async (questionId) => {
+    try {
+      const response = await QuestionService.getCommentsByQuestionId(questionId);
+      return response.data?.length || 0;
+    } catch (error) {
+      console.error("Lỗi khi lấy số lượng comment:", error);
+      return 0;
+    }
+  };
 
   const fetchComments = async (questionId) => {
     setLoadingComments(true);
@@ -67,133 +90,324 @@ const QuestionList = () => {
   // Frontend - QuestionList Component
   const handleToggleLike = async (questionId) => {
     if (!patientId) {
-      console.error("Không thể like vì patientId chưa được tải từ Redux");
+      Modal.warning({
+        title: "Thông báo",
+        content: "Bạn cần đăng nhập để thực hiện chức năng này",
+      });
       return;
     }
-  
+
+    console.log("Attempting to toggle like for:", { questionId, patientId });
+
+    // Lưu lại trạng thái cũ để phục hồi UI nếu lỗi xảy ra
+    const previousQuestions = [...questions];
+    const updatedQuestions = questions.map((q) =>
+      q._id === questionId
+        ? {
+            ...q,
+            likedBy: q.likedBy.includes(patientId)
+              ? q.likedBy.filter((id) => id !== patientId)
+              : [...q.likedBy, patientId],
+            likes: q.likedBy.includes(patientId) ? q.likes - 1 : q.likes + 1,
+          }
+        : q
+    );
+
+    // Cập nhật giao diện tạm thời trước khi gọi API
+    setQuestions(updatedQuestions);
+
     try {
       const response = await QuestionService.toggleLikeQuestion({
         questionId,
         patientId,
       });
-  
-      setQuestions((prevQuestions) =>
-        prevQuestions.map((q) =>
-          q._id === questionId
-            ? { 
-                ...q, 
-                likedBy: Array.isArray(response.data.likedBy) ? response.data.likedBy : [], 
-                likes: Array.isArray(response.data.likedBy) ? response.data.likedBy.length : 0 
-              }
-            : q
-        )
-      );
+
+      if (response?.success) {
+        console.log("API phản hồi thành công:", response);
+        // Cập nhật dữ liệu UI theo phản hồi từ server
+        setQuestions((prevQuestions) =>
+          prevQuestions.map((q) =>
+            q._id === questionId
+              ? {
+                  ...q,
+                  likedBy: response.likedBy,
+                  likes: response.likes,
+                }
+              : q
+          )
+        );
+      } else {
+        throw new Error("Lỗi khi xử lý yêu cầu. Vui lòng thử lại sau.");
+      }
     } catch (error) {
-      console.error("Lỗi khi like/unlike:", error);
+      console.error("Lỗi chi tiết khi like/unlike:", error.message || error);
+      // Hoàn tác lại UI nếu xảy ra lỗi
+      setQuestions(previousQuestions);
+      Modal.error({
+        title: "Lỗi",
+        content: "Không thể thực hiện thao tác này, vui lòng thử lại sau",
+      });
     }
   };
-  
-  
+
   return (
     <QuestionListContainer>
-    <div className="question-list-container">
-      <h3 className="question-list-title">Các câu hỏi đã được trả lời</h3>
-      {loading ? (
-        <p className="loading-text">Đang tải dữ liệu...</p>
-      ) : questions.length === 0 ? (
-        <p className="no-question-text">Chưa có câu hỏi nào.</p>
-      ) : (
-        questions.map((q) => {
-          const isLiked = Array.isArray(q?.likedBy) && q.likedBy.some((id) => id.toString() === patientId);
-
-
-          return (
-            <div key={q._id} className="question-item">
-              <h4 className="question-title">{q.title}</h4>
-              <p className="question-meta">
-                <strong>{q.gender}, {q.age} tuổi</strong>
-              </p>
-              <p className="question-content">{q.content}</p>
-              <p className="question-date">
-                📅 {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "Không xác định"}
-              </p>
-              <div className="question-footer">
-                <span className="question-reply" onClick={() => openModal(q)}>
-                  <MessageOutlined className="reply-icon" />  Bình luận
-                </span>
-                {/* <span
-                  className="question-thanks"
-                  onClick={() => handleToggleLike(q._id)}
-                >
-                  {isLiked ? (
-                    <HeartFilled style={{ color: "red" }} />
-                  ) : (
-                    <HeartOutlined />
-                  )}
-                  {q.likedBy?.length || 0} Cảm ơn
-                </span> */}
-              </div>
-            </div>
-          );
-        })
-      )}
-
-      <Modal
-        title="Chi tiết câu hỏi"
-        open={isModalOpen}
-        onCancel={closeModal}
-        footer={null}
+      <div
+        style={{
+          maxWidth: 1200,
+          margin: "0 auto",
+          padding: "40px 20px",
+          background: "#f5f7fa",
+        }}
       >
-        {selectedQuestion ? (
-          <div className="modal-content">
-            <h4 className="modal-question-title">{selectedQuestion.title}</h4>
-            <p className="modal-question-meta">
-              <strong>{selectedQuestion.gender}, {selectedQuestion.age} tuổi</strong>
-            </p>
-            <p className="modal-question-content">{selectedQuestion.content}</p>
-            <p className="modal-question-date">
-              📅 Ngày hỏi: {selectedQuestion.createdAt ? new Date(selectedQuestion.createdAt).toLocaleDateString() : "Không xác định"}
-            </p>
-            <div className="question-footer">
-              <span className="question-reply">
-                <MessageOutlined className="reply-icon" /> {comments.length} Bình luận
-              </span>
-              <span className="question-thanks">
-                {/* ❤️ {selectedQuestion.likedBy?.length || 0} Cảm ơn */}
-              </span>
-            </div>
+        <Typography.Title
+          level={2}
+          style={{
+            marginBottom: 40,
+            textAlign: "center",
+            color: "#1890ff",
+            fontSize: "2.5rem",
+            fontWeight: 600,
+          }}
+        >
+          Các câu hỏi đã được trả lời
+        </Typography.Title>
 
-            <div className="comments-section">
-              <h4>Bình luận</h4>
-              {loadingComments ? (
-                <Spin />
-              ) : comments.length > 0 ? (
-                comments.map((c, index) => (
-                  <div key={index} className="comment-item">
-                    <p className="comment-meta">
-                      <strong>
-                        {c.doctorId ? `Bác sĩ ${c.doctorId.name || "Không rõ"}` : c.patientId ? `Bệnh nhân ${selectedQuestion.gender}, ${selectedQuestion.age} tuổi` : "Người dùng"}
-                      </strong>
-                    </p>
-                    <p className="comment-content">{c.content || "Không có nội dung"}</p>
-                    <p className="comment-date">
-                      ⏳ {c.createdAt ? new Date(c.createdAt).toLocaleString() : "Không rõ thời gian"}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <p>Chưa có bình luận nào.</p>
-              )}
-            </div>
+        {loading ? (
+          <div
+            style={{
+              textAlign: "center",
+              padding: "80px",
+              background: "white",
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+            }}
+          >
+            <Spin size="large" />
           </div>
         ) : (
-          <p className="no-data">Không có dữ liệu.</p>
+          <List
+            grid={{
+              gutter: 24,
+              xs: 1,
+              sm: 1,
+              md: 1,
+              lg: 1,
+              xl: 1,
+              xxl: 1,
+            }}
+            dataSource={questions}
+            renderItem={(q) => (
+              <Card
+                style={{
+                  marginBottom: 24,
+                  borderRadius: 16,
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+                  background: "white",
+                }}
+                hoverable
+                bodyStyle={{ padding: "24px 32px" }}
+              >
+                <List.Item
+                  actions={[
+                    <Tooltip
+                      title={patientId ? "Thích câu hỏi này" : "Đăng nhập để thích"}
+                      key="like"
+                    >
+                      <span
+                        onClick={() => handleToggleLike(q._id)}
+                        style={{
+                          cursor: patientId ? "pointer" : "not-allowed",
+                          color: q.likedBy?.includes(patientId) ? "#ff4d4f" : "inherit",
+                          fontSize: "16px",
+                          marginLeft: "-48px",
+                        }}
+                      >
+                        {q.likedBy?.includes(patientId) ? (
+                          <HeartFilled style={{ color: "#ff4d4f", fontSize: "18px" }} />
+                        ) : (
+                          <HeartOutlined style={{ fontSize: "18px" }} />
+                        )}{" "}
+                        {q.likes || 0} Thích
+                      </span>
+                    </Tooltip>,
+                    <span
+                      onClick={() => openModal(q)}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "16px",
+                      }}
+                      key="comment"
+                    >
+                      <MessageOutlined style={{ fontSize: "18px" }} />{" "}
+                      {questionsWithComments[q._id] || 0} Bình luận
+                    </span>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={
+                      <Typography.Title
+                        level={4}
+                        style={{
+                          marginBottom: 16,
+                          color: "#2c3e50",
+                          fontSize: "22px",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {q.title}
+                      </Typography.Title>
+                    }
+                    description={
+                      <Typography.Text
+                        type="secondary"
+                        style={{
+                          fontSize: "15px",
+                          display: "block",
+                          marginBottom: 16,
+                          color: "#666",
+                        }}
+                      >
+                        <span
+                          style={{
+                            background: "#e6f7ff",
+                            padding: "4px 12px",
+                            borderRadius: "12px",
+                            marginRight: "12px",
+                          }}
+                        >
+                          {q.gender}, {q.age} tuổi
+                        </span>
+                        {q.createdAt
+                          ? new Date(q.createdAt).toLocaleDateString()
+                          : "Không xác định"}
+                      </Typography.Text>
+                    }
+                  />
+                  <Typography.Paragraph
+                    style={{
+                      fontSize: "16px",
+                      lineHeight: "1.8",
+                      color: "#34495e",
+                      margin: "20px 0",
+                      background: "#f8f9fa",
+                      padding: "16px",
+                      borderRadius: "12px",
+                    }}
+                  >
+                    {q.content}
+                  </Typography.Paragraph>
+                </List.Item>
+              </Card>
+            )}
+          />
         )}
-      </Modal>
-    </div>
+
+        <Modal
+          title={
+            <Typography.Title
+              level={4}
+              style={{
+                margin: 0,
+                color: "#1890ff",
+                fontSize: "24px",
+                fontWeight: 600,
+              }}
+            >
+              Chi tiết câu hỏi
+            </Typography.Title>
+          }
+          open={isModalOpen}
+          onCancel={closeModal}
+          footer={null}
+          width={900}
+          style={{ top: 20 }}
+          bodyStyle={{ padding: "32px" }}
+        >
+          {selectedQuestion && (
+            <div>
+              <Typography.Title level={4} style={{ color: "#2c3e50" }}>
+                {selectedQuestion.title}
+              </Typography.Title>
+              <Typography.Text
+                type="secondary"
+                style={{
+                  display: "block",
+                  marginBottom: 16,
+                  fontSize: "14px",
+                }}
+              >
+                {selectedQuestion.gender}, {selectedQuestion.age} tuổi
+              </Typography.Text>
+              <Typography.Paragraph
+                style={{
+                  fontSize: "15px",
+                  lineHeight: "1.8",
+                  color: "#34495e",
+                  margin: "16px 0",
+                  padding: "16px",
+                  background: "#f8f9fa",
+                  borderRadius: "8px",
+                }}
+              >
+                {selectedQuestion.content}
+              </Typography.Paragraph>
+
+              <Typography.Title
+                level={5}
+                style={{
+                  marginTop: 32,
+                  color: "#1890ff",
+                }}
+              >
+                Bình luận ({comments.length})
+              </Typography.Title>
+
+              {loadingComments ? (
+                <div style={{ textAlign: "center", padding: "32px" }}>
+                  <Spin />
+                </div>
+              ) : (
+                <List
+                  itemLayout="vertical"
+                  dataSource={comments}
+                  renderItem={(comment) => (
+                    <Comment
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        padding: "16px",
+                        borderRadius: "8px",
+                        marginBottom: "16px",
+                      }}
+                      author={
+                        <Typography.Text strong style={{ color: "#1890ff" }}>
+                          {comment.doctorId
+                            ? `Bác sĩ ${comment.doctorId.name || "Không rõ"}`
+                            : "Người dùng"}
+                        </Typography.Text>
+                      }
+                      content={
+                        <Typography.Text style={{ fontSize: "14px" }}>
+                          {comment.content}
+                        </Typography.Text>
+                      }
+                      datetime={
+                        <Tooltip title={new Date(comment.createdAt).toLocaleString()}>
+                          <Typography.Text type="secondary" style={{ fontSize: "12px" }}>
+                            {new Date(comment.createdAt).toLocaleString()}
+                          </Typography.Text>
+                        </Tooltip>
+                      }
+                    />
+                  )}
+                />
+              )}
+            </div>
+          )}
+        </Modal>
+      </div>
     </QuestionListContainer>
   );
-  
 };
 
 export default QuestionList;
