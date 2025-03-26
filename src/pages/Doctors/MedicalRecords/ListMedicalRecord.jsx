@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { TableCustom } from "../../Staffs/AppointmentList/styles";
 import { convertToVietnamTime } from "../../../utils/timeConfig";
 import { getColorByStatus } from "../../../utils/getColorByStatus";
-import { Tag } from "antd";
+import { Col, Input, Row, Tag } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import MedicalRecordDetail from "./modal/MedicalRecordDetail";
@@ -14,6 +14,9 @@ const ListMedicalRecord = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState("");
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [search, setSearch] = useState("");
 
   const { user } = useSelector((state) => state.auth);
   const doctorId = user?.id;
@@ -21,12 +24,16 @@ const ListMedicalRecord = () => {
   const getListMedicalRecord = async () => {
     try {
       setLoading(true);
-      const res = await MedicalRecordServices.listMedicalRecordbyDoctorId(
-        doctorId
-      );
+      const res = await MedicalRecordServices.listMedicalRecordbyDoctorId({
+        doctorId,
+        page: page,
+        limit: 10,
+        search: search,
+      });
 
       if (res.success) {
         setData(res.data);
+        setTotal(res.total);
       }
     } catch (error) {
       console.log(error);
@@ -38,7 +45,7 @@ const ListMedicalRecord = () => {
   useEffect(() => {
     getListMedicalRecord();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpenModal]);
+  }, [isOpenModal, page, search]);
 
   const columns = [
     {
@@ -65,16 +72,13 @@ const ListMedicalRecord = () => {
     {
       title: "Ngày khám",
       key: "date",
-      render: (record) =>
-        convertToVietnamTime(record?.appointmentId?.examinationDate),
+      render: (record) => convertToVietnamTime(record?.appointmentId?.examinationDate),
     },
     {
       title: "Ca khám",
       key: "exam",
       render: (record) => {
-        return record?.appointmentId?.examinationType === 1
-          ? "Trực tiếp"
-          : "Online";
+        return record?.appointmentId?.examinationType === 1 ? "Trực tiếp" : "Online";
       },
     },
     {
@@ -97,6 +101,17 @@ const ListMedicalRecord = () => {
   ];
   return (
     <>
+      <Row gutter={24} style={{ marginBottom: "20px" }}>
+        <Col span={12} style={{ marginTop: "10px" }}>
+          <div style={{ marginBottom: "5px" }}>Tìm kiếm theo tên bệnh nhân</div>
+          <Input.Search
+            placeholder="Tìm kiếm"
+            allowClear
+            onSearch={(value) => setSearch(value)}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Col>
+      </Row>
       <TableCustom
         columns={columns}
         loading={loading}
@@ -111,7 +126,12 @@ const ListMedicalRecord = () => {
             },
           };
         }}
-        pagination={{ pageSize: 10 }}
+        pagination={{
+          total: total,
+          pageSize: 10,
+          current: page,
+          onChange: (page) => setPage(page),
+        }}
       />
       {!!setIsOpenModal && (
         <MedicalRecordDetail

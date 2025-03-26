@@ -51,25 +51,17 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
           />
           <div className="title-login">Đăng nhập cho Nhân Viên</div>
         </div>
-        {loginError ? (
-          <div className="error">Email Hoặc Mật Khẩu không đúng!</div>
-        ) : null}
+        {loginError ? <div className="error">Email Hoặc Mật Khẩu không đúng!</div> : null}
         <Form
           form={formLogin}
           name="normal_login"
           className="login-form"
           style={{ width: "70%", margin: "auto" }}
         >
-          <Form.Item
-            name="email"
-            rules={[{ required: true, message: "Vui lòng nhập Email!" }]}
-          >
+          <Form.Item name="email" rules={[{ required: true, message: "Vui lòng nhập Email!" }]}>
             <Input
               prefix={
-                <UserOutlined
-                  className="site-form-item-icon"
-                  style={{ paddingRight: "10px" }}
-                />
+                <UserOutlined className="site-form-item-icon" style={{ paddingRight: "10px" }} />
               }
               placeholder="Vui lòng nhập Email"
             />
@@ -78,16 +70,17 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
             name="password"
             rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
           >
-            <Input
+            <Input.Password
               prefix={
-                <LockOutlined
-                  className="site-form-item-icon"
-                  style={{ paddingRight: "10px" }}
-                />
+                <LockOutlined className="site-form-item-icon" style={{ paddingRight: "10px" }} />
               }
-              type="password"
               placeholder="Mật khẩu"
               onPressEnter={loginAccout}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  loginAccout();
+                }
+              }}
             />
           </Form.Item>
           <Form.Item>

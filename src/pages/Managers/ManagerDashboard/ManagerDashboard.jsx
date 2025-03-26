@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './style/managerDashboard.css';
-// import AppointmentStats from '../../../components/Statistics/AppointmentStats';
-// import DoctorStats from '../../../components/Statistics/DoctorStats.jsx';
 import ProductRevenue from '../../../components/Statistics/ProductRevenue';
 import AppointmentRevenue from '../../../components/Statistics/AppointmentRevenue';
+import AppointmentStats from '../../../components/Statistics/AppointmentStats';
+import DoctorStats from '../../../components/Statistics/DoctorStats.jsx';
 import { FaChartPie, FaUserMd, FaShoppingCart, FaStethoscope } from 'react-icons/fa';
 
 const ManagerDashboard = () => {

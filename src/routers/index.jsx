@@ -20,7 +20,6 @@ const ROUTERS = {
   CHI_TIET_SAN_PHAM: "chi-tiet-san-pham",
   LICH_SU_MUA_HANG: "lich-su-mua-hang",
 
-
   // Bác sĩ
   DASHBOARD_DOCTOR: "",
   DANH_SACH_LICH_HEN_TRUC_TIEP: "lich-hen-truc-tiep",
@@ -32,7 +31,7 @@ const ROUTERS = {
   DASHBOARD_STAFF: "",
   DANH_SACH_LICH_KHAM: "danh-sach-lich-kham",
   HO_SO_BENH_AN_NHAN_VIEN: "ho-so-benh-an",
-  TRANG_THAI_DON_HANG:"trang-thai-don-hang",
+  TRANG_THAI_DON_HANG: "trang-thai-don-hang",
   // Quản lý
   DASHBOARD_MANAGER: "",
   MANAGE_EMPLOYEES: "danh-sach-nhan-vien",
@@ -40,6 +39,7 @@ const ROUTERS = {
   MANAGE_PATIENTS: "danh-sach-benh-nhan",
 
   // Admin
+  DASHBOARD_ADMIN: "",
   XEM_DANH_SACH_ACCOUNT: "danh-sach-account",
   TAO_ACCOUNT: "tao-tai-khoan",
 };

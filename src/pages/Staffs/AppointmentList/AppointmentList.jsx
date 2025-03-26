@@ -3,26 +3,32 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import AppointmentServices from "../../../services/AppointmentServices";
 import { TableCustom } from "./styles";
-import { Tag } from "antd";
+import { Col, Input, Row, Tag } from "antd";
 import AppointmentDetailModal from "./components/AppointmentDetailModal";
 import { getColorByStatus } from "../../../utils/getColorByStatus";
 import { convertToVietnamTime } from "../../../utils/timeConfig";
+import { formatCurrencyVND } from "../../../utils/moneyConfig";
 
 const AppointmentList = () => {
   const [loading, setLoading] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState("");
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [search, setSearch] = useState("");
 
   const listAppointment = async () => {
     try {
       setLoading(true);
       const res = await AppointmentServices.listAppointment({
-        page: 1,
+        page: page,
         limit: 10,
+        search: search,
       });
       if (res.success) {
         setData(res.data);
+        setTotal(res.total);
       }
     } catch (error) {
       console.log(error);
@@ -33,7 +39,8 @@ const AppointmentList = () => {
 
   useEffect(() => {
     listAppointment();
-  }, [isOpenModal]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpenModal, page, search]);
 
   const columns = [
     {
@@ -78,7 +85,7 @@ const AppointmentList = () => {
     {
       title: "Viện phí",
       key: "amount",
-      render: (record) => record.amount,
+      render: (record) => formatCurrencyVND(record.amount),
     },
     {
       title: "Trạng thái",
@@ -96,6 +103,17 @@ const AppointmentList = () => {
 
   return (
     <>
+      <Row gutter={24} style={{ marginBottom: "20px" }}>
+        <Col span={12} style={{ marginTop: "10px" }}>
+          <div style={{ marginBottom: "5px" }}>Tìm kiếm theo tên bệnh nhân</div>
+          <Input.Search
+            placeholder="Tìm kiếm"
+            allowClear
+            onSearch={(value) => setSearch(value)}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Col>
+      </Row>
       <TableCustom
         columns={columns}
         dataSource={data}
@@ -110,9 +128,14 @@ const AppointmentList = () => {
             },
           };
         }}
-        pagination={{ pageSize: 10 }}
+        pagination={{
+          total: total,
+          pageSize: 10,
+          current: page,
+          onChange: (page) => setPage(page),
+        }}
       />
-      {!!setIsOpenModal && (
+      {setIsOpenModal && (
         <AppointmentDetailModal
           open={isOpenModal}
           selectedAppointment={selectedAppointment}

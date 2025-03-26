@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { TableCustom } from "../../Staffs/AppointmentList/styles";
 import { getColorByStatus } from "../../../utils/getColorByStatus";
-import { Tag } from "antd";
+import { Col, Input, Row, Tag } from "antd";
 import { convertToVietnamTime } from "../../../utils/timeConfig";
 import moment from "moment";
 import AppointmentServices from "../../../services/AppointmentServices";
@@ -17,7 +17,10 @@ const AppointmentListbyDoctor = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenReBookingForm, setIsOpenReBookingForm] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [textSearch, setTextSearch] = useState("");
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const { user } = useSelector((state) => state.auth);
   const doctorId = user?.id;
@@ -28,12 +31,14 @@ const AppointmentListbyDoctor = () => {
       const res = await AppointmentServices.listAppointmentDoctor({
         doctorId,
         examinationType: 1,
-        page: 1,
+        page: page,
         limit: 10,
+        search: textSearch,
       });
 
       if (res.success) {
         setData(res.data);
+        setTotal(res.total);
       }
     } catch (error) {
       console.log(error);
@@ -45,17 +50,19 @@ const AppointmentListbyDoctor = () => {
   useEffect(() => {
     getListAppointmentDoctor();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpenModal]);
+  }, [isOpenModal, isOpenReBookingForm, textSearch]);
 
   const columns = [
     {
       title: "Họ và tên",
       key: "name",
+      width: 200,
       render: (record) => record.patient.name,
     },
     {
       title: "Tuổi",
       key: "age",
+      width: 60,
       render: (record) => {
         const birthday = moment(record.patient.birthDay, "YYYY-MM-DD");
         const age = moment().diff(birthday, "years");
@@ -63,18 +70,15 @@ const AppointmentListbyDoctor = () => {
       },
     },
     {
-      title: "Số Điện Thoại",
-      key: "phone",
-      render: (record) => record.patient.phone,
-    },
-    {
       title: "Ngày khám",
       key: "date",
+      width: 140,
       render: (record) => convertToVietnamTime(record.examinationDate),
     },
     {
       title: "Ca khám",
       key: "exam",
+      width: 140,
       render: (record) => record.exam_id.examination,
     },
     {
@@ -85,6 +89,7 @@ const AppointmentListbyDoctor = () => {
     {
       title: "Trạng thái",
       key: "status",
+      width: 120,
       render: (record) => {
         const color = getColorByStatus(record?.status);
         return (
@@ -97,9 +102,11 @@ const AppointmentListbyDoctor = () => {
     {
       title: "",
       key: "action",
+      width: 40,
       render: (record) => {
         return (
-          record.status === "Completed" && (
+          record?.isRebooking === false &&
+          record?.status === "Completed" && (
             <ButtonCircle
               title="Đặt lịch tái khám"
               enable={true}
@@ -118,6 +125,17 @@ const AppointmentListbyDoctor = () => {
   ];
   return (
     <>
+      <Row gutter={24} style={{ marginBottom: "20px" }}>
+        <Col span={12} style={{ marginTop: "10px" }}>
+          <div style={{ marginBottom: "5px" }}>Tìm kiếm theo tên bệnh nhân</div>
+          <Input.Search
+            placeholder="Tìm kiếm"
+            allowClear
+            onSearch={(value) => setTextSearch(value)}
+            onChange={(e) => setTextSearch(e.target.value)}
+          />
+        </Col>
+      </Row>
       <TableCustom
         columns={columns}
         loading={loading}
@@ -130,14 +148,19 @@ const AppointmentListbyDoctor = () => {
               if (record.status === "Approved") {
                 setIsOpenModal(true);
                 setSelectedAppointment(record);
-              } else if (record.status === "Completed") {
+              } else if (record?.isRebooking === false) {
                 setIsOpenReBookingForm(true);
                 setSelectedAppointment(record);
               }
             },
           };
         }}
-        pagination={{ pageSize: 10 }}
+        pagination={{
+          total: total,
+          pageSize: 10,
+          current: page,
+          onChange: (page) => setPage(page),
+        }}
       />
       {isOpenModal && (
         <AppointmentDetail

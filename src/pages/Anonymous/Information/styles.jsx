@@ -290,6 +290,20 @@ export const InformationStyled = styled.div`
     font-size: 14px;
     color: #777;
   }
+
+  .question-doctor {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px auto 30px;
+    padding: 20px;
+    background-color: #3e70a7;
+    color: white;
+    border-radius: 50px;
+    border: 1px solid #9ad8e2;
+    cursor: pointer;
+  }
 `;
 
 export const ListQuestionByDoctorStyled = styled.div`
@@ -441,4 +455,3 @@ export const ListQuestionByDoctorStyled = styled.div`
     padding: 10px;
   }
 `;
-

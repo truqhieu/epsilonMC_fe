@@ -50,6 +50,8 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
       }
     } catch (error) {
       console.error("Verify OTP Failed:", error);
+      const errorMessage = error?.response?.data?.message || "Đã có lỗi xảy ra. Vui lòng thử lại.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -100,9 +102,7 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
           />
           <div className="title-login">Đăng nhập cho Bệnh Nhân</div>
         </div>
-        {sendOTP ? (
-          <div className="error">Gửi lại mã OTP sau {seconds} giây</div>
-        ) : null}
+        {sendOTP ? <div className="error">Gửi lại mã OTP sau {seconds} giây</div> : null}
         <Form
           form={formLogin}
           name="normal_login"
@@ -134,10 +134,7 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
               </Button>
             </div>
           </Form.Item>
-          <Form.Item
-            name="otp"
-            rules={[{ required: true, message: "Vui lòng nhập mã OTP!" }]}
-          >
+          <Form.Item name="otp" rules={[{ required: true, message: "Vui lòng nhập mã OTP!" }]}>
             <Input
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="otp"
@@ -159,8 +156,7 @@ const LoginForPatient = ({ setRoleLogin, onCancel }) => {
           </Form.Item>
         </Form>
         <div className="booing-order">
-          Nếu đây là lần đầu bạn đến với chúng tôi vui lòng{" "}
-          <Link to="/dat-lich">đăng ký</Link> !
+          Nếu đây là lần đầu bạn đến với chúng tôi vui lòng <Link to="/dat-lich">đăng ký</Link> !
         </div>
       </LoginForStaffStyled>
     </Spin>

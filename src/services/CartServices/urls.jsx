@@ -1,25 +1,23 @@
-export const apiCart = "/cart";
-
-// API thêm sản phẩm vào giỏ hàng
-export const apiAddToCart = `${apiCart}/add`;  // POST
+export const apiAddToCart = `cart/add`;
 
 // API lấy giỏ hàng (sử dụng POST thay vì GET)
-export const apiGetCart = `${apiCart}/get`;  // POST
+export const apiGetCart = `cart/get`;
 
 // API cập nhật số lượng sản phẩm trong giỏ hàng (PATCH thay vì PUT)
-export const apiUpdateCart = `${apiCart}/update`;  // PATCH
+export const apiUpdateCart = `cart/update`;
 
 // API xóa sản phẩm khỏi giỏ hàng (DELETE thay vì POST)
-export const apiRemoveCart = `${apiCart}/remove`;  // DELETE
+export const apiRemoveCart = `cart/remove`;
 
 // API xóa toàn bộ giỏ hàng sau khi thanh toán
-export const apiClearCart = `${apiCart}/clear`;  // POST
+export const apiClearCart = `cart/clear`;
 
 // API lấy danh sách đơn hàng (chỉ hiển thị đơn "Paid" cho Staff)
-export const apiViewCartStaff = `${apiCart}/trang-thai-don-hang`;  // POST
+export const apiViewCartStaff = `cart/trang-thai-don-hang`;
 
 // API cập nhật trạng thái đơn hàng từ "Paid" → "Shipped"
-export const apiUpdateOrderStatus = `${apiCart}/update-status`;  // PATCH
+export const apiUpdateOrderStatus = `cart/update-status`;
 
 // API lấy lịch sử mua hàng (chỉ hiển thị đơn "Paid" cho bệnh nhân)
-export const apiGetPurchaseHistory = `${apiCart}/lich-su-mua-hang`;  // POST
+export const apiGetPurchaseHistory = `cart/lich-su-mua-hang`;
+export const apiVerifyPayment = `cart/verify`;

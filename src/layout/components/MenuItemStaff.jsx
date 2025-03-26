@@ -2,8 +2,9 @@ import {
   BookOutlined,
   CommentOutlined,
   FundOutlined,
-  HomeOutlined,
   QuestionCircleOutlined,
+  ShoppingCartOutlined,
+  SignatureOutlined,
   SolutionOutlined,
   TeamOutlined,
   UserAddOutlined,
@@ -15,13 +16,13 @@ export const menuItemsStaff = {
   doctor: [
     {
       key: "1",
-      icon: <UserOutlined />,
-      label: "Bệnh nhân",
+      icon: <UserAddOutlined />,
+      label: "Lịch khám trực tiếp",
     },
     {
       key: "2",
       icon: <VideoCameraOutlined />,
-      label: "Lịch khám trực tiếp",
+      label: "Lịch khám Online",
     },
     {
       key: "3",
@@ -31,7 +32,7 @@ export const menuItemsStaff = {
     {
       key: "4",
       icon: <CommentOutlined />,
-      label: "Trò chuyện với bệnh nhân",
+      label: "Chat với bệnh nhân",
     },
     {
       key: "5",
@@ -42,23 +43,18 @@ export const menuItemsStaff = {
   staff: [
     {
       key: "1",
-      icon: <HomeOutlined />,
-      label: "Dashborad",
-    },
-    {
-      key: "2",
       icon: <UserOutlined />,
       label: "Quản lý lịch khám",
     },
     {
-      key: "3",
-      icon: <VideoCameraOutlined />,
-      label: "Chẩn đoán",
+      key: "2",
+      icon: <ShoppingCartOutlined />,
+      label: "Trạng Thái Đơn Hàng",
     },
     {
-      key: "4",
-      icon: <VideoCameraOutlined />,
-      label: "Trạng Thái Đơn Hàng",
+      key: "3",
+      icon: <SignatureOutlined />,
+      label: "Đặt lịch khám",
     },
   ],
   admin: [

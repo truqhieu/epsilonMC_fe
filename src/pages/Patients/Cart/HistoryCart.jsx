@@ -1,18 +1,20 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { Table, Typography, Spin, Descriptions, Modal, Tag, Card, Empty } from "antd";
-import CartServices from "../../../services/CartServices"; // Import service để gọi API
-import { useSelector } from "react-redux"; // Sử dụng useSelector để lấy thông tin người dùng từ Redux
-import { CartContainer } from "./style"; // Import style nếu có
+import { Table, Typography, Spin, Descriptions, Tag, Card, Empty } from "antd";
+import CartServices from "../../../services/CartServices";
+import { useSelector } from "react-redux";
+import { CartContainer } from "./style";
+import CustomModal from "../../../components/CustomModal";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const HistoryCart = () => {
-  const { user } = useSelector((state) => state.auth); // Lấy thông tin người dùng từ Redux
-  const accountId = user?.accountId; // Lấy accountId từ user
-  const [orders, setOrders] = useState([]); // State để lưu trữ danh sách đơn hàng
-  const [loading, setLoading] = useState(true); // State để quản lý trạng thái loading
-  const [selectedOrder, setSelectedOrder] = useState(null); // State để lưu đơn hàng được chọn
-  const [isModalVisible, setIsModalVisible] = useState(false); // State để quản lý hiển thị Modal
+  const { user } = useSelector((state) => state.auth);
+  const accountId = user?.accountId;
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Hàm để lấy lịch sử mua hàng
   const fetchPurchaseHistory = async () => {
@@ -20,18 +22,17 @@ const HistoryCart = () => {
       setLoading(true);
       const { success, data } = await CartServices.getPurchaseHistory({ accountId });
       if (success) {
-        setOrders(data); // Lưu dữ liệu đơn hàng vào state
+        setOrders(data);
       } else {
         setOrders([]);
       }
     } catch (error) {
       console.error("Lỗi khi lấy lịch sử mua hàng:", error);
     } finally {
-      setLoading(false); // Tắt trạng thái loading
+      setLoading(false);
     }
   };
 
-  // Gọi API khi component được render
   useEffect(() => {
     if (accountId) {
       fetchPurchaseHistory();
@@ -84,7 +85,7 @@ const HistoryCart = () => {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status) => <Tag color="green">{status}</Tag>, // Luôn hiển thị Paid
+      render: (status) => <Tag color="green">{status}</Tag>,
     },
   ];
 
@@ -118,9 +119,9 @@ const HistoryCart = () => {
         )}
 
         {/* Modal hiển thị chi tiết đơn hàng */}
-        <Modal
-          title="Lịch sử mua hàng" // Tiêu đề Modal
-          visible={isModalVisible}
+        <CustomModal
+          title="Thông tin đơn hàng"
+          open={isModalVisible}
           onCancel={handleCloseModal}
           footer={null}
           width={800}
@@ -128,9 +129,7 @@ const HistoryCart = () => {
           {selectedOrder && (
             <div>
               <Descriptions bordered column={1}>
-                <Descriptions.Item label="Mã đơn hàng">
-                  {selectedOrder.orderCode}
-                </Descriptions.Item>
+                <Descriptions.Item label="Mã đơn hàng">{selectedOrder.orderCode}</Descriptions.Item>
                 <Descriptions.Item label="Ngày mua">
                   {new Date(selectedOrder.createdAt).toLocaleString("vi-VN")}
                 </Descriptions.Item>
@@ -162,7 +161,7 @@ const HistoryCart = () => {
               </Descriptions>
             </div>
           )}
-        </Modal>
+        </CustomModal>
       </div>
     </CartContainer>
   );

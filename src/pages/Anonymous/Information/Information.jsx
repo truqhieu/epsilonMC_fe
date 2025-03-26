@@ -40,9 +40,7 @@ const Information = () => {
         <div className="mainstream">
           <img src={assets.doctor} alt="doctor" className="doctor-image" />
           <div className="mainstream-content">
-            <h1 className="mainstream-title">
-              Khám - tư vấn - điều trị các bệnh
-            </h1>
+            <h1 className="mainstream-title">Khám - tư vấn - điều trị các bệnh</h1>
             <div className="mainstream-description">
               <div className="mainstream-description-content">
                 <p>- Rối loạn giấc ngủ</p>
@@ -89,6 +87,10 @@ const Information = () => {
             />
           )}
         </div>
+
+        <button className="question-doctor" onClick={() => navigate("/hoi-dap")}>
+          Đặt câu hỏi cho bác sĩ
+        </button>
       </div>
     </InformationStyled>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -29,7 +30,7 @@ const ViewProducts = () => {
         setProducts(response);
         setFilteredProducts(response);
       } catch (error) {
-        setError("Không thể tải danh sách sản phẩm.");
+        setError("Không thể tải danh sách sản phẩm.", error);
       } finally {
         setLoading(false);
       }
@@ -52,46 +53,46 @@ const ViewProducts = () => {
     navigate(`/chi-tiet-san-pham/${productId}`);
   };
 
+  console.log(products);
+
   const addToCart = async (productId, event) => {
     event.stopPropagation();
     message.destroy(); // Xóa thông báo cũ trước khi hiển thị thông báo mới
 
     const product = products.find((p) => p._id === productId);
     if (!product) {
-        message.error("Không tìm thấy sản phẩm!");
-        return;
+      message.error("Không tìm thấy sản phẩm!");
+      return;
     }
 
     console.log("Product info:", product); // Kiểm tra giá trị product trước khi xử lý
 
     if (!accountId) {
-        message.warning("Bạn cần đăng nhập để thêm vào giỏ hàng!");
-        return;
+      message.warning("Bạn cần đăng nhập để thêm vào giỏ hàng!");
+      return;
     }
 
     try {
-        const response = await CartServices.addToCart({
-            accountId,
-            productId,
-            quantity: 1,
-        });
+      const response = await CartServices.addToCart({
+        accountId,
+        productId,
+        quantity: 1,
+      });
 
-        console.log("API response:", response);
+      console.log("API response:", response);
 
-        if (response.success) {
-            message.success("Đã thêm vào giỏ hàng");
-        } else if (response.message === "Sản phẩm đã hết hàng") {
-            message.warning("Sản phẩm đã hết hàng!"); // Hiển thị đúng thông báo từ API
-        } else {
-            message.error(response.message || "Lỗi khi thêm vào giỏ hàng");
-        }
+      if (response.success) {
+        message.success("Đã thêm vào giỏ hàng");
+      } else if (response.message === "Sản phẩm đã hết hàng") {
+        message.warning("Sản phẩm đã hết hàng!"); // Hiển thị đúng thông báo từ API
+      } else {
+        message.error(response.message || "Lỗi khi thêm vào giỏ hàng");
+      }
     } catch (error) {
-        console.error("Lỗi hệ thống:", error);
-        message.error(error.response?.data?.message || "Lỗi hệ thống!");
+      console.error("Lỗi hệ thống:", error);
+      message.error(error.response?.data?.message || "Lỗi hệ thống!");
     }
-};
-
-
+  };
 
   return (
     <ViewProductsContainer>

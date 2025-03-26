@@ -8,16 +8,19 @@ import { Tag } from "antd";
 const ViewListAccount = () => {
   const [loading, setLoading] = useState(false);
   const [listAccount, setListAccount] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
 
   const getListAccount = async () => {
     try {
       setLoading(true);
       const res = await AuthServices.getAllAccount({
-        page: 1,
+        page: page,
         limit: 10,
       });
       if (res?.success) {
         setListAccount(res?.data);
+        setTotal(res?.total);
       }
     } catch (error) {
       console.log(error);
@@ -43,7 +46,7 @@ const ViewListAccount = () => {
 
   useEffect(() => {
     getListAccount();
-  }, []);
+  }, [page]);
 
   const columns = [
     {
@@ -117,7 +120,12 @@ const ViewListAccount = () => {
         loading={loading}
         bordered={true}
         rowKey={(record) => record._id}
-        pagination={{ pageSize: 10 }}
+        pagination={{
+          total: total,
+          pageSize: 10,
+          current: page,
+          onChange: (page) => setPage(page),
+        }}
       />
     </>
   );

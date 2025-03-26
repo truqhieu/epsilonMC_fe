@@ -41,13 +41,13 @@ const StaffLayout = () => {
 
   const routes = {
     doctor: [
-      "patients",
       ROUTERS.DANH_SACH_LICH_HEN_TRUC_TIEP,
+      "online",
       ROUTERS.HO_SO_BENH_AN_BAC_SI,
       ROUTERS.CHAT_BENH_NHAN,
       ROUTERS.CAU_HOI_KHACH,
     ],
-    staff: [ROUTERS.DASHBOARD_STAFF, ROUTERS.DANH_SACH_LICH_KHAM, ROUTERS.HO_SO_BENH_AN_NHAN_VIEN, ROUTERS.TRANG_THAI_DON_HANG],
+    staff: [ROUTERS.DANH_SACH_LICH_KHAM, ROUTERS.TRANG_THAI_DON_HANG, ROUTERS.BOOKING],
     admin: [ROUTERS.XEM_DANH_SACH_ACCOUNT, ROUTERS.TAO_ACCOUNT],
     manager: [
       ROUTERS.DASHBOARD_MANAGER,
@@ -57,7 +57,6 @@ const StaffLayout = () => {
     ],
   };
 
-  // Tạo navigationPaths tự động
   const navigationPaths = Object.fromEntries(
     Object.entries(routes).map(([role, paths]) => [
       role,

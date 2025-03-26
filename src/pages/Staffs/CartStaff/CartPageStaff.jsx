@@ -1,9 +1,12 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CartServices from "../../../services/CartServices";
-import { Table, Spin, Typography, Card, Tag, Space, message, Dropdown, Menu, Modal } from "antd";
+import { Spin, Typography, Card, Tag, Space, message, Dropdown, Menu, Button } from "antd";
+import { TableCustom } from "../AppointmentList/styles";
+import CustomModal from "../../../components/CustomModal";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const CartPageStaff = () => {
   const [orders, setOrders] = useState([]);
@@ -57,11 +60,12 @@ const CartPageStaff = () => {
         if (selectedOrder && selectedOrder._id === orderId) {
           setSelectedOrder((prev) => ({ ...prev, status: newStatus }));
         }
+        setModalVisible(false);
       } else {
         message.error("Cập nhật thất bại.");
       }
     } catch (error) {
-      message.error("Lỗi khi cập nhật trạng thái đơn hàng.");
+      message.error("Lỗi khi cập nhật trạng thái đơn hàng.", error);
     }
   };
 
@@ -82,7 +86,9 @@ const CartPageStaff = () => {
           }
           trigger={["click"]}
         >
-          <Tag color={color} style={{ cursor: "pointer" }}>{status} ▼</Tag>
+          <Tag color={color} style={{ cursor: "pointer" }}>
+            {status} ▼
+          </Tag>
         </Dropdown>
       );
     }
@@ -106,20 +112,24 @@ const CartPageStaff = () => {
       render: (createdAt) => <Text>{new Date(createdAt).toLocaleDateString()}</Text>,
     },
     {
+      title: "Tổng tiền",
+      dataIndex: "totalPrice",
+      key: "totalPrice",
+      render: (totalPrice) => (
+        <Text style={{ color: "#52c41a" }}>{`${totalPrice.toLocaleString()} VND`}</Text>
+      ),
+    },
+    {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status, record) => renderStatusTag(status, record._id, false), 
+      render: (status, record) => renderStatusTag(status, record._id, false),
     },
   ];
 
   return (
     <div className="cart-container">
       <Card className="cart-card">
-        <Title level={2} className="cart-title">
-          Trạng Thái Đơn Hàng
-        </Title>
-
         {loading ? (
           <div className="cart-loading">
             <Spin size="large" />
@@ -127,7 +137,7 @@ const CartPageStaff = () => {
         ) : orders.length === 0 ? (
           <Text className="cart-empty">Không có đơn hàng nào.</Text>
         ) : (
-          <Table
+          <TableCustom
             columns={columns}
             dataSource={orders}
             rowKey={(record) => record._id}
@@ -136,7 +146,7 @@ const CartPageStaff = () => {
             onRow={(record) => ({
               onClick: () => {
                 setSelectedOrder(record);
-                setTempStatus(record.status); // 🔹 Lưu trạng thái hiện tại vào tempStatus
+                setTempStatus(record.status);
                 setModalVisible(true);
               },
             })}
@@ -145,27 +155,17 @@ const CartPageStaff = () => {
       </Card>
 
       {/* 🟢 Modal chi tiết đơn hàng */}
-      <Modal
+      <CustomModal
         title="Chi tiết đơn hàng"
-        visible={modalVisible}
+        width={400}
+        open={modalVisible}
+        footer={null}
         onCancel={() => setModalVisible(false)}
-        onOk={() => {
-          if (tempStatus !== selectedOrder.status) {
-            handleUpdateStatus(selectedOrder._id, tempStatus);
-          }
-          setModalVisible(false);
-        }}
       >
         {selectedOrder && (
           <>
-            <Text strong>Mã đơn hàng:</Text>{" "}
-            <Text>{selectedOrder.orderCode}</Text>
-            <br />
-            <Text strong>Tên bệnh nhân:</Text>{" "}
-            <Text>{selectedOrder.accountId?.patientId?.name || "Không xác định"}</Text>
-            <br />
-            <Text strong>Trạng thái:</Text>{" "}
-            {renderStatusTag(tempStatus, selectedOrder._id, true)}
+            <Text strong>Trạng thái:</Text> {renderStatusTag(tempStatus, selectedOrder._id, true)}{" "}
+            {/* 🟢 Dropdown chỉ hiển thị trong modal */}
             <br />
             <Text strong>Sản phẩm:</Text>
             <Space direction="vertical" style={{ display: "block", marginTop: 5 }}>
@@ -180,9 +180,18 @@ const CartPageStaff = () => {
             <Text style={{ color: "#52c41a" }}>
               {`${selectedOrder.totalPrice.toLocaleString()} VND`}
             </Text>
+            <br />
+            {tempStatus !== selectedOrder.status && (
+              <Button
+                onClick={() => handleUpdateStatus(selectedOrder._id, tempStatus)}
+                style={{ marginTop: "10px" }}
+              >
+                Cập nhật
+              </Button>
+            )}
           </>
         )}
-      </Modal>
+      </CustomModal>
     </div>
   );
 };

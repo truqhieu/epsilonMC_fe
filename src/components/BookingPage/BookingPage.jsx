@@ -20,8 +20,8 @@ const BookingPage = () => {
   const getInvoiceById = async (id, intervalId) => {
     try {
       const res = await InvoiceServices.getInvoiceById(id);
-      console.log(res?.invoice?.status);
-      if (res?.invoice?.status === "Paid") {
+      console.log(res?.data?.status);
+      if (res?.data?.status === "Paid") {
         setCurrent(2);
         clearInterval(intervalId);
       }
@@ -89,7 +89,7 @@ const BookingPage = () => {
               />
             ))}
           {current === 1 && <PaymentPage qr_url={qr_url} amount={amount} />}
-          {current === 2 && <ConfirmBooking />}
+          {current === 2 && <ConfirmBooking role={user?.role} />}
         </div>
       </div>
     </BookingPageContainer>
