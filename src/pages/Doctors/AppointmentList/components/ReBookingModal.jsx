@@ -6,7 +6,7 @@ import { InfoRow } from "../../../../components/InfoRow";
 import { ReBookingStyles } from "../styles";
 import { convertToVietnamTime } from "../../../../utils/timeConfig";
 import MedicalRecordServices from "../../../../services/MedicalRecordServices";
-import { Button, Col, DatePicker, Form, Row, Select } from "antd";
+import { Button, Col, DatePicker, Form, Row, Select, Spin } from "antd";
 import dayjs from "dayjs";
 import ExamServices from "../../../../services/ExamServices";
 import AppointmentServices from "../../../../services/AppointmentServices";
@@ -69,6 +69,7 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
   // Update appointment logic
   const updateAppointment = async () => {
     try {
+      setLoading(true);
       const res = await AppointmentServices.updateAppointment(selectedAppointment._id, {
         doctor: selectedAppointment?.doctor,
         status: "Completed",
@@ -80,8 +81,12 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
       if (res.success) sendEmailReminder();
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  console.log("exam", exam?._id);
 
   const addAppointment = async (values) => {
     try {
@@ -111,6 +116,7 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
 
   const sendEmailReminder = async () => {
     try {
+      setLoading(true);
       const res = await AppointmentServices.sendMailReminder({
         email: selectedAppointment?.patient?.email,
         date: selectedDate,
@@ -132,103 +138,104 @@ const ReBookingModal = ({ open, onCancel, selectedAppointment }) => {
   };
 
   return (
-    <CustomModal
-      title="Xác nhận thông tin"
-      open={open}
-      onCancel={onCancel}
-      loading={loading}
-      width={700}
-      footer={null}
-      style={{ top: 20 }}
-    >
-      <ReBookingStyles>
-        <div className="detail-container">
-          <div className="detail-content">
-            <div className="info-detail">
-              <InfoRow label="Người khám" value={selectedAppointment?.patient?.name} />
-              <span style={{ fontWeight: "bold" }}>
-                {selectedAppointment?.patient?.gender === "male" ? "Nam" : "Nữ"}
-              </span>
+    <Spin spinning={loading}>
+      <CustomModal
+        title="Xác nhận thông tin"
+        open={open}
+        onCancel={onCancel}
+        width={700}
+        footer={null}
+        style={{ top: 20 }}
+      >
+        <ReBookingStyles>
+          <div className="detail-container">
+            <div className="detail-content">
+              <div className="info-detail">
+                <InfoRow label="Người khám" value={selectedAppointment?.patient?.name} />
+                <span style={{ fontWeight: "bold" }}>
+                  {selectedAppointment?.patient?.gender === "male" ? "Nam" : "Nữ"}
+                </span>
+              </div>
+              <InfoRow
+                label="Ngày sinh"
+                value={convertToVietnamTime(selectedAppointment?.patient?.birthDay)}
+              />
+              <InfoRow label="Email" value={selectedAppointment?.patient?.email} />
+              <InfoRow label="Số điện thoại" value={selectedAppointment?.patient?.phone} />
             </div>
-            <InfoRow
-              label="Ngày sinh"
-              value={convertToVietnamTime(selectedAppointment?.patient?.birthDay)}
-            />
-            <InfoRow label="Email" value={selectedAppointment?.patient?.email} />
-            <InfoRow label="Số điện thoại" value={selectedAppointment?.patient?.phone} />
-          </div>
-          <div className="detail-content">
-            <div className="detail-content-title"> Hồ sơ lần khám trước</div>
-            <InfoRow label="Triệu chứng" value={medicalRecord?.symptom} />
-            <InfoRow label="Chẩn đoán" value={medicalRecord?.diagnose} />
-            <InfoRow label="Hướng điều trị" value={medicalRecord?.treatment_plan} />
-            <InfoRow label="Gi chú" value={medicalRecord?.note} />
-          </div>
-          <div className="detail-content">
-            <Form form={formBooking} layout="vertical">
-              <Row gutter={16}>
-                <Col xs={24} sm={6}>
-                  <Form.Item
-                    name="examinationType"
-                    label="Hình thức khám"
-                    rules={[{ required: true, message: "Vui lòng chọn hình thức khám" }]}
-                  >
-                    <Select
-                      value={examinationType}
-                      onChange={setExaminationType}
-                      placeholder="Chọn hình thức khám"
-                      options={[
-                        { value: 2, label: "Online" },
-                        { value: 1, label: "Trực tiếp" },
-                      ]}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={6}>
-                  <Form.Item
-                    name="examinationDate"
-                    label="Ngày khám"
-                    rules={[{ validator: validateDate }]}
-                  >
-                    <DatePicker
-                      value={selectedDate}
-                      onChange={setSelectedDate}
-                      format="DD/MM/YYYY"
-                      placeholder="Chọn ngày khám"
-                    />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={6}>
-                  <Form.Item
-                    name="exam"
-                    label="Ca khám"
-                    rules={[{ required: true, message: "Vui lòng chọn ca khám" }]}
-                  >
-                    <Select
-                      value={exam?._id}
-                      onChange={(value, option) =>
-                        setExam({ _id: value, examination: option.label })
-                      }
-                      placeholder="Chọn ca khám"
-                      options={listExam.map((item) => ({
-                        value: item._id,
-                        label: item.examination,
-                      }))}
-                      allowClear
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-            <div className="button-action">
-              <Button type="primary" style={{ backgroundColor: "#0794DB" }} onClick={onSubmit}>
-                Hẹn tái khám
-              </Button>
+            <div className="detail-content">
+              <div className="detail-content-title"> Hồ sơ lần khám trước</div>
+              <InfoRow label="Triệu chứng" value={medicalRecord?.symptom} />
+              <InfoRow label="Chẩn đoán" value={medicalRecord?.diagnose} />
+              <InfoRow label="Hướng điều trị" value={medicalRecord?.treatment_plan} />
+              <InfoRow label="Gi chú" value={medicalRecord?.note} />
+            </div>
+            <div className="detail-content">
+              <Form form={formBooking} layout="vertical">
+                <Row gutter={16}>
+                  <Col xs={24} sm={6}>
+                    <Form.Item
+                      name="examinationType"
+                      label="Hình thức khám"
+                      rules={[{ required: true, message: "Vui lòng chọn hình thức khám" }]}
+                    >
+                      <Select
+                        value={examinationType}
+                        onChange={setExaminationType}
+                        placeholder="Chọn hình thức khám"
+                        options={[
+                          // { value: 2, label: "Online" },
+                          { value: 1, label: "Trực tiếp" },
+                        ]}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={6}>
+                    <Form.Item
+                      name="examinationDate"
+                      label="Ngày khám"
+                      rules={[{ validator: validateDate }]}
+                    >
+                      <DatePicker
+                        value={selectedDate}
+                        onChange={setSelectedDate}
+                        format="DD/MM/YYYY"
+                        placeholder="Chọn ngày khám"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={6}>
+                    <Form.Item
+                      name="exam_id"
+                      label="Ca khám"
+                      rules={[{ required: true, message: "Vui lòng chọn ca khám" }]}
+                    >
+                      <Select
+                        value={exam?._id}
+                        onChange={(value, option) =>
+                          setExam({ _id: value, examination: option.label })
+                        }
+                        placeholder="Chọn ca khám"
+                        options={listExam.map((item) => ({
+                          value: item._id,
+                          label: item.examination,
+                        }))}
+                        allowClear
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+              <div className="button-action">
+                <Button type="primary" style={{ backgroundColor: "#0794DB" }} onClick={onSubmit}>
+                  Hẹn tái khám
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </ReBookingStyles>
-    </CustomModal>
+        </ReBookingStyles>
+      </CustomModal>
+    </Spin>
   );
 };
 
