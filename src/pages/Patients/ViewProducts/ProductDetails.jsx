@@ -7,6 +7,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import ProductServices from "../../../services/ProductServices";
 import CartServices from "../../../services/CartServices";
 import { ProductDetailStyled } from "./styles";
+import PatientServices from "../../../services/PatientServices";
 
 const { Title } = Typography;
 
@@ -19,6 +20,7 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [patient, setPatient] = useState({});
 
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -38,13 +40,41 @@ const ProductDetails = () => {
     fetchProductDetail();
   }, [productId]);
 
+  useEffect(() => {
+    const getPatientById = async () => {
+      try {
+        setLoading(true);
+        const res = await PatientServices.getPatientById(user?.id);
+        if (res.success) {
+          setPatient(res.data);
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy thông tin bệnh nhân:", error);
+        message.error("Lỗi khi lấy thông tin bệnh nhân.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getPatientById();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const addToCart = async () => {
     if (!accountId) {
       message.warning("Bạn cần đăng nhập để thêm vào giỏ hàng!");
       return;
     }
     try {
-      const response = await CartServices.addToCart({ accountId, productId, quantity: 1 });
+      const response = await CartServices.addToCart({
+        accountId,
+        productId,
+        quantity: 1,
+        wards: patient.wards,
+        districts: patient.districts,
+        provinces: patient.provinces,
+        phone: patient.phone,
+        patient: patient.name,
+      });
       if (response.success) {
         message.success("Đã thêm vào giỏ hàng");
       } else {

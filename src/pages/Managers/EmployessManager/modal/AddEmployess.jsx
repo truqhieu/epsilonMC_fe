@@ -4,7 +4,6 @@ import CustomModal from "../../../../components/CustomModal";
 import PropTypes from "prop-types";
 import { AddEmployessStyled } from "../styles";
 import { Form, Input, DatePicker, InputNumber, Button, Select, Row, Col } from "antd";
-import moment from "moment-timezone";
 import UserServices from "../../../../services/UserServices";
 
 const { Option } = Select;
@@ -35,14 +34,16 @@ const AddEmployees = ({ open, onCancel }) => {
     }
   };
 
-  const handleFinish = (values) => {
-    const formattedValues = {
-      ...values,
-      birthDay: values.birthDay
-        ? moment(values.birthDay).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD HH:mm:ss")
-        : null,
-    };
-    createUser(formattedValues);
+  const handleFinish = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        createUser(values);
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+    // createDoctor(formattedValues);
   };
 
   return (

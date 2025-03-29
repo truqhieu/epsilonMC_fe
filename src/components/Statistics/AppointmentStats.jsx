@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import StatisticService from '../../services/StatisticServices';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { Card, Row, Col, Statistic, Typography, Spin } from 'antd';
+// eslint-disable-next-line no-unused-vars
+import React, { useEffect, useState } from "react";
+import StatisticService from "../../services/StatisticServices";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { Card, Row, Col, Statistic, Typography, Spin } from "antd";
 
 const { Title } = Typography;
 
 const AppointmentStats = () => {
   const [appointmentStats, setAppointmentStats] = useState(null);
-  const COLORS = ["#34D399", "#FBBF24", "#EF4444"];
+  const COLORS = {
+    Completed: "#1890ff",
+    Approved: "#34D399",
+    Rejected: "#808080",
+    Pending: "#FFD700",
+    PendingPayment: "#FFA500",
+    Cancelled: "#EF4444",
+  };
 
   useEffect(() => {
     fetchAppointmentStats();
@@ -22,37 +30,36 @@ const AppointmentStats = () => {
     }
   };
 
-  if (!appointmentStats) return (
-    <div className="loading-container" style={{ textAlign: 'center', padding: '50px' }}>
-      <Spin size="large" />
-    </div>
-  );
+  if (!appointmentStats)
+    return (
+      <div className="loading-container" style={{ textAlign: "center", padding: "50px" }}>
+        <Spin size="large" />
+      </div>
+    );
 
   return (
-    <Card className="statistics-container" style={{ margin: '24px' }}>
-      <Title level={2} style={{ textAlign: 'center', marginBottom: '24px' }}>
+    <Card className="statistics-container" style={{ margin: "24px" }}>
+      <Title level={2} style={{ textAlign: "center", marginBottom: "24px" }}>
         Thống kê trạng thái khám bệnh
       </Title>
-      
-      <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
+
+      <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
         <Col xs={24} sm={12} md={6}>
           <Card>
             <Statistic
               title="Tổng số ca khám"
               value={appointmentStats.total}
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: "#1890ff" }}
             />
           </Card>
         </Col>
-        {appointmentStats.statusStats.map((stat, index) => (
+        {appointmentStats.statusStats.map((stat) => (
           <Col xs={24} sm={12} md={6} key={stat.status}>
             <Card>
               <Statistic
                 title={`Tỷ lệ ${stat.status}`}
-                value={stat.rate}
-                precision={2}
-                suffix="%"
-                valueStyle={{ color: COLORS[index] }}
+                value={`${stat.count} (${stat.rate.toFixed(2)}%)`}
+                valueStyle={{ color: COLORS[stat.status] }}
               />
             </Card>
           </Col>
@@ -60,28 +67,34 @@ const AppointmentStats = () => {
       </Row>
 
       <Card className="chart-container">
-        <Title level={3} style={{ textAlign: 'center', marginBottom: '24px' }}>
+        <Title level={3} style={{ textAlign: "center", marginBottom: "24px" }}>
           Biểu đồ phân bố trạng thái
         </Title>
         <ResponsiveContainer width="100%" height={400}>
           <PieChart>
             <Pie
-              data={appointmentStats.statusStats.map(stat => ({
+              data={appointmentStats.statusStats.map((stat) => ({
                 name: stat.status,
-                value: stat.rate
+                value: stat.count,
+                rate: stat.rate,
               }))}
               dataKey="value"
               cx="50%"
               cy="50%"
               outerRadius={150}
               fill="#8884d8"
-              label={({name, percent}) => `${name}: ${(percent * 100).toFixed(2)}%`}
+              label={({ name, value, rate }) => `${name}: ${value} (${rate.toFixed(2)}%)`}
             >
-              {COLORS.map((color, index) => (
-                <Cell key={`cell-${index}`} fill={color} />
+              {appointmentStats.statusStats.map((stat, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[stat.status]} />
               ))}
             </Pie>
-            <Tooltip formatter={(value) => `${value.toFixed(2)}%`} />
+            <Tooltip
+              formatter={(value, name, props) => [
+                `${value} (${props.payload.rate.toFixed(2)}%)`,
+                name,
+              ]}
+            />
           </PieChart>
         </ResponsiveContainer>
       </Card>
@@ -89,4 +102,4 @@ const AppointmentStats = () => {
   );
 };
 
-export default AppointmentStats; 
+export default AppointmentStats;

@@ -164,8 +164,18 @@ const CartPageStaff = () => {
       >
         {selectedOrder && (
           <>
-            <Text strong>Trạng thái:</Text> {renderStatusTag(tempStatus, selectedOrder._id, true)}{" "}
-            {/* 🟢 Dropdown chỉ hiển thị trong modal */}
+            <Text strong>Tên người nhận:</Text>{" "}
+            <Text style={{ fontWeight: "bold" }}>{selectedOrder.patient || "Không xác định"}</Text>
+            <br />
+            <Text strong>Địa chỉ:</Text>{" "}
+            <Text style={{ fontWeight: "bold" }}>
+              {selectedOrder.wards && selectedOrder.districts && selectedOrder.provinces
+                ? `${selectedOrder.wards}, ${selectedOrder.districts}, ${selectedOrder.provinces}`
+                : "Không xác định"}
+            </Text>
+            <br />
+            <Text strong>Số Điện Thoại:</Text>{" "}
+            <Text style={{ fontWeight: "bold" }}>{selectedOrder.phone || "Không xác định"}</Text>
             <br />
             <Text strong>Sản phẩm:</Text>
             <Space direction="vertical" style={{ display: "block", marginTop: 5 }}>
@@ -175,6 +185,8 @@ const CartPageStaff = () => {
                 </Text>
               ))}
             </Space>
+            <br />
+            <Text strong>Trạng thái:</Text> {renderStatusTag(tempStatus, selectedOrder._id, true)}{" "}
             <br />
             <Text strong>Tổng tiền:</Text>{" "}
             <Text style={{ color: "#52c41a" }}>

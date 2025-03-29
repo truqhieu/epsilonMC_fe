@@ -8,6 +8,7 @@ import ProductServices from "../../../services/ProductServices";
 import CartServices from "../../../services/CartServices";
 import { formatCurrencyVND } from "../../../utils/moneyConfig";
 import { ViewProductsContainer } from "./styles";
+import PatientServices from "../../../services/PatientServices";
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
@@ -16,6 +17,7 @@ const ViewProducts = () => {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchInput, setShowSearchInput] = useState(false);
+  const [patient, setPatient] = useState({});
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const accountId = user?.accountId;
@@ -49,11 +51,30 @@ const ViewProducts = () => {
     }
   }, [searchTerm, products]);
 
+  useEffect(() => {
+    const getPatientById = async () => {
+      try {
+        setLoading(true);
+        const res = await PatientServices.getPatientById(user?.id);
+        if (res.success) {
+          setPatient(res.data);
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy thông tin bệnh nhân:", error);
+        message.error("Lỗi khi lấy thông tin bệnh nhân.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getPatientById();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleProductClick = (productId) => {
     navigate(`/chi-tiet-san-pham/${productId}`);
   };
 
-  console.log(products);
+  console.log(patient);
 
   const addToCart = async (productId, event) => {
     event.stopPropagation();
@@ -77,6 +98,11 @@ const ViewProducts = () => {
         accountId,
         productId,
         quantity: 1,
+        wards: patient.wards,
+        districts: patient.districts,
+        provinces: patient.provinces,
+        phone: patient.phone,
+        patient: patient.name,
       });
 
       console.log("API response:", response);

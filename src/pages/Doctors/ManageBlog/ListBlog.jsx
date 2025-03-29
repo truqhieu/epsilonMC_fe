@@ -102,7 +102,14 @@ const ListBolg = () => {
       render: (record) => {
         return (
           <div className="d-flex g-6">
-            <Button color="cyan" variant="outlined" onClick={() => setOpen(true)}>
+            <Button
+              color="cyan"
+              variant="outlined"
+              onClick={() => {
+                setOpen(true);
+                setSelectedBlog(record);
+              }}
+            >
               Chỉnh sửa
             </Button>
             <Popconfirm
@@ -135,14 +142,6 @@ const ListBolg = () => {
         columns={columns}
         bordered={true}
         rowKey={(record) => record._id}
-        onRow={(record) => {
-          return {
-            onClick: () => {
-              setSelectedBlog(record);
-              setOpen(true);
-            },
-          };
-        }}
         pagination={{
           total: totalPage,
           pageSize: 10,

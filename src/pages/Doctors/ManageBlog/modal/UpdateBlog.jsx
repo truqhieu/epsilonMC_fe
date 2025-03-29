@@ -10,6 +10,8 @@ const UpdateBlog = ({ open, onCancel, selectedBlog }) => {
   const [form] = Form.useForm();
   const [image, setImage] = useState(false);
 
+  console.log("selectedBlog", selectedBlog);
+
   const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
   useEffect(() => {

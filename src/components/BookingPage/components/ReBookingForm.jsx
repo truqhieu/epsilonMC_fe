@@ -185,7 +185,7 @@ const ReBookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                   onChange={(value) => setExaminationType(value)}
                   placeholder="Chọn hình thức khám"
                   options={[
-                    { value: 2, label: "Online" },
+                    // { value: 2, label: "Online" },
                     { value: 1, label: "Trực tiếp" },
                   ]}
                 />
