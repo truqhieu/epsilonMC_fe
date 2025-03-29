@@ -3,24 +3,31 @@ import React, { useState } from "react";
 import CustomModal from "../../../../components/CustomModal";
 import PropTypes from "prop-types";
 import { Form, Input, DatePicker, InputNumber, Button, Row, Col, Select } from "antd";
-import moment from "moment-timezone";
 import DoctorServices from "../../../../services/DoctorServices";
+import dayjs from "dayjs";
+import { convertToVietnamTime } from "../../../../utils/timeConfig";
 
 const { Option } = Select;
 
 const AddDoctor = ({ open, onCancel }) => {
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(false);
+  const [birthDay, setBirthDay] = useState(null);
   const [form] = Form.useForm();
 
   const createDoctor = async (body) => {
     try {
       setLoading(true);
-      const res = await DoctorServices.createDoctor({
-        ...body,
-        role: "doctor",
-        isAccount: false,
-        isActive: false,
-      });
+      const formData = new FormData();
+      for (let key in body) {
+        formData.append(key, body[key]);
+      }
+
+      if (image) {
+        formData.append("image", image);
+      }
+
+      const res = await DoctorServices.createDoctor(formData);
       if (res?.success) {
         console.log("User created successfully:", res.data);
         form.resetFields();
@@ -35,14 +42,27 @@ const AddDoctor = ({ open, onCancel }) => {
     }
   };
 
-  const handleFinish = (values) => {
-    const formattedValues = {
-      ...values,
-      birthDay: values.birthDay
-        ? moment(values.birthDay).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD HH:mm:ss")
-        : null,
-    };
-    createDoctor(formattedValues);
+  const handleFinish = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        createDoctor(values);
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+    // createDoctor(formattedValues);
+  };
+
+  const validateAge = (_, value) => {
+    if (!value) {
+      return Promise.reject("Vui lòng chọn ngày!");
+    }
+    const minDate = dayjs().subtract(28, "year");
+    if (value.isAfter(minDate)) {
+      return Promise.reject("Bác sĩ phải trên 28 tuổi!");
+    }
+    return Promise.resolve();
   };
 
   return (
@@ -66,13 +86,45 @@ const AddDoctor = ({ open, onCancel }) => {
               <Input placeholder="Nhập họ và tên" />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={12}>
             <Form.Item
-              name="birthDay"
-              label="Ngày sinh"
-              rules={[{ required: true, message: "Vui lòng chọn ngày sinh" }]}
+              name="image"
+              label="Hình ảnh mô tả"
+              rules={[{ required: true, message: "Vui lòng thêm ảnh mô tả" }]}
             >
-              <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
+              <div className="add-img-upload flex-col">
+                <label htmlFor="image">
+                  {image ? (
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt="add"
+                      style={{ width: "100px", height: "70px" }}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </label>
+                <input
+                  onChange={(e) => setImage(e.target.files[0])}
+                  type="file"
+                  id="image"
+                  hidden
+                  required
+                />
+              </div>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={8}>
+            <Form.Item name="birthDay" label="Ngày sinh" rules={[{ validator: validateAge }]}>
+              <DatePicker
+                value={birthDay ? convertToVietnamTime(birthDay) : null}
+                format="YYYY-MM-DD"
+                style={{ width: "100%" }}
+                onChange={(date) => setBirthDay(date ? convertToVietnamTime(date) : null)}
+              />
             </Form.Item>
           </Col>
           <Col span={8}>
