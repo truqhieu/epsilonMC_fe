@@ -1,7 +1,21 @@
+import { Button, Result } from "antd";
 import "./NotFound.css";
+import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
-  return <div className="not-found">Page not found</div>;
+  const nagivate = useNavigate();
+  return (
+    <Result
+      status="403"
+      title="403"
+      subTitle="Sorry, you are not authorized to access this page."
+      extra={
+        <Button type="primary" onClick={() => nagivate("/")}>
+          Back Home
+        </Button>
+      }
+    />
+  );
 };
 
 export default NotFound;

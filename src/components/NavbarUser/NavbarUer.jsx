@@ -10,7 +10,9 @@ import { logout } from "../../reduxs/authReduxs/authSlice";
 import {
   BookOutlined,
   LogoutOutlined,
+  QuestionCircleOutlined,
   ScheduleOutlined,
+  ShopOutlined,
   ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -60,17 +62,40 @@ const NavbarUser = () => {
                 <>
                   <li>
                     <ScheduleOutlined />
-                    <p style={{ width: "max-content" }}>Lịch sử đặt khám</p>
+                    <Link to="/lich-su-kham" style={{ textDecoration: "none", color: "inherit" }}>
+                      <p style={{ width: "max-content" }}>Lịch sử đặt khám</p>
+                    </Link>
                   </li>
                   <hr />
                   <li>
                     <BookOutlined />
-                    <p style={{ width: "max-content" }}>Hồ sơ bệnh án</p>
+                    <Link to="/ho-so-benh-an" style={{ textDecoration: "none", color: "inherit" }}>
+                      <p style={{ width: "max-content" }}>Hồ sơ bệnh án</p>
+                    </Link>
+                  </li>
+                  <hr />
+                  <li>
+                    <QuestionCircleOutlined />
+                    <Link to="/hoi-dap" style={{ textDecoration: "none", color: "inherit" }}>
+                      <p style={{ width: "max-content" }}>Câu hỏi của tôi</p>
+                    </Link>
+                  </li>
+                  <hr />
+                  <li>
+                    <ShopOutlined />
+                    <Link to="/san-pham" style={{ textDecoration: "none", color: "inherit" }}>
+                      <p style={{ width: "max-content" }}>Hiệu thuốc</p>
+                    </Link>
                   </li>
                   <hr />
                   <li>
                     <ShoppingCartOutlined />
-                    <p style={{ width: "max-content" }}>Đơn hàng</p>
+                    <Link
+                      to="/lich-su-mua-hang"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <p style={{ width: "max-content" }}>Lịch sử mua hàng</p>
+                    </Link>
                   </li>
                   <hr />
                 </>
@@ -84,9 +109,7 @@ const NavbarUser = () => {
         )}
       </div>
 
-      {!!showLogin && (
-        <LoginForm open={showLogin} onCancel={() => setShowLogin(false)} />
-      )}
+      {!!showLogin && <LoginForm open={showLogin} onCancel={() => setShowLogin(false)} />}
     </div>
   );
 };

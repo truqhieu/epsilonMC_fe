@@ -16,12 +16,14 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import AuthServices from "../../services/AuthServices";
+import PatientInfo from "./modal/PatientInfo";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
   const { accessToken, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [showLogin, setShowLogin] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -87,7 +89,7 @@ const Navbar = () => {
               </div>
             </div>
             <ul className="navbar-profile-dropdown">
-              <li onClick={() => setMenu("profile")}>
+              <li onClick={() => setShowInfo(true)}>
                 <UserOutlined />
                 <p style={{ width: "max-content" }}>Thông tin cá nhân</p>
               </li>
@@ -144,6 +146,7 @@ const Navbar = () => {
       </div>
 
       {!!showLogin && <LoginForm open={showLogin} onCancel={() => setShowLogin(false)} />}
+      {showInfo && <PatientInfo open={showInfo} onCancel={() => setShowInfo(false)} user={user} />}
     </div>
   );
 };

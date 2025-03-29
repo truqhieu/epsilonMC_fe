@@ -24,7 +24,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
   const [codeDistricts, setCodeDistricts] = useState(0);
   const [listWards, setListWards] = useState([]);
   const [listDoctor, setListDoctor] = useState([]);
-  const [doctor, setDoctor] = useState();
+  // const [doctor, setDoctor] = useState();
   const [wards, setWards] = useState([]);
   const [exam, setExam] = useState();
 
@@ -330,7 +330,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                   onChange={(value) => setExaminationType(value)}
                   placeholder="Chọn hình thức khám"
                   options={[
-                    { value: 2, label: "Online" },
+                    // { value: 2, label: "Online" },
                     { value: 1, label: "Trực tiếp" },
                   ]}
                 />
@@ -369,7 +369,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                 />
               </Form.Item>
             </Col>
-            {examinationType === 2 && (
+            {/* {examinationType === 2 && (
               <Col xs={24} sm={6}>
                 <Form.Item
                   name="doctor"
@@ -388,7 +388,7 @@ const BookingForm = ({ setAmount, setIsBooking, setCurrent }) => {
                   />
                 </Form.Item>
               </Col>
-            )}
+            )} */}
           </Row>
 
           <Form.Item

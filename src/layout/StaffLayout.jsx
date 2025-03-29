@@ -14,11 +14,13 @@ import AuthServices from "../services/AuthServices";
 import { menuItemsStaff } from "./components/MenuItemStaff";
 import { StaffLayoutStyled } from "./styles";
 import ROUTERS from "../routers";
+import EmployessInfo from "./modal/EmployessInfo";
 
 const { Header, Sider, Content } = Layout;
 
 const StaffLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,10 +44,11 @@ const StaffLayout = () => {
   const routes = {
     doctor: [
       ROUTERS.DANH_SACH_LICH_HEN_TRUC_TIEP,
-      "online",
+      ROUTERS.DANH_SACH_LICH_HEN_ONLINE,
       ROUTERS.HO_SO_BENH_AN_BAC_SI,
       ROUTERS.CHAT_BENH_NHAN,
       ROUTERS.CAU_HOI_KHACH,
+      ROUTERS.BLOG,
     ],
     staff: [ROUTERS.DANH_SACH_LICH_KHAM, ROUTERS.TRANG_THAI_DON_HANG, ROUTERS.BOOKING],
     admin: [ROUTERS.XEM_DANH_SACH_ACCOUNT, ROUTERS.TAO_ACCOUNT],
@@ -114,7 +117,7 @@ const StaffLayout = () => {
                   </div>
                 </div>
                 <ul className="navbar-profile-dropdown-user">
-                  <li>
+                  <li onClick={() => setShowInfo(true)}>
                     <UserOutlined />
                     <p style={{ width: "max-content" }}>Tài khoản</p>
                   </li>
@@ -140,6 +143,14 @@ const StaffLayout = () => {
           </Content>
         </Layout>
       </Layout>
+      {showInfo && (
+        <EmployessInfo
+          open={showInfo}
+          onCancel={() => setShowInfo(false)}
+          user={user}
+          logout={handleLogout}
+        />
+      )}
     </StaffLayoutStyled>
   );
 };

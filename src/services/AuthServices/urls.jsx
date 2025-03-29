@@ -9,3 +9,5 @@ export const apiGetAllAccount = `/account/listAccount`;
 export const apigetCurrentAccount = `/account/getCurrentAccount`;
 export const apiRegisterEmployess = `/account/registerEmployess`;
 export const apiUpdateAccount = `/account/updateAccount`;
+export const apiForgotPassword = `/account/forgotPassword`;
+export const apiChangePassword = `/account/changePassword`;

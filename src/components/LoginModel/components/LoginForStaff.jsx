@@ -8,10 +8,12 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setTokens, setUser } from "../../../reduxs/authReduxs/authSlice";
 import { useNavigate } from "react-router-dom";
+import ForgotPassword from "./ForgotPassword";
 
 const LoginForStaff = ({ setRoleLogin, onCancel }) => {
   const [loginError, setLoginError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [formLogin] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -103,8 +105,16 @@ const LoginForStaff = ({ setRoleLogin, onCancel }) => {
             </Button>
           </Form.Item>
         </Form>
+        <div
+          className="booing-order"
+          style={{ cursor: "pointer", color: "#3e70a7", marginLeft: "10px" }}
+          onClick={() => setOpen(true)}
+        >
+          Quên mật khẩu?
+        </div>
         <div className="booing-order">Chỉ sử dụng cho nhân viên phòng khám</div>
       </LoginForStaffStyled>
+      {open && <ForgotPassword open={open} onCancel={() => setOpen(false)} />}
     </Spin>
   );
 };

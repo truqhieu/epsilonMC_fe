@@ -10,7 +10,9 @@ import {
   apiGetAllAccount,
   apigetCurrentAccount,
   apiRegisterEmployess,
-  apiUpdateAccount, // Thêm API mới
+  apiUpdateAccount,
+  apiForgotPassword,
+  apiChangePassword, // Thêm API mới
 } from "./urls";
 
 const loginStaff = (body) => http.post(apiLoginStaff, body);
@@ -24,6 +26,8 @@ const getAllAccount = (body) => http.post(apiGetAllAccount, body);
 const getCurrentAccount = () => http.get(apigetCurrentAccount);
 const registerEmployess = (body) => http.post(apiRegisterEmployess, body);
 const updateAccount = (body) => http.post(apiUpdateAccount, body);
+const forgotPassword = (body) => http.post(apiForgotPassword, body);
+const changePassword = (body) => http.post(apiChangePassword, body);
 
 const AuthServices = {
   loginStaff,
@@ -37,6 +41,8 @@ const AuthServices = {
   getCurrentAccount,
   registerEmployess,
   updateAccount,
+  forgotPassword,
+  changePassword,
 };
 
 export default AuthServices;
